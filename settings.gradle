@@ -1,0 +1,4 @@
+rootProject.name = 'Timefold Solver Quickstarts'
+
+include ':technology:java-spring-boot'
+include ':hello-world'
