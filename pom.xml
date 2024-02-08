@@ -29,6 +29,7 @@
     <module>use-cases/call-center</module>
     <module>use-cases/vaccination-scheduling</module>
     <module>use-cases/vehicle-routing</module>
+    <module>use-cases/vehicle-routing-kotlin</module>
     <module>use-cases/order-picking</module>
     <module>use-cases/employee-scheduling</module>
     <module>use-cases/food-packaging</module>

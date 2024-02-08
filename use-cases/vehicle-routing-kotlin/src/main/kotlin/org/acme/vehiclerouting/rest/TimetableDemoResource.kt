@@ -1,14 +1,10 @@
-package org.acme.kotlin.schooltimetabling.rest
+package org.acme.vehiclerouting.rest
 
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
-import org.acme.kotlin.schooltimetabling.domain.Lesson
-import org.acme.kotlin.schooltimetabling.domain.Room
-import org.acme.kotlin.schooltimetabling.domain.Timeslot
-import org.acme.kotlin.schooltimetabling.domain.Timetable
 import org.eclipse.microprofile.openapi.annotations.Operation
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType
 import org.eclipse.microprofile.openapi.annotations.media.Content

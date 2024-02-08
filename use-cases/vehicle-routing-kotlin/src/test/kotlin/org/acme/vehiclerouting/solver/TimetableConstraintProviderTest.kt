@@ -1,12 +1,8 @@
-package org.acme.kotlin.schooltimetabling.solver
+package org.acme.vehiclerouting.solver
 
 import ai.timefold.solver.test.api.score.stream.ConstraintVerifier
 import io.quarkus.test.junit.QuarkusTest
 import jakarta.inject.Inject
-import org.acme.kotlin.schooltimetabling.domain.Lesson
-import org.acme.kotlin.schooltimetabling.domain.Room
-import org.acme.kotlin.schooltimetabling.domain.Timeslot
-import org.acme.kotlin.schooltimetabling.domain.Timetable
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 import java.time.LocalTime
