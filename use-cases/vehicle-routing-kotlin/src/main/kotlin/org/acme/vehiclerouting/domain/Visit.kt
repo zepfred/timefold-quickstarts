@@ -61,6 +61,10 @@ class Visit {
         return vehicle
     }
 
+    fun setVehicle(vehicle: Vehicle?) {
+        this.vehicle = vehicle
+    }
+
     val departureTime: LocalDateTime?
         get() {
             if (arrivalTime == null) {

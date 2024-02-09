@@ -1,22 +1,24 @@
 package org.acme.vehiclerouting.domain
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDateTime
+import java.util.ArrayList
 
-import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
-import ai.timefold.solver.core.api.domain.lookup.PlanningId;
-import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
+import ai.timefold.solver.core.api.domain.entity.PlanningEntity
+import ai.timefold.solver.core.api.domain.lookup.PlanningId
+import ai.timefold.solver.core.api.domain.variable.PlanningListVariable
 
 @PlanningEntity
 class Vehicle {
     @PlanningId
-    var id: String
+    lateinit var id: String
     var capacity: Int = 0
-    var homeLocation: Location
-    var departureTime: LocalDateTime
+    lateinit var homeLocation: Location
+    lateinit var departureTime: LocalDateTime
 
     @PlanningListVariable
-    var visits: List<Visit>? = null
+    var visits: MutableList<Visit>? = null
+
+    constructor()
 
     constructor(id: String, capacity: Int, homeLocation: Location, departureTime: LocalDateTime) {
         this.id = id

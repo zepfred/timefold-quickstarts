@@ -20,7 +20,7 @@ class VehicleRoutingConstraintProvider : ConstraintProvider {
         )
     }
 
-    protected fun vehicleCapacity(factory: ConstraintFactory): Constraint {
+    fun vehicleCapacity(factory: ConstraintFactory): Constraint {
         return factory.forEach(Vehicle::class.java)
             .filter({ vehicle: Vehicle -> vehicle.totalDemand > vehicle.capacity })
             .penalizeLong(
@@ -35,7 +35,7 @@ class VehicleRoutingConstraintProvider : ConstraintProvider {
             .asConstraint(VEHICLE_CAPACITY)
     }
 
-    protected fun serviceFinishedAfterMaxEndTime(factory: ConstraintFactory): Constraint {
+    fun serviceFinishedAfterMaxEndTime(factory: ConstraintFactory): Constraint {
         return factory.forEach(Visit::class.java)
             .filter({ obj: Visit -> obj.isServiceFinishedAfterMaxEndTime })
             .penalizeLong(HardSoftLongScore.ONE_HARD,
@@ -49,7 +49,7 @@ class VehicleRoutingConstraintProvider : ConstraintProvider {
             .asConstraint(SERVICE_FINISHED_AFTER_MAX_END_TIME)
     }
 
-    protected fun minimizeTravelTime(factory: ConstraintFactory): Constraint {
+    fun minimizeTravelTime(factory: ConstraintFactory): Constraint {
         return factory.forEach(Vehicle::class.java)
             .penalizeLong(HardSoftLongScore.ONE_SOFT,
                 { obj: Vehicle -> obj.totalDrivingTimeSeconds })
