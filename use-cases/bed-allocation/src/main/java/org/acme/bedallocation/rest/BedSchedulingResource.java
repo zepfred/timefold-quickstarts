@@ -21,6 +21,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.solver.ScoreAnalysisFetchPolicy;
@@ -52,19 +53,23 @@ public class BedSchedulingResource {
 
     private final SolverManager<BedPlan, String> solverManager;
     private final SolutionManager<BedPlan, HardSoftScore> solutionManager;
+    private final PlannerBenchmarkFactory benchmarkFactory;
     private final ConcurrentMap<String, Job> jobIdToJob = new ConcurrentHashMap<>();
 
     // Workaround to make Quarkus CDI happy. Do not use.
     public BedSchedulingResource() {
         this.solverManager = null;
         this.solutionManager = null;
+        this.benchmarkFactory = null;
     }
 
     @Inject
     public BedSchedulingResource(SolverManager<BedPlan, String> solverManager,
-                                 SolutionManager<BedPlan, HardSoftScore> solutionManager) {
+                                 SolutionManager<BedPlan, HardSoftScore> solutionManager,
+                                 PlannerBenchmarkFactory benchmarkFactory) {
         this.solverManager = solverManager;
         this.solutionManager = solutionManager;
+        this.benchmarkFactory = benchmarkFactory;
     }
 
     @Operation(summary = "List the job IDs of all submitted schedules.")
@@ -89,16 +94,17 @@ public class BedSchedulingResource {
     public String solve(BedPlan problem) {
         String jobId = UUID.randomUUID().toString();
         jobIdToJob.put(jobId, Job.ofSchedule(problem));
-        solverManager.solveBuilder()
-                .withProblemId(jobId)
-                .withProblemFinder(id -> jobIdToJob.get(jobId).schedule)
-                .withBestSolutionConsumer(solution -> jobIdToJob.put(jobId, Job.ofSchedule(solution)))
-                .withExceptionHandler((id, exception) -> {
-                    jobIdToJob.put(id, Job.ofException(exception));
-                    LOGGER.error("Failed solving jobId ({}).", id, exception);
-                })
-                .run();
-        cleanJobs();
+//        solverManager.solveBuilder()
+//                .withProblemId(jobId)
+//                .withProblemFinder(id -> jobIdToJob.get(jobId).schedule)
+//                .withBestSolutionConsumer(solution -> jobIdToJob.put(jobId, Job.ofSchedule(solution)))
+//                .withExceptionHandler((id, exception) -> {
+//                    jobIdToJob.put(id, Job.ofException(exception));
+//                    LOGGER.error("Failed solving jobId ({}).", id, exception);
+//                })
+//                .run();
+//        cleanJobs();
+        benchmarkFactory.buildPlannerBenchmark(problem).benchmark();
         return jobId;
     }
 

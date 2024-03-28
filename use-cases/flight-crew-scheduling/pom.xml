@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.acme</groupId>
-  <artifactId>timefold-solver-quarkus-vehicle-routing-quickstart</artifactId>
+  <artifactId>timefold-solver-quarkus-flight-crew-scheduling-quickstart</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
@@ -19,14 +19,6 @@
     <version.surefire.plugin>3.2.5</version.surefire.plugin>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>timefold-solver-enterprise</id>
-      <name>Timefold Solver Enterprise Edition</name>
-      <url>https://timefold.jfrog.io/artifactory/releases/</url>
-    </repository>
-  </repositories>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -39,13 +31,6 @@
       <dependency>
         <groupId>ai.timefold.solver</groupId>
         <artifactId>timefold-solver-bom</artifactId>
-        <version>${version.ai.timefold.solver}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>ai.timefold.solver.enterprise</groupId>
-        <artifactId>timefold-solver-enterprise-bom</artifactId>
         <version>${version.ai.timefold.solver}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -67,12 +52,8 @@
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
     <dependency>
-      <groupId>ai.timefold.solver.enterprise</groupId>
-      <artifactId>timefold-solver-enterprise-quarkus</artifactId>
-    </dependency>
-    <dependency>
       <groupId>ai.timefold.solver</groupId>
-      <artifactId>timefold-solver-quarkus-benchmark</artifactId>
+      <artifactId>timefold-solver-quarkus</artifactId>
     </dependency>
     <dependency>
       <groupId>ai.timefold.solver</groupId>
@@ -86,8 +67,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>ai.timefold.solver</groupId>
-      <artifactId>timefold-solver-test</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-internal</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,14 +77,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
+      <groupId>ai.timefold.solver</groupId>
+      <artifactId>timefold-solver-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.25.3</version>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -136,21 +116,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>leaflet</artifactId>
-      <version>1.6.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.webjars.npm</groupId>
       <artifactId>js-joda</artifactId>
       <version>1.11.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.npm</groupId>
-      <artifactId>flatpickr</artifactId>
-      <version>4.6.13</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
@@ -210,13 +178,7 @@
                 </goals>
                 <configuration>
                   <systemPropertyVariables>
-                    <native.image.path>
-                      ${project.build.directory}/${project.build.finalName}-runner
-                    </native.image.path>
-                    <java.util.logging.manager>org.jboss.logmanager.LogManager
-                    </java.util.logging.manager>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <maven.home>${maven.home}</maven.home>
+                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                   </systemPropertyVariables>
                 </configuration>
               </execution>
@@ -226,6 +188,8 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
+        <!-- To allow application.properties to avoid using the in-memory database for native builds. -->
+        <quarkus.profile>native</quarkus.profile>
       </properties>
     </profile>
     <profile>

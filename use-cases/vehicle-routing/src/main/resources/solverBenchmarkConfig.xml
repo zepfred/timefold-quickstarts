@@ -1,0 +1,46 @@
+<plannerBenchmark xmlns="https://timefold.ai/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://timefold.ai/xsd/benchmark https://timefold.ai/xsd/benchmark/benchmark.xsd">
+    <inheritedSolverBenchmark>
+        <solver>
+            <termination>
+                <secondsSpentLimit>5</secondsSpentLimit>
+            </termination>
+        </solver>
+        <problemBenchmarks>
+            <problemStatisticType>BEST_SCORE</problemStatisticType>
+            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+
+    <solverBenchmark>
+        <name>No threads</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>One thread</name>
+        <solver>
+            <moveThreadCount>1</moveThreadCount>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Two threads</name>
+        <solver>
+            <moveThreadCount>2</moveThreadCount>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Four threads</name>
+        <solver>
+            <moveThreadCount>4</moveThreadCount>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+</plannerBenchmark>

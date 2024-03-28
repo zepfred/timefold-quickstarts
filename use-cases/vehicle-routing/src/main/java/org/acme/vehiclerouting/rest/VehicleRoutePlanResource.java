@@ -19,6 +19,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
 import ai.timefold.solver.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import ai.timefold.solver.core.api.solver.RecommendedFit;
@@ -57,6 +58,8 @@ public class VehicleRoutePlanResource {
     private final SolverManager<VehicleRoutePlan, String> solverManager;
 
     private final SolutionManager<VehicleRoutePlan, HardSoftLongScore> solutionManager;
+    private final PlannerBenchmarkFactory benchmarkFactory;
+
 
     // TODO: Without any "time to live", the map may eventually grow out of memory.
     private final ConcurrentMap<String, Job> jobIdToJob = new ConcurrentHashMap<>();
@@ -65,13 +68,16 @@ public class VehicleRoutePlanResource {
     public VehicleRoutePlanResource() {
         this.solverManager = null;
         this.solutionManager = null;
+        this.benchmarkFactory = null;
     }
 
     @Inject
     public VehicleRoutePlanResource(SolverManager<VehicleRoutePlan, String> solverManager,
-                                    SolutionManager<VehicleRoutePlan, HardSoftLongScore> solutionManager) {
+                                    SolutionManager<VehicleRoutePlan, HardSoftLongScore> solutionManager,
+                                    PlannerBenchmarkFactory benchmarkFactory) {
         this.solverManager = solverManager;
         this.solutionManager = solutionManager;
+        this.benchmarkFactory = benchmarkFactory;
     }
 
     @Operation(summary = "List the job IDs of all submitted route plans.")
@@ -96,15 +102,16 @@ public class VehicleRoutePlanResource {
     public String solve(VehicleRoutePlan problem) {
         String jobId = UUID.randomUUID().toString();
         jobIdToJob.put(jobId, Job.ofRoutePlan(problem));
-        solverManager.solveBuilder()
-                .withProblemId(jobId)
-                .withProblemFinder(jobId_ -> jobIdToJob.get(jobId).routePlan)
-                .withBestSolutionConsumer(solution -> jobIdToJob.put(jobId, Job.ofRoutePlan(solution)))
-                .withExceptionHandler((jobId_, exception) -> {
-                    jobIdToJob.put(jobId, Job.ofException(exception));
-                    LOGGER.error("Failed solving jobId ({}).", jobId, exception);
-                })
-                .run();
+//        solverManager.solveBuilder()
+//                .withProblemId(jobId)
+//                .withProblemFinder(jobId_ -> jobIdToJob.get(jobId).routePlan)
+//                .withBestSolutionConsumer(solution -> jobIdToJob.put(jobId, Job.ofRoutePlan(solution)))
+//                .withExceptionHandler((jobId_, exception) -> {
+//                    jobIdToJob.put(jobId, Job.ofException(exception));
+//                    LOGGER.error("Failed solving jobId ({}).", jobId, exception);
+//                })
+//                .run();
+        benchmarkFactory.buildPlannerBenchmark(problem).benchmark();
         return jobId;
     }
 
