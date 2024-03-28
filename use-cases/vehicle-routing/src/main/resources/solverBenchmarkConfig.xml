@@ -3,7 +3,7 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>1</secondsSpentLimit>
+                <secondsSpentLimit>10</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
@@ -13,7 +13,14 @@
     </inheritedSolverBenchmark>
 
     <solverBenchmark>
-        <name>No threads</name>
+        <name>Config1</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Config2</name>
         <solver>
             <constructionHeuristic/>
             <localSearch/>
