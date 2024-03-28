@@ -3,7 +3,7 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>5</secondsSpentLimit>
+                <secondsSpentLimit>1</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
@@ -19,28 +19,28 @@
             <localSearch/>
         </solver>
     </solverBenchmark>
-    <solverBenchmark>
-        <name>One thread</name>
-        <solver>
-            <moveThreadCount>1</moveThreadCount>
-            <constructionHeuristic/>
-            <localSearch/>
-        </solver>
-    </solverBenchmark>
-    <solverBenchmark>
-        <name>Two threads</name>
-        <solver>
-            <moveThreadCount>2</moveThreadCount>
-            <constructionHeuristic/>
-            <localSearch/>
-        </solver>
-    </solverBenchmark>
-    <solverBenchmark>
-        <name>Four threads</name>
-        <solver>
-            <moveThreadCount>4</moveThreadCount>
-            <constructionHeuristic/>
-            <localSearch/>
-        </solver>
-    </solverBenchmark>
+<!--    <solverBenchmark>-->
+<!--        <name>One thread</name>-->
+<!--        <solver>-->
+<!--            <moveThreadCount>1</moveThreadCount>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch/>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+<!--    <solverBenchmark>-->
+<!--        <name>Two threads</name>-->
+<!--        <solver>-->
+<!--            <moveThreadCount>2</moveThreadCount>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch/>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+<!--    <solverBenchmark>-->
+<!--        <name>Four threads</name>-->
+<!--        <solver>-->
+<!--            <moveThreadCount>4</moveThreadCount>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch/>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
 </plannerBenchmark>
