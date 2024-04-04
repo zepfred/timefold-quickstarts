@@ -2,11 +2,21 @@
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Conference Scheduling - Timefold Quarkus</title>
+    <title>Flight Crew Scheduling - Timefold Quarkus</title>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/font-awesome/css/all.css"/>
     <link rel="stylesheet" href="/webjars/timefold/css/timefold-webui.css"/>
     <link rel="icon" href="/webjars/timefold/img/timefold-favicon.svg" type="image/svg+xml">
+    <style>
+        .vis-time-axis .vis-grid.vis-saturday,
+        .vis-time-axis .vis-grid.vis-sunday {
+            background: #D3D7CFFF;
+        }
+
+        .vis-item-content {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 <header id="timefold-auto-header">
@@ -17,106 +27,49 @@
         <div class="sticky-top d-flex justify-content-center align-items-center" aria-live="polite" aria-atomic="true">
             <div id="notificationPanel" style="position: absolute; top: .5rem;"></div>
         </div>
-        <h1>Conference Scheduling solver</h1>
-        <p>Generate the optimal schedule for your conference talks.</p>
+        <h1>Flight Crew Scheduling Solver</h1>
+        <p>Generate the optimal schedule for your flight crew scheduling.</p>
 
         <div class="mb-2">
             <button id="solveButton" type="button" class="btn btn-success">
                 <span class="fas fa-play"></span> Solve
             </button>
-            <button id="publishButton" type="button" class="btn btn-primary">
-                <span class="fas fa-refresh"></span> Publish
-            </button>
-            <button id="publishLoadingButton" type="button" class="btn btn-primary">
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Publishing...
-            </button>
             <button id="stopSolvingButton" type="button" class="btn btn-danger">
                 <span class="fas fa-stop"></span> Stop solving
+            </button>
+            <span id="score" class="score ms-2 align-middle fw-bold">Score: ?</span>
+            <button id="analyzeButton" type="button" class="ms-2 btn btn-secondary">
+                <span class="fas fa-question"></span>
             </button>
 
             <div class="float-end">
                 <ul class="nav nav-pills" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="byRoomTab" data-bs-toggle="tab"
-                                data-bs-target="#byRoomPanel" type="button" role="tab" aria-controls="byRoomPanel"
-                                aria-selected="true">By room
+                        <button class="nav-link active" id="byCrewTab" data-bs-toggle="tab"
+                                data-bs-target="#byCrewPanel" type="button" role="tab" aria-controls="byCrewPanel"
+                                aria-selected="true">By crew
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="bySpeakerTab" data-bs-toggle="tab" data-bs-target="#byTeacherPanel"
-                                type="button" role="tab" aria-controls="byTeacherPanel" aria-selected="false">By Speaker
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="byThemeTrackTab" data-bs-toggle="tab"
-                                data-bs-target="#byThemeTrackPanel" type="button" role="tab"
-                                aria-controls="byThemeTrackPanel" aria-selected="false">By Theme
-                            Tracks
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="bySectorsTab" data-bs-toggle="tab"
-                                data-bs-target="#bySectorsPanel" type="button" role="tab"
-                                aria-controls="bySectorsPanel" aria-selected="false">By Sectors
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="byAudienceTypeTab" data-bs-toggle="tab"
-                                data-bs-target="#byAudienceTypePanel" type="button" role="tab"
-                                aria-controls="byAudienceTypePanel" aria-selected="false">By Audience Type
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="byAudienceLevelTab" data-bs-toggle="tab"
-                                data-bs-target="#byAudienceLevelPanel" type="button" role="tab"
-                                aria-controls="byAudienceLevelPanel" aria-selected="false">By Audience Level
+                        <button class="nav-link" id="byFlightTab" data-bs-toggle="tab"
+                                data-bs-target="#byFlightPanel" type="button" role="tab" aria-controls="byFlightPanel"
+                                aria-selected="true">By Flight
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="mb-2">
-            <span id="score" class="score ms-2 align-middle fw-bold">Score: ?</span>
-            <button id="analyzeButton" type="button" class="ms-2 btn btn-secondary">
-                <span class="fas fa-question"></span>
-            </button>
-        </div>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="byRoomPanel" role="tabpanel" aria-labelledby="byRoomTab">
-                <table class="table table-borderless table-striped" id="scheduleByRoom">
-                    <!-- Filled in by app.js -->
-                </table>
+            <div class="tab-pane fade show active" id="byCrewPanel" role="tabpanel" aria-labelledby="byCrewTab">
+                <div id="crewVisualization"></div>
             </div>
-            <div class="tab-pane fade" id="byTeacherPanel" role="tabpanel" aria-labelledby="bySpeakerTab">
-                <table class="table table-borderless table-striped" id="scheduleBySpeaker">
-                    <!-- Filled in by app.js -->
-                </table>
-            </div>
-            <div class="tab-pane fade" id="byThemeTrackPanel" role="tabpanel" aria-labelledby="byThemeTrackTab">
-                <table class="table table-borderless table-striped" id="scheduleByThemeTrack">
-                    <!-- Filled in by app.js -->
-                </table>
-            </div>
-            <div class="tab-pane fade" id="bySectorsPanel" role="tabpanel" aria-labelledby="bySectorsTab">
-                <table class="table table-borderless table-striped" id="scheduleBySectors">
-                    <!-- Filled in by app.js -->
-                </table>
-            </div>
-            <div class="tab-pane fade" id="byAudienceTypePanel" role="tabpanel" aria-labelledby="byAudienceTypeTab">
-                <table class="table table-borderless table-striped" id="scheduleByAudienceType">
-                    <!-- Filled in by app.js -->
-                </table>
-            </div>
-            <div class="tab-pane fade" id="byAudienceLevelPanel" role="tabpanel" aria-labelledby="byAudienceLevelTab">
-                <table class="table table-borderless table-striped" id="scheduleByAudienceLevel">
-                    <!-- Filled in by app.js -->
-                </table>
+            <div class="tab-pane fade" id="byFlightPanel" role="tabpanel" aria-labelledby="byFlightTab">
+                <div id="flightVisualization"></div>
             </div>
         </div>
 
-        <h2>Unassigned talks</h2>
-        <div id="unassignedTalks" class="row row-cols-3 g-3 mb-4"></div>
+        <h2>Unassigned</h2>
+        <div id="unassignedCrew" class="row row-cols-4 g-3 mb-4"></div>
     </div>
 
     <div id="rest" class="tab-pane fade  container-fluid">
@@ -197,11 +150,13 @@
     </div>
 </div>
 
-
 <script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/js-joda/dist/js-joda.min.js"></script>
+<script src="/webjars/js-joda__locale_en-us/dist/index.js"></script>
 <script src="/webjars/timefold/js/timefold-webui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.2/standalone/umd/vis-timeline-graph2d.min.js"
+        integrity="sha256-Jy2+UO7rZ2Dgik50z3XrrNpnc5+2PAx9MhL2CicodME=" crossorigin="anonymous"></script>
 <script src="/app.js"></script>
 </body>
 </html>

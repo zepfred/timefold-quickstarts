@@ -106,7 +106,7 @@
         <pre>
             <button class="btn btn-outline-dark btn-sm float-end"
                     onclick="copyTextToClipboard('curl5')">Copy</button>
-            <code id="curl5">curl -X PUT -H 'Accept:application/json' http://localhost:8080/schedules/analyze?fetchPolicy={FETCH_ALL|FETCH_SHALLOW} -d@solution.json</code>
+            <code id="curl5">curl -X PUT -H 'Content-Type:application/json' http://localhost:8080/schedules/analyze -d@solution.json</code>
     </pre>
 
         <h3>6. Terminate solving early</h3>

@@ -104,6 +104,14 @@ image::use-cases/bed-allocation/quarkus-bed-scheduling-screenshot.png[]
 
 * link:use-cases/bed-allocation/README.adoc[Run quarkus-bed-allocation-scheduling] (Java, Maven, Quarkus)
 
+=== Flight Crew Scheduling
+
+Assign crew to flights to produce a better schedule for flight assignments.
+
+image::use-cases/flight-crew-scheduling/quarkus-flight-crew-scheduling-screenshot.png[]
+
+* link:use-cases/flight-crew-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
+
 == Legal notice
 
 Timefold Quickstarts was https://timefold.ai/blog/2023/optaplanner-fork/[forked] on 20 April 2023 from OptaPlanner Quickstarts,
