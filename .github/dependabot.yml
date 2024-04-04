@@ -5,6 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+      time: '05:00' # Otherwise it picks a random time.
     open-pull-requests-limit: 10
     commit-message:
       prefix: "deps: "
@@ -13,6 +14,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+      time: '05:00' # Otherwise it picks a random time.
     open-pull-requests-limit: 10
     commit-message:
       prefix: "deps: "
@@ -21,5 +23,6 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+      time: '05:00' # Otherwise it picks a random time.
     commit-message:
       prefix: "deps: "
