@@ -14,9 +14,11 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<food-packaging, Food packaging>>
 * <<order-picking, Order Picking>>
 * <<school-timetabling, School timetabling>>
-* <<facility-location, Facility location problem>>
+* <<facility-location-problem, Facility location problem>>
 * <<conference-scheduling, Conference Scheduling>>
-* <<bed-scheduling, Bed Allocation Scheduling>>
+* <<bed-allocation-scheduling, Bed Allocation Scheduling>>
+* <<flight-crew-scheduling, Flight Crew Scheduling>>
+* <<meeting-scheduling, Meeting Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -111,6 +113,14 @@ Assign crew to flights to produce a better schedule for flight assignments.
 image::use-cases/flight-crew-scheduling/quarkus-flight-crew-scheduling-screenshot.png[]
 
 * link:use-cases/flight-crew-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
+
+=== Meeting Scheduling
+
+Assign timeslots and rooms for meetings to produce a better schedule.
+
+image::use-cases/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
+
+* link:use-cases/meeting-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
 
 == Legal notice
 

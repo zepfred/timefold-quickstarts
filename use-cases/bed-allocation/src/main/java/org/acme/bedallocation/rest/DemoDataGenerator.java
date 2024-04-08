@@ -19,9 +19,6 @@ import java.util.stream.IntStream;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import ai.timefold.solver.core.impl.util.MutableReference;
-import ai.timefold.solver.core.impl.util.Pair;
-
 import org.acme.bedallocation.domain.Bed;
 import org.acme.bedallocation.domain.BedPlan;
 import org.acme.bedallocation.domain.Department;
@@ -151,23 +148,25 @@ public class DemoDataGenerator {
                 new Pair<>(0.95f, 3),
                 new Pair<>(1f, 4));
         for (int i = 0; i < rooms.size(); i++) {
-            MutableReference<LocalDate> currentDate = new MutableReference<>(LocalDate.from(initialDate));
-            while (currentDate.getValue().isBefore(maxDate)) {
+            LocalDate currentDate = LocalDate.from(initialDate);
+            while (currentDate.isBefore(maxDate)) {
                 double countDays = random.nextDouble();
                 int numDays = periodCount.stream()
                         .filter(p -> countDays <= p.key())
                         .mapToInt(Pair::value)
                         .findFirst()
                         .getAsInt();
-                MutableReference<LocalDate> nextDate = new MutableReference<>(currentDate.getValue().plusDays(numDays));
-                if (nextDate.getValue().isAfter(maxDate)) {
-                    nextDate.setValue(maxDate);
+                LocalDate nextDate = currentDate.plusDays(numDays);
+                if (nextDate.isAfter(maxDate)) {
+                    nextDate = maxDate;
                 }
+                LocalDate finalCurrentDate = currentDate;
+                LocalDate finalNexDate = nextDate;
                 applyRandomValue(1, updatedStays, stay -> stay.getArrivalDate() == null, stay -> {
-                    stay.setArrivalDate(currentDate.getValue());
-                    stay.setDepartureDate(nextDate.getValue());
+                    stay.setArrivalDate(finalCurrentDate);
+                    stay.setDepartureDate(finalNexDate);
                 });
-                currentDate.setValue(nextDate.getValue().plusDays(1));
+                currentDate = nextDate.plusDays(1);
             }
         }
         return updatedStays.stream().filter(s -> s.getArrivalDate() != null).toList();
@@ -332,5 +331,8 @@ public class DemoDataGenerator {
                 break;
             }
         }
+    }
+
+    private record Pair<K, V>(K key, V value) {
     }
 }
