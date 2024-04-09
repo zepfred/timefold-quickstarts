@@ -6,7 +6,7 @@
   <parent>
     <groupId>ai.timefold.solver</groupId>
     <artifactId>timefold-solver-build-parent</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
     <relativePath/>
   </parent>
   <!-- IMPORTANT: the individual quickstarts have no parent pom. -->
@@ -30,6 +30,10 @@
     <module>use-cases/order-picking</module>
     <module>use-cases/employee-scheduling</module>
     <module>use-cases/food-packaging</module>
+    <module>use-cases/conference-scheduling</module>
+    <module>use-cases/bed-allocation</module>
+    <module>use-cases/flight-crew-scheduling</module>
+    <module>use-cases/meeting-scheduling</module>
   </modules>
 
 </project>

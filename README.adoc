@@ -14,7 +14,11 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<food-packaging, Food packaging>>
 * <<order-picking, Order Picking>>
 * <<school-timetabling, School timetabling>>
-* <<facility-location, Facility location problem>>
+* <<facility-location-problem, Facility location problem>>
+* <<conference-scheduling, Conference Scheduling>>
+* <<bed-allocation-scheduling, Bed Allocation Scheduling>>
+* <<flight-crew-scheduling, Flight Crew Scheduling>>
+* <<meeting-scheduling, Meeting Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -85,6 +89,38 @@ Pick the best geographical locations for new stores, distribution centers, covid
 image::use-cases/facility-location/quarkus-facility-location-screenshot.png[]
 
 * link:use-cases/facility-location/README.adoc[Run quarkus-facility-location] (Java, Maven, Quarkus)
+
+=== Conference Scheduling
+
+Assign conference talks to timeslots and rooms to produce a better schedule for speakers.
+
+image::use-cases/conference-scheduling/quarkus-conference-scheduling-screenshot.png[]
+
+* link:use-cases/conference-scheduling/README.adoc[Run quarkus-conference-scheduling] (Java, Maven, Quarkus)
+
+=== Bed Allocation Scheduling
+
+Assign beds to patient stays to produce a better schedule for hospitals.
+
+image::use-cases/bed-allocation/quarkus-bed-scheduling-screenshot.png[]
+
+* link:use-cases/bed-allocation/README.adoc[Run quarkus-bed-allocation-scheduling] (Java, Maven, Quarkus)
+
+=== Flight Crew Scheduling
+
+Assign crew to flights to produce a better schedule for flight assignments.
+
+image::use-cases/flight-crew-scheduling/quarkus-flight-crew-scheduling-screenshot.png[]
+
+* link:use-cases/flight-crew-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
+
+=== Meeting Scheduling
+
+Assign timeslots and rooms for meetings to produce a better schedule.
+
+image::use-cases/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
+
+* link:use-cases/meeting-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
 
 == Legal notice
 

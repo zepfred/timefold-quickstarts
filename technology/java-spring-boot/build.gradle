@@ -1,11 +1,11 @@
 plugins {
-    id "org.springframework.boot" version "3.2.3"
+    id "org.springframework.boot" version "3.2.4"
     id "io.spring.dependency-management" version "1.1.4"
     id 'org.graalvm.buildtools.native' version '0.10.1'
     id "java"
 }
 
-def timefoldVersion = "1.8.0"
+def timefoldVersion = "1.9.0"
 
 group = "org.acme"
 archivesBaseName = "timefold-solver-spring-boot-school-timetabling-quickstart"
@@ -30,7 +30,7 @@ dependencies {
     implementation "ai.timefold.solver:timefold-solver-spring-boot-starter"
 
     // Swagger
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
