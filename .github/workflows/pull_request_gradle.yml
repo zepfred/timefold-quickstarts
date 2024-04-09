@@ -35,6 +35,7 @@ jobs:
           path: ./timefold-solver
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Prevent stale fork of timefold-solver
+        if: steps.checkout-solver.outcome == 'success'
         env:
           BLESSED_REPO: "timefold-solver"
           BLESSED_BRANCH: ${{ endsWith(github.head_ref, '.x') && github.head_ref || 'main' }}
