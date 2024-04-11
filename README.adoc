@@ -19,6 +19,7 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<bed-allocation-scheduling, Bed Allocation Scheduling>>
 * <<flight-crew-scheduling, Flight Crew Scheduling>>
 * <<meeting-scheduling, Meeting Scheduling>>
+* <<sports-leaghe-scheduling, Sports League Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -121,6 +122,14 @@ Assign timeslots and rooms for meetings to produce a better schedule.
 image::use-cases/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
 
 * link:use-cases/meeting-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
+
+=== Sports League Scheduling
+
+Assign rounds to matches to produce a better schedule for league matches.
+
+image::use-cases/sports-league-scheduling/quarkus-sports-leaghe-scheduling-screenshot.png[]
+
+* link:use-cases/sports-league-scheduling/README.adoc[Run quarkus-sports-league-scheduling] (Java, Maven, Quarkus)
 
 == Legal notice
 

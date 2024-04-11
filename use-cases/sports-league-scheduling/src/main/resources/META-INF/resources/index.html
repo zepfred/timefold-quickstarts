@@ -1,8 +1,9 @@
+<!DOCTYPE>
 <html lang="en">
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Flight Crew Scheduling - Timefold Quarkus</title>
+    <title>Sports League Scheduling - Timefold Quarkus</title>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/font-awesome/css/all.css"/>
     <link rel="stylesheet" href="/webjars/timefold/css/timefold-webui.css"/>
@@ -27,8 +28,8 @@
         <div class="sticky-top d-flex justify-content-center align-items-center" aria-live="polite" aria-atomic="true">
             <div id="notificationPanel" style="position: absolute; top: .5rem;"></div>
         </div>
-        <h1>Flight Crew Scheduling Solver</h1>
-        <p>Generate the optimal schedule for your flight crew scheduling.</p>
+        <h1>Sports League Scheduling Solver</h1>
+        <p>Generate the optimal schedule for your sports league matches.</p>
 
         <div class="mb-2">
             <button id="solveButton" type="button" class="btn btn-success">
@@ -45,37 +46,28 @@
             <div class="float-end">
                 <ul class="nav nav-pills" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="byCrewTab" data-bs-toggle="tab"
-                                data-bs-target="#byCrewPanel" type="button" role="tab" aria-controls="byCrewPanel"
-                                aria-selected="true">By crew
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="byFlightTab" data-bs-toggle="tab"
-                                data-bs-target="#byFlightPanel" type="button" role="tab" aria-controls="byFlightPanel"
-                                aria-selected="true">By Flight
+                        <button class="nav-link active" id="byTeamTab" data-bs-toggle="tab"
+                                data-bs-target="#byTeamPanel" type="button" role="tab" aria-controls="byTeamPanel"
+                                aria-selected="true">By Team
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="byCrewPanel" role="tabpanel" aria-labelledby="byCrewTab">
-                <div id="crewVisualization"></div>
-            </div>
-            <div class="tab-pane fade" id="byFlightPanel" role="tabpanel" aria-labelledby="byFlightTab">
-                <div id="flightVisualization"></div>
+            <div class="tab-pane fade show active" id="byTeamPanel" role="tabpanel" aria-labelledby="byTeamTab">
+                <div id="teamVisualization"></div>
             </div>
         </div>
 
         <h2>Unassigned</h2>
-        <div id="unassignedCrew" class="row row-cols-4 g-3 mb-4"></div>
+        <div id="unassigned" class="row row-cols-4 g-3 mb-4"></div>
     </div>
 
     <div id="rest" class="tab-pane fade  container-fluid">
         <h1>REST API Guide</h1>
 
-        <h2>Flight Crew Scheduling solver integration via cURL</h2>
+        <h2>Sports League Scheduling solver integration via cURL</h2>
 
         <h3>1. Download demo data</h3>
         <pre>

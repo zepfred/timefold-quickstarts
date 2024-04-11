@@ -34,6 +34,7 @@
     <module>use-cases/bed-allocation</module>
     <module>use-cases/flight-crew-scheduling</module>
     <module>use-cases/meeting-scheduling</module>
+    <module>use-cases/sports-league-scheduling</module>
   </modules>
 
 </project>
