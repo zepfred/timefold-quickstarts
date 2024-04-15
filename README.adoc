@@ -20,6 +20,7 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<flight-crew-scheduling, Flight Crew Scheduling>>
 * <<meeting-scheduling, Meeting Scheduling>>
 * <<sports-leaghe-scheduling, Sports League Scheduling>>
+* <<task-assigning, Task Assigning>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -130,6 +131,14 @@ Assign rounds to matches to produce a better schedule for league matches.
 image::use-cases/sports-league-scheduling/quarkus-sports-leaghe-scheduling-screenshot.png[]
 
 * link:use-cases/sports-league-scheduling/README.adoc[Run quarkus-sports-league-scheduling] (Java, Maven, Quarkus)
+
+=== Task Assigning
+
+Assign employees to tasks to produce a better plan for task assignments.
+
+image::use-cases/task-assigning/quarkus-task-assigning-screenshot.png[]
+
+* link:use-cases/task-assigning/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
 
 == Legal notice
 

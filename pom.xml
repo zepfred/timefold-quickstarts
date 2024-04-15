@@ -35,6 +35,7 @@
     <module>use-cases/flight-crew-scheduling</module>
     <module>use-cases/meeting-scheduling</module>
     <module>use-cases/sports-league-scheduling</module>
+    <module>use-cases/task-assigning</module>
   </modules>
 
 </project>
