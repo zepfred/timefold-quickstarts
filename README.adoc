@@ -21,6 +21,7 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<meeting-scheduling, Meeting Scheduling>>
 * <<sports-leaghe-scheduling, Sports League Scheduling>>
 * <<task-assigning, Task Assigning>>
+* <<project-job-scheduling, Project Job Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -139,6 +140,14 @@ Assign employees to tasks to produce a better plan for task assignments.
 image::use-cases/task-assigning/quarkus-task-assigning-screenshot.png[]
 
 * link:use-cases/task-assigning/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
+
+=== Project Job Scheduling
+
+Assign jobs for execution to produce a better schedule for project job allocations.
+
+image::use-cases/project-job-scheduling/quarkus-project-job-scheduling-screenshot.png[]
+
+* link:use-cases/project-job-scheduling/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
 
 == Legal notice
 
