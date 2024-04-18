@@ -2,6 +2,8 @@ package org.acme.vehiclerouting.domain;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
@@ -164,7 +166,16 @@ public class Visit {
         if (arrivalTime == null) {
             return 0;
         }
-        return Duration.between(maxEndTime, arrivalTime.plus(serviceDuration)).toMinutes();
+        return roundDurationToNextOrEqualMinutes(Duration.between(maxEndTime, arrivalTime.plus(serviceDuration)));
+    }
+
+    private static long roundDurationToNextOrEqualMinutes(Duration duration) {
+        var remainder = duration.minus(duration.truncatedTo(ChronoUnit.MINUTES));
+        var minutes = duration.toMinutes();
+        if (remainder.equals(Duration.ZERO)) {
+            return minutes;
+        }
+        return minutes + 1;
     }
 
     @JsonIgnore
