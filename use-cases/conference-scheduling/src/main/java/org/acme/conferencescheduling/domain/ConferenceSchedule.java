@@ -7,7 +7,7 @@ import ai.timefold.solver.core.api.domain.solution.PlanningEntityCollectionPrope
 import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.solution.ProblemFactCollectionProperty;
-import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
 @PlanningSolution
@@ -34,7 +34,7 @@ public class ConferenceSchedule {
     private Set<Talk> talks;
 
     @PlanningScore
-    private HardMediumSoftScore score = null;
+    private HardSoftScore score = null;
 
     // Ignored by Timefold, used by the UI to display solve or stop solving button
     private SolverStatus solverStatus;
@@ -42,7 +42,7 @@ public class ConferenceSchedule {
     public ConferenceSchedule() {
     }
 
-    public ConferenceSchedule(String name, HardMediumSoftScore score, SolverStatus solverStatus) {
+    public ConferenceSchedule(String name, HardSoftScore score, SolverStatus solverStatus) {
         this.name = name;
         this.score = score;
         this.solverStatus = solverStatus;
@@ -118,11 +118,11 @@ public class ConferenceSchedule {
         this.talks = talks;
     }
 
-    public HardMediumSoftScore getScore() {
+    public HardSoftScore getScore() {
         return score;
     }
 
-    public void setScore(HardMediumSoftScore score) {
+    public void setScore(HardSoftScore score) {
         this.score = score;
     }
 

@@ -290,41 +290,8 @@ class ConferenceSchedulingConstraintProviderTest {
     }
 
     // ************************************************************************
-    // Medium constraints
-    // ************************************************************************
-
-    @Test
-    void publishedTimeslot() {
-        Room room = new Room("0");
-        Talk talk1 = new Talk("1", MONDAY_9_TO_10, room);
-        talk1.setPublishedTimeslot(MONDAY_9_TO_10);
-        Talk talk2 = new Talk("2", MONDAY_10_05_TO_11, room);
-        talk2.setPublishedTimeslot(MONDAY_9_TO_10);
-
-        constraintVerifier.verifyThat(ConferenceSchedulingConstraintProvider::publishedTimeslot)
-                .given(talk1, talk2)
-                .indictsWith(talk2)
-                .penalizesBy(1);
-    }
-
-    // ************************************************************************
     // Soft constraints
     // ************************************************************************
-
-    @Test
-    void publishedRoom() {
-        Room room1 = new Room("0");
-        Room room2 = new Room("1");
-        Talk talk1 = new Talk("1", MONDAY_9_TO_10, room1);
-        talk1.setPublishedRoom(room1);
-        Talk talk2 = new Talk("2", MONDAY_10_05_TO_11, room1);
-        talk2.setPublishedRoom(room2);
-
-        constraintVerifier.verifyThat(ConferenceSchedulingConstraintProvider::publishedRoom)
-                .given(talk1, talk2)
-                .indictsWith(talk2)
-                .penalizesBy(1);
-    }
 
     @Test
     void themeTrackConflict() {

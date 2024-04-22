@@ -19,8 +19,6 @@ import static org.acme.conferencescheduling.domain.ConferenceConstraintConfigura
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.CROWD_CONTROL;
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.LANGUAGE_DIVERSITY;
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.POPULAR_TALKS;
-import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.PUBLISHED_ROOM;
-import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.PUBLISHED_TIMESLOT;
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.ROOM_CONFLICT;
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.ROOM_UNAVAILABLE_TIMESLOT;
 import static org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration.SAME_DAY_TALKS;
@@ -67,7 +65,6 @@ import org.acme.conferencescheduling.solver.justifications.ConflictTalkJustifica
 import org.acme.conferencescheduling.solver.justifications.DiversityTalkJustification;
 import org.acme.conferencescheduling.solver.justifications.PreferredTagsJustification;
 import org.acme.conferencescheduling.solver.justifications.ProhibitedTagsJustification;
-import org.acme.conferencescheduling.solver.justifications.PublishedTimeslotJustification;
 import org.acme.conferencescheduling.solver.justifications.RequiredTagsJustification;
 import org.acme.conferencescheduling.solver.justifications.UnavailableTimeslotJustification;
 import org.acme.conferencescheduling.solver.justifications.UndesiredTagsJustification;
@@ -103,10 +100,7 @@ public class ConferenceSchedulingConstraintProvider implements ConstraintProvide
                 speakerProhibitedRoomTags(factory),
                 talkRequiredRoomTags(factory),
                 talkProhibitedRoomTags(factory),
-                // Medium constraints
-                publishedTimeslot(factory),
                 // Soft constraints
-                publishedRoom(factory),
                 themeTrackConflict(factory),
                 themeTrackRoomStability(factory),
                 sectorConflict(factory),
@@ -336,29 +330,8 @@ public class ConferenceSchedulingConstraintProvider implements ConstraintProvide
     }
 
     // ************************************************************************
-    // Medium constraints
-    // ************************************************************************
-
-    Constraint publishedTimeslot(ConstraintFactory factory) {
-        return factory.forEach(Talk.class)
-                .filter(talk -> talk.getPublishedTimeslot() != null
-                        && !talk.getTimeslot().equals(talk.getPublishedTimeslot()))
-                .penalizeConfigurable()
-                .justifyWith((talk, score) -> new PublishedTimeslotJustification(talk, true))
-                .asConstraint(PUBLISHED_TIMESLOT);
-    }
-
-    // ************************************************************************
     // Soft constraints
     // ************************************************************************
-
-    Constraint publishedRoom(ConstraintFactory factory) {
-        return factory.forEach(Talk.class)
-                .filter(talk -> talk.getPublishedRoom() != null && !talk.getRoom().equals(talk.getPublishedRoom()))
-                .penalizeConfigurable()
-                .justifyWith((talk, score) -> new PublishedTimeslotJustification(talk, false))
-                .asConstraint(PUBLISHED_ROOM);
-    }
 
     Constraint themeTrackConflict(ConstraintFactory factory) {
         return factory.forEachUniquePair(Talk.class,

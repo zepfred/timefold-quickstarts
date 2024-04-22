@@ -3,7 +3,7 @@ package org.acme.conferencescheduling.domain;
 
 import ai.timefold.solver.core.api.domain.constraintweight.ConstraintConfiguration;
 import ai.timefold.solver.core.api.domain.constraintweight.ConstraintWeight;
-import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @ConstraintConfiguration(constraintPackage = "ai.timefold.solver.examples.conferencescheduling.score")
 public class ConferenceConstraintConfiguration {
@@ -26,9 +26,6 @@ public class ConferenceConstraintConfiguration {
     public static final String TALK_REQUIRED_ROOM_TAGS = "Talk required room tags";
     public static final String TALK_PROHIBITED_ROOM_TAGS = "Talk prohibited room tags";
 
-    public static final String PUBLISHED_TIMESLOT = "Published timeslot";
-
-    public static final String PUBLISHED_ROOM = "Published room";
     public static final String THEME_TRACK_CONFLICT = "Theme track conflict";
     public static final String THEME_TRACK_ROOM_STABILITY = "Theme track room stability";
     public static final String SECTOR_CONFLICT = "Sector conflict";
@@ -54,85 +51,80 @@ public class ConferenceConstraintConfiguration {
     private int minimumConsecutiveTalksPauseInMinutes = 30;
 
     @ConstraintWeight(ROOM_UNAVAILABLE_TIMESLOT)
-    private HardMediumSoftScore roomUnavailableTimeslot = HardMediumSoftScore.ofHard(100_000);
+    private HardSoftScore roomUnavailableTimeslot = HardSoftScore.ofHard(100_000);
     @ConstraintWeight(ROOM_CONFLICT)
-    private HardMediumSoftScore roomConflict = HardMediumSoftScore.ofHard(1_000);
+    private HardSoftScore roomConflict = HardSoftScore.ofHard(1_000);
     @ConstraintWeight(SPEAKER_UNAVAILABLE_TIMESLOT)
-    private HardMediumSoftScore speakerUnavailableTimeslot = HardMediumSoftScore.ofHard(100);
+    private HardSoftScore speakerUnavailableTimeslot = HardSoftScore.ofHard(100);
     @ConstraintWeight(SPEAKER_CONFLICT)
-    private HardMediumSoftScore speakerConflict = HardMediumSoftScore.ofHard(10);
+    private HardSoftScore speakerConflict = HardSoftScore.ofHard(10);
     @ConstraintWeight(TALK_PREREQUISITE_TALKS)
-    private HardMediumSoftScore talkPrerequisiteTalks = HardMediumSoftScore.ofHard(10);
+    private HardSoftScore talkPrerequisiteTalks = HardSoftScore.ofHard(10);
     @ConstraintWeight(TALK_MUTUALLY_EXCLUSIVE_TALKS_TAGS)
-    private HardMediumSoftScore talkMutuallyExclusiveTalksTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore talkMutuallyExclusiveTalksTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(CONSECUTIVE_TALKS_PAUSE)
-    private HardMediumSoftScore consecutiveTalksPause = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore consecutiveTalksPause = HardSoftScore.ofHard(1);
     @ConstraintWeight(CROWD_CONTROL)
-    private HardMediumSoftScore crowdControl = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore crowdControl = HardSoftScore.ofHard(1);
 
     @ConstraintWeight(SPEAKER_REQUIRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore speakerRequiredTimeslotTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore speakerRequiredTimeslotTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(SPEAKER_PROHIBITED_TIMESLOT_TAGS)
-    private HardMediumSoftScore speakerProhibitedTimeslotTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore speakerProhibitedTimeslotTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(TALK_REQUIRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore talkRequiredTimeslotTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore talkRequiredTimeslotTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(TALK_PROHIBITED_TIMESLOT_TAGS)
-    private HardMediumSoftScore talkProhibitedTimeslotTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore talkProhibitedTimeslotTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(SPEAKER_REQUIRED_ROOM_TAGS)
-    private HardMediumSoftScore speakerRequiredRoomTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore speakerRequiredRoomTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(SPEAKER_PROHIBITED_ROOM_TAGS)
-    private HardMediumSoftScore speakerProhibitedRoomTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore speakerProhibitedRoomTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(TALK_REQUIRED_ROOM_TAGS)
-    private HardMediumSoftScore talkRequiredRoomTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore talkRequiredRoomTags = HardSoftScore.ofHard(1);
     @ConstraintWeight(TALK_PROHIBITED_ROOM_TAGS)
-    private HardMediumSoftScore talkProhibitedRoomTags = HardMediumSoftScore.ofHard(1);
+    private HardSoftScore talkProhibitedRoomTags = HardSoftScore.ofHard(1);
 
-    @ConstraintWeight(PUBLISHED_TIMESLOT)
-    private HardMediumSoftScore publishedTimeslot = HardMediumSoftScore.ofMedium(1);
-
-    @ConstraintWeight(PUBLISHED_ROOM)
-    private HardMediumSoftScore publishedRoom = HardMediumSoftScore.ofSoft(10);
     @ConstraintWeight(THEME_TRACK_CONFLICT)
-    private HardMediumSoftScore themeTrackConflict = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore themeTrackConflict = HardSoftScore.ofSoft(10);
     @ConstraintWeight(THEME_TRACK_ROOM_STABILITY)
-    private HardMediumSoftScore themeTrackRoomStability = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore themeTrackRoomStability = HardSoftScore.ofSoft(10);
     @ConstraintWeight(SECTOR_CONFLICT)
-    private HardMediumSoftScore sectorConflict = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore sectorConflict = HardSoftScore.ofSoft(10);
     @ConstraintWeight(AUDIENCE_TYPE_DIVERSITY)
-    private HardMediumSoftScore audienceTypeDiversity = HardMediumSoftScore.ofSoft(1);
+    private HardSoftScore audienceTypeDiversity = HardSoftScore.ofSoft(1);
     @ConstraintWeight(AUDIENCE_TYPE_THEME_TRACK_CONFLICT)
-    private HardMediumSoftScore audienceTypeThemeTrackConflict = HardMediumSoftScore.ofSoft(1);
+    private HardSoftScore audienceTypeThemeTrackConflict = HardSoftScore.ofSoft(1);
     @ConstraintWeight(AUDIENCE_LEVEL_DIVERSITY)
-    private HardMediumSoftScore audienceLevelDiversity = HardMediumSoftScore.ofSoft(1);
+    private HardSoftScore audienceLevelDiversity = HardSoftScore.ofSoft(1);
     @ConstraintWeight(CONTENT_AUDIENCE_LEVEL_FLOW_VIOLATION)
-    private HardMediumSoftScore contentAudienceLevelFlowViolation = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore contentAudienceLevelFlowViolation = HardSoftScore.ofSoft(10);
     @ConstraintWeight(CONTENT_CONFLICT)
-    private HardMediumSoftScore contentConflict = HardMediumSoftScore.ofSoft(100);
+    private HardSoftScore contentConflict = HardSoftScore.ofSoft(100);
     @ConstraintWeight(LANGUAGE_DIVERSITY)
-    private HardMediumSoftScore languageDiversity = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore languageDiversity = HardSoftScore.ofSoft(10);
     @ConstraintWeight(SAME_DAY_TALKS)
-    private HardMediumSoftScore sameDayTalks = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore sameDayTalks = HardSoftScore.ofSoft(10);
     @ConstraintWeight(POPULAR_TALKS)
-    private HardMediumSoftScore popularTalks = HardMediumSoftScore.ofSoft(10);
+    private HardSoftScore popularTalks = HardSoftScore.ofSoft(10);
 
     @ConstraintWeight(SPEAKER_PREFERRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore speakerPreferredTimeslotTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore speakerPreferredTimeslotTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(SPEAKER_UNDESIRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore speakerUndesiredTimeslotTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore speakerUndesiredTimeslotTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(TALK_PREFERRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore talkPreferredTimeslotTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore talkPreferredTimeslotTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(TALK_UNDESIRED_TIMESLOT_TAGS)
-    private HardMediumSoftScore talkUndesiredTimeslotTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore talkUndesiredTimeslotTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(SPEAKER_PREFERRED_ROOM_TAGS)
-    private HardMediumSoftScore speakerPreferredRoomTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore speakerPreferredRoomTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(SPEAKER_UNDESIRED_ROOM_TAGS)
-    private HardMediumSoftScore speakerUndesiredRoomTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore speakerUndesiredRoomTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(TALK_PREFERRED_ROOM_TAGS)
-    private HardMediumSoftScore talkPreferredRoomTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore talkPreferredRoomTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(TALK_UNDESIRED_ROOM_TAGS)
-    private HardMediumSoftScore talkUndesiredRoomTags = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore talkUndesiredRoomTags = HardSoftScore.ofSoft(20);
     @ConstraintWeight(SPEAKER_MAKESPAN)
-    private HardMediumSoftScore speakerMakespan = HardMediumSoftScore.ofSoft(20);
+    private HardSoftScore speakerMakespan = HardSoftScore.ofSoft(20);
 
     public ConferenceConstraintConfiguration() {
     }
@@ -149,307 +141,291 @@ public class ConferenceConstraintConfiguration {
         this.minimumConsecutiveTalksPauseInMinutes = minimumConsecutiveTalksPauseInMinutes;
     }
 
-    public HardMediumSoftScore getRoomUnavailableTimeslot() {
+    public HardSoftScore getRoomUnavailableTimeslot() {
         return roomUnavailableTimeslot;
     }
 
-    public void setRoomUnavailableTimeslot(HardMediumSoftScore roomUnavailableTimeslot) {
+    public void setRoomUnavailableTimeslot(HardSoftScore roomUnavailableTimeslot) {
         this.roomUnavailableTimeslot = roomUnavailableTimeslot;
     }
 
-    public HardMediumSoftScore getRoomConflict() {
+    public HardSoftScore getRoomConflict() {
         return roomConflict;
     }
 
-    public void setRoomConflict(HardMediumSoftScore roomConflict) {
+    public void setRoomConflict(HardSoftScore roomConflict) {
         this.roomConflict = roomConflict;
     }
 
-    public HardMediumSoftScore getSpeakerUnavailableTimeslot() {
+    public HardSoftScore getSpeakerUnavailableTimeslot() {
         return speakerUnavailableTimeslot;
     }
 
-    public void setSpeakerUnavailableTimeslot(HardMediumSoftScore speakerUnavailableTimeslot) {
+    public void setSpeakerUnavailableTimeslot(HardSoftScore speakerUnavailableTimeslot) {
         this.speakerUnavailableTimeslot = speakerUnavailableTimeslot;
     }
 
-    public HardMediumSoftScore getSpeakerConflict() {
+    public HardSoftScore getSpeakerConflict() {
         return speakerConflict;
     }
 
-    public void setSpeakerConflict(HardMediumSoftScore speakerConflict) {
+    public void setSpeakerConflict(HardSoftScore speakerConflict) {
         this.speakerConflict = speakerConflict;
     }
 
-    public HardMediumSoftScore getTalkPrerequisiteTalks() {
+    public HardSoftScore getTalkPrerequisiteTalks() {
         return talkPrerequisiteTalks;
     }
 
-    public void setTalkPrerequisiteTalks(HardMediumSoftScore talkPrerequisiteTalks) {
+    public void setTalkPrerequisiteTalks(HardSoftScore talkPrerequisiteTalks) {
         this.talkPrerequisiteTalks = talkPrerequisiteTalks;
     }
 
-    public HardMediumSoftScore getTalkMutuallyExclusiveTalksTags() {
+    public HardSoftScore getTalkMutuallyExclusiveTalksTags() {
         return talkMutuallyExclusiveTalksTags;
     }
 
-    public void setTalkMutuallyExclusiveTalksTags(HardMediumSoftScore talkMutuallyExclusiveTalksTags) {
+    public void setTalkMutuallyExclusiveTalksTags(HardSoftScore talkMutuallyExclusiveTalksTags) {
         this.talkMutuallyExclusiveTalksTags = talkMutuallyExclusiveTalksTags;
     }
 
-    public HardMediumSoftScore getConsecutiveTalksPause() {
+    public HardSoftScore getConsecutiveTalksPause() {
         return consecutiveTalksPause;
     }
 
-    public void setConsecutiveTalksPause(HardMediumSoftScore consecutiveTalksPause) {
+    public void setConsecutiveTalksPause(HardSoftScore consecutiveTalksPause) {
         this.consecutiveTalksPause = consecutiveTalksPause;
     }
 
-    public HardMediumSoftScore getCrowdControl() {
+    public HardSoftScore getCrowdControl() {
         return crowdControl;
     }
 
-    public void setCrowdControl(HardMediumSoftScore crowdControl) {
+    public void setCrowdControl(HardSoftScore crowdControl) {
         this.crowdControl = crowdControl;
     }
 
-    public HardMediumSoftScore getSpeakerRequiredTimeslotTags() {
+    public HardSoftScore getSpeakerRequiredTimeslotTags() {
         return speakerRequiredTimeslotTags;
     }
 
-    public void setSpeakerRequiredTimeslotTags(HardMediumSoftScore speakerRequiredTimeslotTags) {
+    public void setSpeakerRequiredTimeslotTags(HardSoftScore speakerRequiredTimeslotTags) {
         this.speakerRequiredTimeslotTags = speakerRequiredTimeslotTags;
     }
 
-    public HardMediumSoftScore getSpeakerProhibitedTimeslotTags() {
+    public HardSoftScore getSpeakerProhibitedTimeslotTags() {
         return speakerProhibitedTimeslotTags;
     }
 
-    public void setSpeakerProhibitedTimeslotTags(HardMediumSoftScore speakerProhibitedTimeslotTags) {
+    public void setSpeakerProhibitedTimeslotTags(HardSoftScore speakerProhibitedTimeslotTags) {
         this.speakerProhibitedTimeslotTags = speakerProhibitedTimeslotTags;
     }
 
-    public HardMediumSoftScore getTalkRequiredTimeslotTags() {
+    public HardSoftScore getTalkRequiredTimeslotTags() {
         return talkRequiredTimeslotTags;
     }
 
-    public void setTalkRequiredTimeslotTags(HardMediumSoftScore talkRequiredTimeslotTags) {
+    public void setTalkRequiredTimeslotTags(HardSoftScore talkRequiredTimeslotTags) {
         this.talkRequiredTimeslotTags = talkRequiredTimeslotTags;
     }
 
-    public HardMediumSoftScore getTalkProhibitedTimeslotTags() {
+    public HardSoftScore getTalkProhibitedTimeslotTags() {
         return talkProhibitedTimeslotTags;
     }
 
-    public void setTalkProhibitedTimeslotTags(HardMediumSoftScore talkProhibitedTimeslotTags) {
+    public void setTalkProhibitedTimeslotTags(HardSoftScore talkProhibitedTimeslotTags) {
         this.talkProhibitedTimeslotTags = talkProhibitedTimeslotTags;
     }
 
-    public HardMediumSoftScore getSpeakerRequiredRoomTags() {
+    public HardSoftScore getSpeakerRequiredRoomTags() {
         return speakerRequiredRoomTags;
     }
 
-    public void setSpeakerRequiredRoomTags(HardMediumSoftScore speakerRequiredRoomTags) {
+    public void setSpeakerRequiredRoomTags(HardSoftScore speakerRequiredRoomTags) {
         this.speakerRequiredRoomTags = speakerRequiredRoomTags;
     }
 
-    public HardMediumSoftScore getSpeakerProhibitedRoomTags() {
+    public HardSoftScore getSpeakerProhibitedRoomTags() {
         return speakerProhibitedRoomTags;
     }
 
-    public void setSpeakerProhibitedRoomTags(HardMediumSoftScore speakerProhibitedRoomTags) {
+    public void setSpeakerProhibitedRoomTags(HardSoftScore speakerProhibitedRoomTags) {
         this.speakerProhibitedRoomTags = speakerProhibitedRoomTags;
     }
 
-    public HardMediumSoftScore getTalkRequiredRoomTags() {
+    public HardSoftScore getTalkRequiredRoomTags() {
         return talkRequiredRoomTags;
     }
 
-    public void setTalkRequiredRoomTags(HardMediumSoftScore talkRequiredRoomTags) {
+    public void setTalkRequiredRoomTags(HardSoftScore talkRequiredRoomTags) {
         this.talkRequiredRoomTags = talkRequiredRoomTags;
     }
 
-    public HardMediumSoftScore getTalkProhibitedRoomTags() {
+    public HardSoftScore getTalkProhibitedRoomTags() {
         return talkProhibitedRoomTags;
     }
 
-    public void setTalkProhibitedRoomTags(HardMediumSoftScore talkProhibitedRoomTags) {
+    public void setTalkProhibitedRoomTags(HardSoftScore talkProhibitedRoomTags) {
         this.talkProhibitedRoomTags = talkProhibitedRoomTags;
     }
 
-    public HardMediumSoftScore getPublishedTimeslot() {
-        return publishedTimeslot;
-    }
-
-    public void setPublishedTimeslot(HardMediumSoftScore publishedTimeslot) {
-        this.publishedTimeslot = publishedTimeslot;
-    }
-
-    public HardMediumSoftScore getPublishedRoom() {
-        return publishedRoom;
-    }
-
-    public void setPublishedRoom(HardMediumSoftScore publishedRoom) {
-        this.publishedRoom = publishedRoom;
-    }
-
-    public HardMediumSoftScore getThemeTrackConflict() {
+    public HardSoftScore getThemeTrackConflict() {
         return themeTrackConflict;
     }
 
-    public void setThemeTrackConflict(HardMediumSoftScore themeTrackConflict) {
+    public void setThemeTrackConflict(HardSoftScore themeTrackConflict) {
         this.themeTrackConflict = themeTrackConflict;
     }
 
-    public HardMediumSoftScore getThemeTrackRoomStability() {
+    public HardSoftScore getThemeTrackRoomStability() {
         return themeTrackRoomStability;
     }
 
-    public void setThemeTrackRoomStability(HardMediumSoftScore themeTrackRoomStability) {
+    public void setThemeTrackRoomStability(HardSoftScore themeTrackRoomStability) {
         this.themeTrackRoomStability = themeTrackRoomStability;
     }
 
-    public HardMediumSoftScore getSectorConflict() {
+    public HardSoftScore getSectorConflict() {
         return sectorConflict;
     }
 
-    public void setSectorConflict(HardMediumSoftScore sectorConflict) {
+    public void setSectorConflict(HardSoftScore sectorConflict) {
         this.sectorConflict = sectorConflict;
     }
 
-    public HardMediumSoftScore getAudienceTypeDiversity() {
+    public HardSoftScore getAudienceTypeDiversity() {
         return audienceTypeDiversity;
     }
 
-    public void setAudienceTypeDiversity(HardMediumSoftScore audienceTypeDiversity) {
+    public void setAudienceTypeDiversity(HardSoftScore audienceTypeDiversity) {
         this.audienceTypeDiversity = audienceTypeDiversity;
     }
 
-    public HardMediumSoftScore getAudienceTypeThemeTrackConflict() {
+    public HardSoftScore getAudienceTypeThemeTrackConflict() {
         return audienceTypeThemeTrackConflict;
     }
 
-    public void setAudienceTypeThemeTrackConflict(HardMediumSoftScore audienceTypeThemeTrackConflict) {
+    public void setAudienceTypeThemeTrackConflict(HardSoftScore audienceTypeThemeTrackConflict) {
         this.audienceTypeThemeTrackConflict = audienceTypeThemeTrackConflict;
     }
 
-    public HardMediumSoftScore getAudienceLevelDiversity() {
+    public HardSoftScore getAudienceLevelDiversity() {
         return audienceLevelDiversity;
     }
 
-    public void setAudienceLevelDiversity(HardMediumSoftScore audienceLevelDiversity) {
+    public void setAudienceLevelDiversity(HardSoftScore audienceLevelDiversity) {
         this.audienceLevelDiversity = audienceLevelDiversity;
     }
 
-    public HardMediumSoftScore getContentAudienceLevelFlowViolation() {
+    public HardSoftScore getContentAudienceLevelFlowViolation() {
         return contentAudienceLevelFlowViolation;
     }
 
-    public void setContentAudienceLevelFlowViolation(HardMediumSoftScore contentAudienceLevelFlowViolation) {
+    public void setContentAudienceLevelFlowViolation(HardSoftScore contentAudienceLevelFlowViolation) {
         this.contentAudienceLevelFlowViolation = contentAudienceLevelFlowViolation;
     }
 
-    public HardMediumSoftScore getContentConflict() {
+    public HardSoftScore getContentConflict() {
         return contentConflict;
     }
 
-    public void setContentConflict(HardMediumSoftScore contentConflict) {
+    public void setContentConflict(HardSoftScore contentConflict) {
         this.contentConflict = contentConflict;
     }
 
-    public HardMediumSoftScore getLanguageDiversity() {
+    public HardSoftScore getLanguageDiversity() {
         return languageDiversity;
     }
 
-    public void setLanguageDiversity(HardMediumSoftScore languageDiversity) {
+    public void setLanguageDiversity(HardSoftScore languageDiversity) {
         this.languageDiversity = languageDiversity;
     }
 
-    public HardMediumSoftScore getSameDayTalks() {
+    public HardSoftScore getSameDayTalks() {
         return sameDayTalks;
     }
 
-    public void setSameDayTalks(HardMediumSoftScore sameDayTalks) {
+    public void setSameDayTalks(HardSoftScore sameDayTalks) {
         this.sameDayTalks = sameDayTalks;
     }
 
-    public HardMediumSoftScore getPopularTalks() {
+    public HardSoftScore getPopularTalks() {
         return popularTalks;
     }
 
-    public void setPopularTalks(HardMediumSoftScore popularTalks) {
+    public void setPopularTalks(HardSoftScore popularTalks) {
         this.popularTalks = popularTalks;
     }
 
-    public HardMediumSoftScore getSpeakerPreferredTimeslotTags() {
+    public HardSoftScore getSpeakerPreferredTimeslotTags() {
         return speakerPreferredTimeslotTags;
     }
 
-    public void setSpeakerPreferredTimeslotTags(HardMediumSoftScore speakerPreferredTimeslotTags) {
+    public void setSpeakerPreferredTimeslotTags(HardSoftScore speakerPreferredTimeslotTags) {
         this.speakerPreferredTimeslotTags = speakerPreferredTimeslotTags;
     }
 
-    public HardMediumSoftScore getSpeakerUndesiredTimeslotTags() {
+    public HardSoftScore getSpeakerUndesiredTimeslotTags() {
         return speakerUndesiredTimeslotTags;
     }
 
-    public void setSpeakerUndesiredTimeslotTags(HardMediumSoftScore speakerUndesiredTimeslotTags) {
+    public void setSpeakerUndesiredTimeslotTags(HardSoftScore speakerUndesiredTimeslotTags) {
         this.speakerUndesiredTimeslotTags = speakerUndesiredTimeslotTags;
     }
 
-    public HardMediumSoftScore getTalkPreferredTimeslotTags() {
+    public HardSoftScore getTalkPreferredTimeslotTags() {
         return talkPreferredTimeslotTags;
     }
 
-    public void setTalkPreferredTimeslotTags(HardMediumSoftScore talkPreferredTimeslotTags) {
+    public void setTalkPreferredTimeslotTags(HardSoftScore talkPreferredTimeslotTags) {
         this.talkPreferredTimeslotTags = talkPreferredTimeslotTags;
     }
 
-    public HardMediumSoftScore getTalkUndesiredTimeslotTags() {
+    public HardSoftScore getTalkUndesiredTimeslotTags() {
         return talkUndesiredTimeslotTags;
     }
 
-    public void setTalkUndesiredTimeslotTags(HardMediumSoftScore talkUndesiredTimeslotTags) {
+    public void setTalkUndesiredTimeslotTags(HardSoftScore talkUndesiredTimeslotTags) {
         this.talkUndesiredTimeslotTags = talkUndesiredTimeslotTags;
     }
 
-    public HardMediumSoftScore getSpeakerPreferredRoomTags() {
+    public HardSoftScore getSpeakerPreferredRoomTags() {
         return speakerPreferredRoomTags;
     }
 
-    public void setSpeakerPreferredRoomTags(HardMediumSoftScore speakerPreferredRoomTags) {
+    public void setSpeakerPreferredRoomTags(HardSoftScore speakerPreferredRoomTags) {
         this.speakerPreferredRoomTags = speakerPreferredRoomTags;
     }
 
-    public HardMediumSoftScore getSpeakerUndesiredRoomTags() {
+    public HardSoftScore getSpeakerUndesiredRoomTags() {
         return speakerUndesiredRoomTags;
     }
 
-    public void setSpeakerUndesiredRoomTags(HardMediumSoftScore speakerUndesiredRoomTags) {
+    public void setSpeakerUndesiredRoomTags(HardSoftScore speakerUndesiredRoomTags) {
         this.speakerUndesiredRoomTags = speakerUndesiredRoomTags;
     }
 
-    public HardMediumSoftScore getTalkPreferredRoomTags() {
+    public HardSoftScore getTalkPreferredRoomTags() {
         return talkPreferredRoomTags;
     }
 
-    public void setTalkPreferredRoomTags(HardMediumSoftScore talkPreferredRoomTags) {
+    public void setTalkPreferredRoomTags(HardSoftScore talkPreferredRoomTags) {
         this.talkPreferredRoomTags = talkPreferredRoomTags;
     }
 
-    public HardMediumSoftScore getTalkUndesiredRoomTags() {
+    public HardSoftScore getTalkUndesiredRoomTags() {
         return talkUndesiredRoomTags;
     }
 
-    public void setTalkUndesiredRoomTags(HardMediumSoftScore talkUndesiredRoomTags) {
+    public void setTalkUndesiredRoomTags(HardSoftScore talkUndesiredRoomTags) {
         this.talkUndesiredRoomTags = talkUndesiredRoomTags;
     }
 
-    public HardMediumSoftScore getSpeakerMakespan() {
+    public HardSoftScore getSpeakerMakespan() {
         return speakerMakespan;
     }
 
-    public void setSpeakerMakespan(HardMediumSoftScore speakerMakespan) {
+    public void setSpeakerMakespan(HardSoftScore speakerMakespan) {
         this.speakerMakespan = speakerMakespan;
     }
 }
