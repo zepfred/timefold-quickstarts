@@ -1,4 +1,4 @@
-name: GraalVM Native
+name: Native
 
 on:
   pull_request:
@@ -18,7 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [ 17, 21, 22 ] #Latest two LTS + latest non-LTS.
+        module: [
+          "technology/kotlin-quarkus", "technology/java-spring-boot", "use-cases/bed-allocation",
+          "use-cases/conference-scheduling", "use-cases/employee-scheduling", "use-cases/facility-location",
+          "use-cases/flight-crew-scheduling", "use-cases/food-packaging", "use-cases/maintenance-scheduling",
+          "use-cases/meeting-scheduling", "use-cases/order-picking", "use-cases/project-job-scheduling",
+          "use-cases/school-timetabling", "use-cases/sports-league-scheduling", "use-cases/task-assigning",
+          "use-cases/vehicle-routing"
+        ]
+        java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
       # Clone timefold-solver
@@ -70,5 +78,5 @@ jobs:
         working-directory: ./timefold-solver
         run: mvn -B -Dquickly clean install
       - name: Test timefold-quickstarts in Native mode
-        working-directory: ./timefold-quickstarts
-        run: mvn -B -Dnative verify
+        working-directory: ./timefold-quickstarts/${{matrix.module}}
+        run: mvn -B -Dnative -Pnative verify
