@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.acme</groupId>
-    <artifactId>timefold-solver-quarkus-bed-allocation-quickstart</artifactId>
+    <artifactId>bed-allocation</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

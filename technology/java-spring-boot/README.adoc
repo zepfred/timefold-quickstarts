@@ -60,14 +60,14 @@ $ gradle clean build
 +
 [source, shell]
 ----
-$ java -jar target/timefold-solver-spring-boot-school-timetabling-quickstart-1.0-SNAPSHOT.jar
+$ java -jar target/spring-boot-school-timetabling-1.0-SNAPSHOT.jar
 ----
 +
 or the Gradle output:
 +
 [source, shell]
 ----
-$ java -jar build/libs/timefold-solver-spring-boot-school-timetabling-quickstart-1.0-SNAPSHOT.jar
+$ java -jar build/libs/spring-boot-school-timetabling-1.0-SNAPSHOT.jar
 ----
 +
 [NOTE]
@@ -107,7 +107,7 @@ $ gradle bootBuildImage
 +
 [source, shell]
 ----
-$ docker run --rm -p 8080:8080 docker.io/library/timefold-solver-spring-boot-school-timetabling-quickstart:1.0-SNAPSHOT
+$ docker run --rm -p 8080:8080 docker.io/library/spring-boot-school-timetabling:1.0-SNAPSHOT
 ----
 +
 . Visit http://localhost:8080 in your browser.
@@ -134,7 +134,7 @@ $ gradle nativeCompile
 +
 [source, shell]
 ----
-$ ./target/timefold-solver-spring-boot-school-timetabling-quickstart
+$ ./target/spring-boot-school-timetabling
 ----
 +
 or the Gradle output:
