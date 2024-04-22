@@ -24,7 +24,7 @@ jobs:
           "use-cases/flight-crew-scheduling", "use-cases/food-packaging", "use-cases/maintenance-scheduling",
           "use-cases/meeting-scheduling", "use-cases/order-picking", "use-cases/project-job-scheduling",
           "use-cases/school-timetabling", "use-cases/sports-league-scheduling", "use-cases/task-assigning",
-          "use-cases/vehicle-routing"
+          "use-cases/tournament-scheduling", "use-cases/vehicle-routing"
         ]
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120

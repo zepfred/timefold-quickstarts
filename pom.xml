@@ -37,6 +37,7 @@
     <module>use-cases/sports-league-scheduling</module>
     <module>use-cases/task-assigning</module>
     <module>use-cases/project-job-scheduling</module>
+    <module>use-cases/tournament-scheduling</module>
   </modules>
 
 </project>

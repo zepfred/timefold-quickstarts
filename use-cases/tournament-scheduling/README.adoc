@@ -1,8 +1,8 @@
-= Sports League Scheduling (Java, Quarkus, Maven)
+= Tournament Scheduling (Java, Quarkus, Maven)
 
-Assign rounds to matches to produce a better schedule for league matches.
+Tournament Scheduling service assigning teams to tournament matches.
 
-image::./quarkus-sports-league-scheduling-screenshot.png[]
+image::./quarkus-tournament-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>
@@ -18,7 +18,7 @@ image::./quarkus-sports-league-scheduling-screenshot.png[]
 ----
 $ git clone https://github.com/TimefoldAI/timefold-quickstarts.git
 ...
-$ cd timefold-quickstarts/use-cases/sports-league-scheduling
+$ cd timefold-quickstarts/use-cases/tournament-scheduling
 ----
 
 . Start the application with Maven:
@@ -83,7 +83,7 @@ The container image name
 +
 [source, shell]
 ----
-$ docker run -p 8080:8080 --rm $USER/timefold-solver-quarkus-sports-league-scheduling-quickstart:1.0-SNAPSHOT
+$ docker run -p 8080:8080 --rm $USER/timefold-solver-quarkus-tournament-scheduling-quickstart:1.0-SNAPSHOT
 ----
 
 [[native]]

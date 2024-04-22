@@ -22,6 +22,7 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<sports-leaghe-scheduling, Sports League Scheduling>>
 * <<task-assigning, Task Assigning>>
 * <<project-job-scheduling, Project Job Scheduling>>
+* <<tournament-scheduling, Tournament Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -129,7 +130,7 @@ image::use-cases/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
 
 Assign rounds to matches to produce a better schedule for league matches.
 
-image::use-cases/sports-league-scheduling/quarkus-sports-leaghe-scheduling-screenshot.png[]
+image::use-cases/sports-league-scheduling/quarkus-sports-league-scheduling-screenshot.png[]
 
 * link:use-cases/sports-league-scheduling/README.adoc[Run quarkus-sports-league-scheduling] (Java, Maven, Quarkus)
 
@@ -147,7 +148,15 @@ Assign jobs for execution to produce a better schedule for project job allocatio
 
 image::use-cases/project-job-scheduling/quarkus-project-job-scheduling-screenshot.png[]
 
-* link:use-cases/project-job-scheduling/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
+* link:use-cases/project-job-scheduling/README.adoc[Run quarkus-project-job-scheduling] (Java, Maven, Quarkus)
+
+=== Tournament Scheduling
+
+Tournament Scheduling service assigning teams to tournament matches.
+
+image::use-cases/tournament-scheduling/quarkus-tournament-scheduling-screenshot.png[]
+
+* link:use-cases/tournament-scheduling/README.adoc[Run quarkus-tournament-scheduling] (Java, Maven, Quarkus)
 
 == Legal notice
 

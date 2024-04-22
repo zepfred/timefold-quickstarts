@@ -1,31 +1,31 @@
 let autoRefreshIntervalId = null;
 const formatter = JSJoda.DateTimeFormatter.ofPattern("MM/dd/YYYY HH:mm").withLocale(JSJodaLocale.Locale.ENGLISH);
 
-const zoomMin = 1000 * 60 * 60 * 8 // 2 hours in milliseconds
-const zoomMax = 2 * 7 * 1000 * 60 * 60 * 24 // 2 weeks in milliseconds
+const zoomMin = 1000 * 60 * 60 * 24 // 1 day in milliseconds
+const zoomMax = 3 * 7 * 1000 * 60 * 60 * 24 // 3 weeks in milliseconds
 
 const byTimelineOptions = {
-    timeAxis: {scale: "hour", step: 8},
+    timeAxis: {scale: "day"},
     orientation: {axis: "top"},
     stack: false,
     xss: {disabled: true}, // Items are XSS safe through JQuery
     zoomMin: zoomMin,
     zoomMax: zoomMax,
+    showCurrentTime: false,
 };
 
-const byCrewPanel = document.getElementById("byCrewPanel");
-let byCrewGroupData = new vis.DataSet();
-let byCrewItemData = new vis.DataSet();
-let byCrewTimeline = new vis.Timeline(byCrewPanel, byCrewItemData, byCrewGroupData, byTimelineOptions);
+const byTeamPanel = document.getElementById("byTeamPanel");
+let byTeamGroupData = new vis.DataSet();
+let byTeamItemData = new vis.DataSet();
+let byTeamTimeline = new vis.Timeline(byTeamPanel, byTeamItemData, byTeamGroupData, byTimelineOptions);
 
-const byFlightPanel = document.getElementById("byFlightPanel");
-let byFlightGroupData = new vis.DataSet();
-let byFlightItemData = new vis.DataSet();
-let byFlightTimeline = new vis.Timeline(byFlightPanel, byFlightItemData, byFlightGroupData, byTimelineOptions);
+const byConfrontationPanel = document.getElementById("byConfrontationPanel");
+
+const teamsTable = $('#teams');
 
 let scheduleId = null;
 let loadedSchedule = null;
-let viewType = "R";
+let viewType = "T";
 
 $(document).ready(function () {
     replaceQuickstartTimefoldAutoHeaderFooter();
@@ -39,21 +39,14 @@ $(document).ready(function () {
     $("#analyzeButton").click(function () {
         analyze();
     });
-    $("#byCrewTab").click(function () {
-        viewType = "R";
+    $("#byTeamTab").click(function () {
+        viewType = "T";
         refreshSchedule();
     });
-    $("#byFlightTab").click(function () {
-        viewType = "F";
+    $("#byConfrontationTab").click(function () {
+        viewType = "C";
         refreshSchedule();
     });
-    // HACK to allow vis-timeline to work within Bootstrap tabs
-    $("#byCrewTab").on('shown.bs.tab', function (event) {
-        byCrewTimeline.redraw();
-    })
-    $("#byFlightTab").on('shown.bs.tab', function (event) {
-        byFlightTimeline.redraw();
-    })
 
     setupAjax();
     refreshSchedule();
@@ -102,153 +95,157 @@ function renderSchedule(schedule) {
     refreshSolvingButtons(schedule.solverStatus != null && schedule.solverStatus !== "NOT_SOLVING");
     $("#score").text("Score: " + (schedule.score == null ? "?" : schedule.score));
 
-    if (viewType === "R") {
-        renderScheduleByCrew(schedule);
+    if (viewType === "T") {
+        renderScheduleByTeam(schedule);
     }
-    if (viewType === "F") {
-        renderScheduleByFlight(schedule);
+    if (viewType === "C") {
+        renderScheduleByConfrontation(schedule);
     }
 }
 
-function renderScheduleByCrew(schedule) {
-    const unassignedCrew = $("#unassignedCrew");
-    unassignedCrew.children().remove();
-    let unassignedCrewCount = 0;
-    byCrewGroupData.clear();
-    byCrewItemData.clear();
+function renderScheduleByTeam(schedule) {
+    const unassigned = $("#unassigned");
+    unassigned.children().remove();
+    let unassignedCount = 0;
+    byTeamGroupData.clear();
+    byTeamItemData.clear();
+    const currentDate = JSJoda.LocalDate.now();
 
-    $.each(schedule.employees.sort((e1, e2) => e1.name.localeCompare(e2.name)), (_, employee) => {
-        const crewIcon = employee.skills.indexOf("Pilot") >= 0 ? '<span class="fas fa-solid fa-plane-departure" title="Pilot"></span>' :
-            '<span class="fas fa-solid fa-glass-martini" title="Flight Attendant"></span>';
-        let content = `<div class="d-flex flex-column"><div><h5 class="card-title mb-1">${employee.name} (${employee.homeAirport}) ${crewIcon}</h5></div>`;
-
-        byCrewGroupData.add({
-            id: employee.id,
+    $.each(schedule.teams.sort((t1, t2) => t1.name.localeCompare(t2.name)), (_, team) => {
+        let content = `<div class="d-flex flex-column"><div><h5 class="card-title mb-1">${team.name}</h5></div>`;
+        byTeamGroupData.add({
+            id: team.id,
             content: content,
         });
-
-        // Unavailable days
-        if (employee.unavailableDays) {
-            let count = 0;
-            employee.unavailableDays.forEach(date => {
-                const unavailableDatetime = JSJoda.LocalDate.parse(date);
-                byCrewItemData.add({
-                    id: `${employee.id}-${count++}`,
-                    group: employee.id,
-                    content: $(`<div />`).html(),
-                    start: unavailableDatetime.atStartOfDay().toString(),
-                    end: unavailableDatetime.atStartOfDay().withHour(23).withMinute(59).toString(),
-                    style: "background-color: gray; min-height: 50px"
-                });
-            });
-        }
     });
 
-    const flightMap = new Map();
-    schedule.flights.forEach(f => flightMap.set(f.flightNumber, f));
-    $.each(schedule.flightAssignments, (_, assignment) => {
-        const flight = flightMap.get(assignment.flight);
-        if (assignment.employee == null) {
-            unassignedCrewCount++;
-            const departureDateTime = JSJoda.LocalDateTime.parse(flight.departureUTCDateTime);
-            const arrivalDateTime = JSJoda.LocalDateTime.parse(flight.arrivalUTCDateTime);
+    $.each(schedule.unavailabilityPenalties, (_, unavailability) => {
+        const unavailableDatetime = currentDate.plusDays(unavailability.day);
+        byTeamItemData.add({
+            id: `u${unavailability.team}-${unavailability.day}`,
+            group: unavailability.team,
+            content: $(`<div />`).html(),
+            start: unavailableDatetime.atStartOfDay().toString(),
+            end: unavailableDatetime.atStartOfDay().withHour(23).withMinute(59).toString(),
+            style: "background-color: gray; min-height: 50px"
+        });
+    });
+
+    $.each(schedule.teamAssignments, (_, assignment) => {
+        if (assignment.team == null) {
+            unassignedCount++;
             const unassignedElement = $(`<div class="card-body"/>`)
-                .append($(`<h5 class="card-title mb-1"/>`).text(`${flight.departureAirport} → ${flight.arrivalAirport}`))
-                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`${departureDateTime.until(arrivalDateTime, JSJoda.ChronoUnit.HOURS)} hour(s)`))
-                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Departure: ${formatter.format(departureDateTime)}`))
-                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Arrival: ${formatter.format(arrivalDateTime)}`));
+                .append($(`<h5 class="card-title mb-1"/>`).text(`${currentDate.plusDays(assignment.day).toString()} - Match ${assignment.indexInDay + 1}`));
 
-            unassignedCrew.append($(`<div class="pl-1"/>`).append($(`<div class="card"/>`).append(unassignedElement)));
-            byCrewItemData.add({
-                id: assignment.id,
-                group: assignment.employee,
-                start: formatter.format(departureDateTime),
-                end: formatter.format(arrivalDateTime),
-                style: "background-color: #EF292999"
-            });
+            unassigned.append($(`<div class="pl-1"/>`).append($(`<div class="card"/>`).append(unassignedElement)));
         } else {
-            const byCrewElement = $("<div />").append($("<div class='d-flex justify-content-center' />").append($(`<h5 class="card-title mb-1"/>`).text(`${flight.departureAirport} → ${flight.arrivalAirport}`)));
-            byCrewItemData.add({
-                id: assignment.id,
-                group: assignment.employee,
-                content: byCrewElement.html(),
-                start: flight.departureUTCDateTime,
-                end: flight.arrivalUTCDateTime,
-                style: "min-height: 50px"
+            const matchDateTime = currentDate.plusDays(assignment.day);
+            const element = $(`<div />`).append($(`<div class="d-flex justify-content-center"/>`).append($(`<h5 class="card-title mb-1"/>`).text(`Match ${assignment.indexInDay + 1}`)));
+            byTeamItemData.add({
+                id: `a${assignment.team}-${assignment.day}`,
+                group: assignment.team,
+                content: element.html(),
+                start: matchDateTime.atStartOfDay().toString(),
+                end: matchDateTime.atStartOfDay().withHour(23).withMinute(59).toString(),
+                style: `background-color: ${pickColor(assignment.team)}; min-height: 50px`
             });
         }
     });
-    if (unassignedCrewCount === 0) {
-        unassignedCrew.append($(`<p/>`).text(`There are no unassigned crew.`));
+    if (unassignedCount === 0) {
+        unassigned.append($(`<p/>`).text(`There are no unassigned team.`));
     }
-    byCrewTimeline.setWindow(JSJoda.LocalDateTime.now().minusMinutes(1).toString(),
-        JSJoda.LocalDateTime.now().plusDays(4).withHour(23).withMinute(59).toString());
-    byCrewTimeline.redraw();
+    byTeamTimeline.setWindow(JSJoda.LocalDateTime.now().minusDays(1).toString(),
+        JSJoda.LocalDateTime.now().plusDays(7).withHour(23).withMinute(59).toString());
 }
 
-function renderScheduleByFlight(schedule) {
-    const unassignedCrew = $("#unassignedCrew");
-    unassignedCrew.children().remove();
-    byFlightGroupData.clear();
-    byFlightItemData.clear();
+function renderScheduleByConfrontation(schedule) {
+    const unassigned = $("#unassigned");
+    unassigned.children().remove();
+    let unassignedCount = 0;
+    const tableByConfrontation = $("#tableByConfrontation");
+    tableByConfrontation.children().remove();
+    const currentDate = JSJoda.LocalDate.now();
 
-    $.each(schedule.flights.sort((e1, e2) => JSJoda.LocalDateTime.parse(e1.departureUTCDateTime)
-        .compareTo(JSJoda.LocalDateTime.parse(e2.departureUTCDateTime))), (_, flight) => {
-        let content = `<div class="d-flex flex-column"><div><h5 class="card-title mb-1">${flight.departureAirport} → ${flight.arrivalAirport}</h5></div>`;
+    const theadByTeam = $("<thead>").appendTo(tableByConfrontation);
+    const headerRowByTeam = $("<tr>").appendTo(theadByTeam);
+    headerRowByTeam.append($("<th></th>"));
 
-        byFlightGroupData.add({
-            id: flight.flightNumber,
-            content: content,
+    const tbodyByTeam = $("<tbody>").appendTo(tableByConfrontation);
+
+    const teamConfrontationCount = new Map();
+    $.each(schedule.teams.sort((t1, t2) => t1.name.localeCompare(t2.name)), (_, team) => {
+        headerRowByTeam
+            .append($("<th/>")
+                .append($("<span/>").text(team.name))
+                .append($(`<button type="button" class="ms-2 mb-1 btn btn-light btn-sm p-1"/>`)));
+
+        const rowByTeam = $("<tr>").appendTo(tbodyByTeam);
+        rowByTeam
+            .append($(`<th class="align-middle"/>`)
+                .append($("<span/>").text(team.name)));
+        $.each(schedule.teams, (index, otherTeam) => {
+            if (team.id !== otherTeam.id) {
+                teamConfrontationCount.set(`match-${team.id}-${otherTeam.id}`, 0);
+            }
+            rowByTeam.append($("<td/>").prop("id", `match-${team.id}-${otherTeam.id}`));
         });
     });
 
-    const employeeMap = new Map();
-    schedule.employees.forEach(e => employeeMap.set(e.id, e));
+    const teamDayCount = new Map();
+    const teamsPerDay = new Map();
+    $.each(schedule.teamAssignments, (_, assignment) => {
+        if (assignment.team == null) {
+            unassignedCount++;
+            const unassignedElement = $(`<div class="card-body"/>`)
+                .append($(`<h5 class="card-title mb-1"/>`).text(`${currentDate.plusDays(assignment.day).toString()} - Match ${assignment.indexInDay + 1}`));
 
-    $.each(schedule.flights, (_, flight) => {
-        const content = $(`<div class="card-body"/>`).append($(`<h4 class="card-title mb-1"/>`).text(flight.flightNumber));
-        const unassignedElement = $(`<div class="card-body"/>`).append($(`<h4 class="card-title mb-1"/>`).text(`${flight.departureAirport} → ${flight.arrivalAirport}`));
-        const assignments = schedule.flightAssignments.filter(f => f.flight === flight.flightNumber);
-        let countUnassigned = 0;
-        const missingSkills = [];
-        const pilots = [];
-        const attendants = [];
-        assignments.forEach(assigment => {
-            if (assigment.employee == null) {
-                countUnassigned++;
-                missingSkills.push(assigment.requiredSkill);
+            unassigned.append($(`<div class="pl-1"/>`).append($(`<div class="card"/>`).append(unassignedElement)));
+        } else {
+            if (teamDayCount.get(assignment.team)) {
+                teamDayCount.set(assignment.team, teamDayCount.get(assignment.team) + 1);
             } else {
-                const employee = employeeMap.get(assigment.employee);
-                if (assigment.requiredSkill === 'Pilot') {
-                    pilots.push(employee.name);
-                } else {
-                    attendants.push(employee.name);
+                teamDayCount.set(assignment.team, 1);
+            }
+            let teams = teamsPerDay.get(assignment.day);
+            if (teams) {
+                teams.push(assignment.team);
+            } else {
+                teams = [assignment.team];
+                teamsPerDay.set(assignment.day, teams);
+            }
+        }
+    });
+
+    teamsPerDay.forEach((value, _) => {
+        for (const left of value) {
+            for (const right of value) {
+                if (left !== right) {
+                    const key = `match-${left}-${right}`;
+                    const count = teamConfrontationCount.get(key);
+                    teamConfrontationCount.set(key, count + 1);
                 }
             }
-        });
-
-        if (pilots.length > 0 && attendants.length > 0) {
-            content.append($(`<p class="card-text" style="font-weight: bold"/>`).text(`Pilot(s)`));
-            pilots.sort().forEach(pilot => content.append($(`<p class="card-text mx-2"/>`).text(pilot)));
-            content.append($(`<p class="card-text" style="font-weight: bold"/>`).text(`Attendant(s)`));
-            attendants.sort().forEach(attendant => content.append($(`<p class="card-text mx-2"/>`).text(attendant)));
-            byFlightItemData.add({
-                id: flight.flightNumber,
-                group: flight.flightNumber,
-                content: $('<div class="d-flex flex-column" />').append(content).html(),
-                start: flight.departureUTCDateTime,
-                end: flight.arrivalUTCDateTime,
-            });
-        }
-        if (countUnassigned > 0) {
-            unassignedElement.append($(`<p class="card-text ms-2 mb-0"/>`).text(`Unassigned skill(s): ${missingSkills.sort().join(", ")}`));
-            unassignedCrew.append($(`<div class="pl-1"/>`).append($(`<div class="card"/>`).append(unassignedElement)));
         }
     });
 
-    byFlightTimeline.setWindow(JSJoda.LocalDateTime.now().minusMinutes(1).toString(),
-        JSJoda.LocalDateTime.now().plusDays(4).withHour(23).withMinute(59).toString());
-    byFlightTimeline.redraw();
+    teamConfrontationCount.forEach((value, key) => {
+        $(`#${key}`).append($(`<span />`).text(value));
+    });
+
+    if (teamDayCount.size > 0) {
+        teamsTable.children().remove();
+        $.each(schedule.teams.sort((t1, t2) => t1.name.localeCompare(t2.name)), (_, team) => {
+            teamsTable.append(`
+      <tr class="m-3">
+        <td class="text-xl-center">${team.name}</td>
+        <td class="text-xl-center">${teamDayCount.get(team.id)}</td>
+      </tr>`);
+        });
+    }
+
+    if (unassignedCount === 0) {
+        unassigned.append($(`<p/>`).text(`There are no unassigned team.`));
+    }
 }
 
 function solve() {
