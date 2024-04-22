@@ -258,7 +258,7 @@ function refreshSolvingButtons(solving) {
 }
 
 function stopSolving() {
-    $.delete("/schdules/" + scheduleId, function () {
+    $.delete("/schedules/" + scheduleId, function () {
         refreshSolvingButtons(false);
         refreshSchedule();
     }).fail(function (xhr, ajaxOptions, thrownError) {
