@@ -33,12 +33,17 @@ public class Visit {
     private LocalDateTime maxEndTime;
     private Duration serviceDuration;
 
+    @JsonIdentityReference(alwaysAsId = true)
+    @InverseRelationShadowVariable(sourceVariableName = "visits")
     private Vehicle vehicle;
-
+    @JsonIdentityReference(alwaysAsId = true)
+    @PreviousElementShadowVariable(sourceVariableName = "visits")
     private Visit previousVisit;
-
+    @JsonIdentityReference(alwaysAsId = true)
+    @NextElementShadowVariable(sourceVariableName = "visits")
     private Visit nextVisit;
-
+    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
+    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
 
     public Visit() {
@@ -95,8 +100,6 @@ public class Visit {
         return serviceDuration;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @InverseRelationShadowVariable(sourceVariableName = "visits")
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -105,8 +108,6 @@ public class Visit {
         this.vehicle = vehicle;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @PreviousElementShadowVariable(sourceVariableName = "visits")
     public Visit getPreviousVisit() {
         return previousVisit;
     }
@@ -115,8 +116,6 @@ public class Visit {
         this.previousVisit = previousVisit;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @NextElementShadowVariable(sourceVariableName = "visits")
     public Visit getNextVisit() {
         return nextVisit;
     }
@@ -125,8 +124,6 @@ public class Visit {
         this.nextVisit = nextVisit;
     }
 
-    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
-    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }

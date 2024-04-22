@@ -56,6 +56,7 @@ public class VehicleRoutePlan {
 
     private SolverStatus solverStatus;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String scoreExplanation;
 
     public VehicleRoutePlan() {
@@ -143,7 +144,6 @@ public class VehicleRoutePlan {
         this.solverStatus = solverStatus;
     }
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public String getScoreExplanation() {
         return scoreExplanation;
     }
