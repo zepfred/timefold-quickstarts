@@ -36,7 +36,7 @@
         <div class="col">
           <h5>
             Solution summary
-            <a href="#" class="float-end" data-bs-toggle="modal" data-bs-target="#scoreDialog">
+            <a id="analyzeButton" class="float-justify" href="#" role="button">
               <i class="fas fa-info-circle"></i>
             </a>
           </h5>
@@ -74,17 +74,21 @@
   </div>
 </div>
 <footer id="timefold-auto-footer"></footer>
-
-<div class="modal fade" id="scoreDialog" tabindex="-1" aria-labelledby="scoreDialogLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<div class="modal fadebd-example-modal-lg" id="scoreAnalysisModal" tabindex="-1"
+     aria-labelledby="scoreAnalysisModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="scoreDialogLabel">Score explanation</h1>
+        <h1 class="modal-title fs-5" id="scoreAnalysisModalLabel">Score analysis <span
+                id="scoreAnalysisScoreLabel"></span></h1>
+
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <pre id="scoreInfo">
-        </pre>
+      <div class="modal-body" id="scoreAnalysisModalContent">
+        <!-- Filled in by app.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
