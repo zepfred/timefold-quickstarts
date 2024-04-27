@@ -43,6 +43,8 @@ public class PredecessorsDoneDateUpdatingVariableListener implements VariableLis
     }
 
     protected void updateAllocation(ScoreDirector<ProjectJobSchedule> scoreDirector, Allocation originalAllocation) {
+        // Reset computed variables when a planning variable changes to prevent score corruption
+        originalAllocation.invalidateComputedVariables();
         Queue<Allocation> uncheckedSuccessorQueue = new ArrayDeque<>();
         uncheckedSuccessorQueue.addAll(originalAllocation.getSuccessorAllocations());
         while (!uncheckedSuccessorQueue.isEmpty()) {

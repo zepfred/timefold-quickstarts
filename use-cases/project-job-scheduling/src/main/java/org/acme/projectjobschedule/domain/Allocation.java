@@ -169,7 +169,7 @@ public class Allocation {
     // Complex methods
     // ************************************************************************
 
-    private void invalidateComputedVariables() {
+    public void invalidateComputedVariables() {
         this.startDate = null;
         this.endDate = null;
         this.busyDates = null;

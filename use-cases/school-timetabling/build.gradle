@@ -5,6 +5,7 @@ plugins {
 
 def quarkusVersion = "3.9.4"
 def timefoldVersion = "999-SNAPSHOT"
+def profile = System.properties['profile'] ?: ''
 
 group = "org.acme"
 version = "1.0-SNAPSHOT"
@@ -31,6 +32,7 @@ dependencies {
     testImplementation "io.rest-assured:rest-assured"
     testImplementation "ai.timefold.solver:timefold-solver-test"
     testImplementation "org.awaitility:awaitility"
+    testImplementation "org.assertj:assertj-core:3.25.3"
 
     // UI
     implementation "io.quarkus:quarkus-webjars-locator"
@@ -63,5 +65,13 @@ test {
     // Log the test execution results.
     testLogging {
         events "passed", "skipped", "failed"
+    }
+
+    if (profile == 'slowly') {
+        useJUnitPlatform()
+    } else {
+        useJUnitPlatform {
+            excludeTags "slowly"
+        }
     }
 }

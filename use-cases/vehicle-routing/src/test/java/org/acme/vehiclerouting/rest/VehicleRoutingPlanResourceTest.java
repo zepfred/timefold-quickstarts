@@ -37,7 +37,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
-public class VehicleRoutePlanResourceTest {
+class VehicleRoutingPlanResourceTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -49,13 +49,13 @@ public class VehicleRoutePlanResourceTest {
     }
 
     @Test
-    public void solveDemoDataUntilFeasible() {
+    void solveDemoDataUntilFeasible() {
         VehicleRoutePlan solution = solveDemoData();
         assertTrue(solution.getScore().isFeasible());
     }
 
     @Test
-    public void analyzeFetchAll() throws JsonProcessingException {
+    void analyzeFetchAll() throws JsonProcessingException {
         VehicleRoutePlan solution = solveDemoData();
         assertTrue(solution.getScore().isFeasible());
 
@@ -80,7 +80,7 @@ public class VehicleRoutePlanResourceTest {
     }
 
     @Test
-    public void analyzeFetchShallow() throws JsonProcessingException {
+    void analyzeFetchShallow() throws JsonProcessingException {
         VehicleRoutePlan solution = solveDemoData();
         assertTrue(solution.getScore().isFeasible());
 
@@ -179,11 +179,11 @@ public class VehicleRoutePlanResourceTest {
     }
 
     @Test
-    public void testRecommendedFit() {
+    void testRecommendedFit() {
         // Generate an initial solution
         VehicleRoutePlan solution = generateInitialSolution();
         assertNotNull(solution);
-        assertEquals(solution.getSolverStatus(), SolverStatus.NOT_SOLVING);
+        assertEquals(SolverStatus.NOT_SOLVING, solution.getSolverStatus());
 
         // Create a new visit
         Visit newVisit = generateNewVisit(solution);
@@ -225,7 +225,7 @@ public class VehicleRoutePlanResourceTest {
                                 .jsonPath().get("solverStatus")));
 
         VehicleRoutePlan solution = get("/route-plans/" + jobId).then().extract().as(VehicleRoutePlan.class);
-        assertEquals(solution.getSolverStatus(), SolverStatus.NOT_SOLVING);
+        assertEquals(SolverStatus.NOT_SOLVING, solution.getSolverStatus());
         assertNotNull(solution.getVehicles());
         assertNotNull(solution.getVisits());
         assertNotNull(solution.getVehicles().get(0).getVisits());

@@ -20,7 +20,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
-class MaintenanceScheduleResourceTest {
+class MaintenanceSchedulingResourceTest {
 
     @Test
     void solveDemoDataUntilFeasible() {

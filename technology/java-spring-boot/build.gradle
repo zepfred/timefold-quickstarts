@@ -6,6 +6,7 @@ plugins {
 }
 
 def timefoldVersion = "999-SNAPSHOT"
+def profile = System.properties['profile'] ?: ''
 
 group = "org.acme"
 archivesBaseName = "spring-boot-school-timetabling"
@@ -34,10 +35,10 @@ dependencies {
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("ai.timefold.solver:timefold-solver-benchmark")
     testImplementation("ai.timefold.solver:timefold-solver-test")
-    testImplementation "io.rest-assured:rest-assured"
+    testImplementation("org.springframework:spring-webflux")
     testImplementation "org.awaitility:awaitility"
+    testImplementation "org.assertj:assertj-core:3.25.3"
 
     // UI
     // No webjar locator; incompatible in native mode;
@@ -52,10 +53,21 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    // Gradle needs native tests in src/native-test/java, but maven needs them in src/test/java instead.
+    // Maven first, so we skip them in Gradle unfortunately.
+    exclude "**/**IT.class"
+
     // Log the test execution results.
     testLogging {
         events "passed", "skipped", "failed"
+    }
+
+    if (profile == 'slowly') {
+        useJUnitPlatform()
+    } else {
+        useJUnitPlatform {
+            excludeTags "slowly"
+        }
     }
 }
 

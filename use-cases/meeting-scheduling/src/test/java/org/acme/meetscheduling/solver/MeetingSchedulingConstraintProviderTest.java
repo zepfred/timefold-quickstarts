@@ -377,7 +377,7 @@ class MeetingSchedulingConstraintProviderTest {
 
     @Test
     void preferredAttendanceConflictPenalized() {
-    Person person = new Person("1");
+        Person person = new Person("1");
 
         Meeting leftMeeting = new Meeting();
         leftMeeting.setDurationInGrains(4);
