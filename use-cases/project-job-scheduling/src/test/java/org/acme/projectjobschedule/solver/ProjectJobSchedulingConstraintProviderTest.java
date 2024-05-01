@@ -142,4 +142,34 @@ class ProjectJobSchedulingConstraintProviderTest {
                 .given(firstAllocation, secondAllocation)
                 .penalizesBy(112);
     }
+
+    @Test
+    void totalStartDateAvg() {
+        Project project = new Project("1");
+        project.setCriticalPathDuration(155);
+        LocalResource resource = new LocalResource("1", project, 10, true);
+
+        Job firstJob = new Job("1", project, SINK);
+        ResourceRequirement firstResourceRequirement = new ResourceRequirement("1", null, resource, 7);
+        ExecutionMode firstExecutionMode = new ExecutionMode("1", firstJob, 10, List.of(firstResourceRequirement));
+        firstResourceRequirement.setExecutionMode(firstExecutionMode);
+        Allocation firstAllocation = new Allocation("1", firstJob);
+        firstAllocation.setExecutionMode(firstExecutionMode);
+        firstAllocation.setDelay(100);
+        firstAllocation.setPredecessorsStartDateAvg(5d);
+
+
+        Job secondJob = new Job("2", project, SINK);
+        ResourceRequirement secondResourceRequirement = new ResourceRequirement("2", null, resource, 5);
+        ExecutionMode secondExecutionMode = new ExecutionMode("2", secondJob, 10, List.of(secondResourceRequirement));
+        secondResourceRequirement.setExecutionMode(secondExecutionMode);
+        Allocation secondAllocation = new Allocation("2", secondJob);
+        secondAllocation.setExecutionMode(secondExecutionMode);
+        secondAllocation.setDelay(100);
+        secondAllocation.setPredecessorsStartDateAvg(2d);
+
+        constraintVerifier.verifyThat(ProjectJobSchedulingConstraintProvider::avgStartDate)
+                .given(firstAllocation, secondAllocation)
+                .penalizesBy(7);
+    }
 }
