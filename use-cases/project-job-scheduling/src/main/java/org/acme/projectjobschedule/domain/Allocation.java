@@ -17,6 +17,7 @@ import org.acme.projectjobschedule.domain.solver.DelayStrengthComparator;
 import org.acme.projectjobschedule.domain.solver.ExecutionModeStrengthWeightFactory;
 import org.acme.projectjobschedule.domain.solver.NotSourceOrSinkAllocationFilter;
 import org.acme.projectjobschedule.domain.solver.PredecessorsDoneDateUpdatingVariableListener;
+import org.acme.projectjobschedule.domain.solver.PredecessorsStartDateAvgUpdatingVariableListener;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -52,6 +53,11 @@ public class Allocation {
     @ShadowVariable(variableListenerClass = PredecessorsDoneDateUpdatingVariableListener.class, sourceVariableName = "delay")
     private Integer predecessorsDoneDate;
 
+    @ShadowVariable(variableListenerClass = PredecessorsStartDateAvgUpdatingVariableListener.class,
+            sourceVariableName = "executionMode")
+    @ShadowVariable(variableListenerClass = PredecessorsStartDateAvgUpdatingVariableListener.class, sourceVariableName = "delay")
+    private Double predecessorsStartDateAvg;
+
     // Filled from shadow variables
     private Integer startDate;
     private Integer endDate;
@@ -68,6 +74,7 @@ public class Allocation {
         this(id);
         this.job = job;
         this.predecessorsDoneDate = 0;
+        this.predecessorsStartDateAvg = 0d;
     }
 
     // ************************************************************************
@@ -164,6 +171,15 @@ public class Allocation {
         this.predecessorsDoneDate = predecessorsDoneDate;
         invalidateComputedVariables();
     }
+
+    public Double getPredecessorsStartDateAvg() {
+        return predecessorsStartDateAvg;
+    }
+
+    public void setPredecessorsStartDateAvg(Double predecessorsStartDateAvg) {
+        this.predecessorsStartDateAvg = predecessorsStartDateAvg;
+    }
+
 
     // ************************************************************************
     // Complex methods

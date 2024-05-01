@@ -207,6 +207,15 @@ public class DemoDataGenerator {
                 }
             }
         }
+        // Initialize the start date avg
+        allocations.stream().filter(allocation -> allocation.getPredecessorsDoneDate() > 0)
+                .forEach(allocation -> {
+                    double avg = allocation.getPredecessorAllocations().stream()
+                            .mapToInt(Allocation::getPredecessorsDoneDate)
+                            .average()
+                            .orElse(0);
+                    allocation.setPredecessorsStartDateAvg(avg);
+                });
 
         return allocations;
     }

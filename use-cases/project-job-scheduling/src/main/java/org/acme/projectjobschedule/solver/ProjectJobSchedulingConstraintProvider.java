@@ -19,7 +19,8 @@ public class ProjectJobSchedulingConstraintProvider implements ConstraintProvide
                 nonRenewableResourceCapacity(constraintFactory),
                 renewableResourceCapacity(constraintFactory),
                 totalProjectDelay(constraintFactory),
-                totalMakespan(constraintFactory)
+                totalMakespan(constraintFactory),
+                avgStartDate(constraintFactory)
         };
     }
 
@@ -67,6 +68,14 @@ public class ProjectJobSchedulingConstraintProvider implements ConstraintProvide
                 .groupBy(ConstraintCollectors.max(Allocation::getEndDate))
                 .penalize(HardMediumSoftScore.ONE_SOFT, maxEndDate -> maxEndDate)
                 .asConstraint("Total makespan");
+    }
+
+
+    protected Constraint avgStartDate(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(Allocation.class)
+                .filter(allocation -> allocation.getPredecessorsStartDateAvg() != null)
+                .penalize(HardMediumSoftScore.ONE_SOFT, allocation -> allocation.getPredecessorsStartDateAvg().intValue())
+                .asConstraint("Avg Start Date");
     }
 
 }
