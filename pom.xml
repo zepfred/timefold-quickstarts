@@ -38,6 +38,7 @@
     <module>use-cases/task-assigning</module>
     <module>use-cases/project-job-scheduling</module>
     <module>use-cases/tournament-scheduling</module>
+    <module>use-cases/vehicle-routing-pickup-delivery</module>
   </modules>
 
 </project>
