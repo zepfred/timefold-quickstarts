@@ -29,8 +29,8 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
                 pickupDeliveryOrder(factory),
                 vehicleCapacityAtVisit(factory),
                 serviceFinishedAfterMaxEndTime(factory),
-                minimizeVehicleTravelTime(factory),
-                minimizeShipmentTravelTime(factory)
+                minimizeVehicleTravelTime(factory)
+                //minimizeShipmentTravelTime(factory)
         };
     }
 
@@ -42,7 +42,7 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
         return factory.forEachUniquePair(Visit.class)
                 .filter(Visit::isSameShipment)
                 .filter((visit, visit2) -> !visit.isSameVehicle(visit2))
-                .penalizeLong(HardSoftLongScore.ONE_HARD, (visit, ignore) -> visit.getShipment().getWeight())
+                .penalizeLong(HardSoftLongScore.ONE_HARD, (visit, ignore) -> visit.getShipment().getWeight() * 1000)
                 .justifyWith((visit, visit2, score) -> new ShipmentVehicleJustification(visit.getId(),
                         visit.getVehicle().getId(), visit2.getId(), visit2.getVehicle().getId()))
                 .asConstraint(SHIPMENT_VEHICLE);

@@ -201,7 +201,7 @@ public class VehicleRouteDemoResource {
                     nameSupplier.get(),
                     new Location(latitudes.nextDouble(), longitudes.nextDouble()),
                     minStartTime,
-                    maxEndTime,
+                    maxEndTime.plusHours(4), // Add four hours for deliveries end time
                     Duration.ofMinutes(serviceDurationMinutes),
                     shipment);
             shipment.setDeliveryVisit(deliveryVisit);

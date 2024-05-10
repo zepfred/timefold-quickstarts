@@ -238,20 +238,19 @@ public class Visit {
 
     @JsonIgnore
     public long getTotalDrivingTimeSeconds(Visit other) {
-        if (getNextVisit() == null) {
+        Visit currentVisit = this;
+        Visit next = getNextVisit();
+        if (next == null) {
             return 0;
         }
-        Visit currentVisit = this;
-        Visit nextVisit = getNextVisit();
-        long totalDrivingTime = currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
-
-        while (!nextVisit.equals(other)) {
-            currentVisit = nextVisit;
-            nextVisit = nextVisit.getNextVisit();
-            if (nextVisit == null) {
+        long totalDrivingTime = currentVisit.getLocation().getDrivingTimeTo(next.getLocation());
+        while (!next.equals(other)) {
+            currentVisit = next;
+            next = next.getNextVisit();
+            if (next == null) {
                 return 0;
             }
-            totalDrivingTime += currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
+            totalDrivingTime += currentVisit.getLocation().getDrivingTimeTo(next.getLocation());
         }
 
         return totalDrivingTime;
