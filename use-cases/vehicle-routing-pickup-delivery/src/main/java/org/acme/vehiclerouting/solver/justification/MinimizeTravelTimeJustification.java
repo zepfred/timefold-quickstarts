@@ -1,4 +1,4 @@
-package org.acme.vehiclerouting.solver.justifications;
+package org.acme.vehiclerouting.solver.justification;
 
 import java.time.Duration;
 
@@ -7,9 +7,9 @@ import ai.timefold.solver.core.api.score.stream.ConstraintJustification;
 public record MinimizeTravelTimeJustification(String vehicleName, long totalDrivingTimeSeconds,
         String description) implements ConstraintJustification {
 
-    public MinimizeTravelTimeJustification(String vehicleName, long totalDrivingTimeSeconds) {
-        this(vehicleName, totalDrivingTimeSeconds, "Vehicle '%s' total travel time is %s."
-                .formatted(vehicleName, formatDrivingTime(totalDrivingTimeSeconds)));
+    public MinimizeTravelTimeJustification(String label, String id, long totalDrivingTimeSeconds) {
+        this(id, totalDrivingTimeSeconds, "%s %s total travel time is %s."
+                .formatted(label, id, formatDrivingTime(totalDrivingTimeSeconds)));
     }
 
     private static String formatDrivingTime(long drivingTimeSeconds) {

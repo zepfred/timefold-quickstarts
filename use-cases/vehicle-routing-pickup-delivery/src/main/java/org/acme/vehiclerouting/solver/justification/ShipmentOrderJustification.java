@@ -1,4 +1,4 @@
-package org.acme.vehiclerouting.solver.justifications;
+package org.acme.vehiclerouting.solver.justification;
 
 import ai.timefold.solver.core.api.score.stream.ConstraintJustification;
 
