@@ -16,7 +16,6 @@ import org.acme.vehiclerouting.domain.geo.DrivingTimeCalculator;
 import org.acme.vehiclerouting.domain.geo.HaversineDrivingTimeCalculator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <ul>
  * <li>capacity - each vehicle has a capacity for visits demand,</li>
  * <li>time windows - each visit accepts the vehicle only in specified time window.</li>
+ * <li>paired pickup and delivery - each shipment has a pickup and delivery visit.</li>
  * </ul>
  *
  * The planning solution is optimized according to the driving time (as opposed to the travel distance, for example)
@@ -79,7 +79,8 @@ public class VehicleRoutePlan {
             @JsonProperty("startDateTime") LocalDateTime startDateTime,
             @JsonProperty("endDateTime") LocalDateTime endDateTime,
             @JsonProperty("vehicles") List<Vehicle> vehicles,
-            @JsonProperty("visits") List<Visit> visits) {
+            @JsonProperty("visits") List<Visit> visits,
+            @JsonProperty("shipments") List<Shipment> shipments) {
         this.name = name;
         this.southWestCorner = southWestCorner;
         this.northEastCorner = northEastCorner;
@@ -87,6 +88,7 @@ public class VehicleRoutePlan {
         this.endDateTime = endDateTime;
         this.vehicles = vehicles;
         this.visits = visits;
+        this.shipments = shipments;
         List<Location> locations = Stream.concat(
                 vehicles.stream().map(Vehicle::getHomeLocation),
                 visits.stream().map(Visit::getLocation)).toList();
@@ -121,6 +123,10 @@ public class VehicleRoutePlan {
 
     public List<Visit> getVisits() {
         return visits;
+    }
+
+    public List<Shipment> getShipments() {
+        return shipments;
     }
 
     public HardSoftLongScore getScore() {

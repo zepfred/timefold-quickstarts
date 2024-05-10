@@ -3,6 +3,7 @@ package org.acme.vehiclerouting.domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
@@ -32,6 +33,7 @@ public class Visit {
     private LocalDateTime minStartTime;
     private LocalDateTime maxEndTime;
     private Duration serviceDuration;
+    @JsonIdentityReference(alwaysAsId = true)
     private Shipment shipment;
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -49,8 +51,8 @@ public class Visit {
     @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
     @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
-    @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceEntityClass = Vehicle.class,
-            sourceVariableName = "vehicle")
+    @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceVariableName = "previousVisit")
+    @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceVariableName = "vehicle")
     private Integer weightAtVisit;
 
     public Visit() {
@@ -224,9 +226,53 @@ public class Visit {
         return this.shipment.getPickupVisit().equals(this);
     }
 
+    @JsonIgnore
+    public boolean isSameShipment(Visit other) {
+        return this.shipment.equals(other.shipment);
+    }
+
+    @JsonIgnore
+    public boolean isSameVehicle(Visit other) {
+        return getVehicle().equals(other.getVehicle());
+    }
+
+    @JsonIgnore
+    public long getTotalDrivingTimeSeconds(Visit other) {
+        if (getNextVisit() == null) {
+            return 0;
+        }
+        Visit currentVisit = this;
+        Visit nextVisit = getNextVisit();
+        long totalDrivingTime = currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
+
+        while (!nextVisit.equals(other)) {
+            currentVisit = nextVisit;
+            nextVisit = nextVisit.getNextVisit();
+            if (nextVisit == null) {
+                return 0;
+            }
+            totalDrivingTime += currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
+        }
+
+        return totalDrivingTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Visit visit))
+            return false;
+        return Objects.equals(getId(), visit.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
     @Override
     public String toString() {
         return id;
     }
-
 }

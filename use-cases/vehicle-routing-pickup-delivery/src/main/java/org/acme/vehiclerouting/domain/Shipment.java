@@ -1,17 +1,45 @@
 package org.acme.vehiclerouting.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
+import ai.timefold.solver.core.api.domain.lookup.PlanningId;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(scope = Shipment.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Shipment {
 
+    @PlanningId
+    private String id;
+    @JsonIdentityReference(alwaysAsId = true)
     private Visit pickupVisit;
+    @JsonIdentityReference(alwaysAsId = true)
     private Visit deliveryVisit;
     private Integer weight;
 
-    public Shipment(Visit pickupVisit, Visit deliveryVisit, Integer weight) {
+    public Shipment() {
+    }
+
+    public Shipment(String id, Integer weight) {
+        this.id = id;
+        this.weight = weight;
+    }
+
+    public Shipment(String id, Visit pickupVisit, Visit deliveryVisit, Integer weight) {
+        this.id = id;
         this.pickupVisit = pickupVisit;
         this.deliveryVisit = deliveryVisit;
         this.weight = weight;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Visit getPickupVisit() {
@@ -38,26 +66,15 @@ public class Shipment {
         this.weight = weight;
     }
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shipment shipment)) return false;
+        return Objects.equals(getId(), shipment.getId());
+    }
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public long getTotalDrivingTimeSeconds() {
-        if (pickupVisit == null || deliveryVisit == null) {
-            return 0;
-        }
-
-        Visit currentVisit = pickupVisit;
-        Visit nextVisit = pickupVisit.getNextVisit();
-        long totalDrivingTime = currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
-
-        while(!nextVisit.equals(deliveryVisit)) {
-            currentVisit = nextVisit;
-            nextVisit = nextVisit.getNextVisit();
-            totalDrivingTime += currentVisit.getLocation().getDrivingTimeTo(nextVisit.getLocation());
-        }
-
-        return totalDrivingTime;
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

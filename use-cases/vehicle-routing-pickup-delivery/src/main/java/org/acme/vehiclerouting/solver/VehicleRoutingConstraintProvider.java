@@ -5,7 +5,6 @@ import ai.timefold.solver.core.api.score.stream.Constraint;
 import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 
-import org.acme.vehiclerouting.domain.Shipment;
 import org.acme.vehiclerouting.domain.Vehicle;
 import org.acme.vehiclerouting.domain.Visit;
 import org.acme.vehiclerouting.solver.justification.MinimizeTravelTimeJustification;
@@ -39,23 +38,25 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
     // Hard constraints
     // ************************************************************************
 
-    private Constraint sameVehicleShipment(ConstraintFactory factory) {
-        return factory.forEach(Shipment.class)
-                .filter(shipment -> !shipment.getPickupVisit().getVehicle().equals(shipment.getDeliveryVisit().getVehicle()))
-                .penalizeLong(HardSoftLongScore.ONE_HARD, Shipment::getWeight)
-                .justifyWith((shipment, score) -> new ShipmentVehicleJustification(shipment.getPickupVisit().getId(),
-                        shipment.getPickupVisit().getVehicle().getId(), shipment.getDeliveryVisit().getId(),
-                        shipment.getDeliveryVisit().getVehicle().getId()))
+    protected Constraint sameVehicleShipment(ConstraintFactory factory) {
+        return factory.forEachUniquePair(Visit.class)
+                .filter(Visit::isSameShipment)
+                .filter((visit, visit2) -> !visit.isSameVehicle(visit2))
+                .penalizeLong(HardSoftLongScore.ONE_HARD, (visit, ignore) -> visit.getShipment().getWeight())
+                .justifyWith((visit, visit2, score) -> new ShipmentVehicleJustification(visit.getId(),
+                        visit.getVehicle().getId(), visit2.getId(), visit2.getVehicle().getId()))
                 .asConstraint(SHIPMENT_VEHICLE);
     }
 
     protected Constraint pickupDeliveryOrder(ConstraintFactory factory) {
-        return factory.forEach(Shipment.class)
-                .filter(shipment -> shipment.getPickupVisit().getVehicleIndex() > shipment.getDeliveryVisit().getVehicleIndex())
+        return factory.forEachUniquePair(Visit.class)
+                .filter(Visit::isSameShipment)
+                .filter((visit, visit2) -> visit.isPickup())
+                .filter((visit, visit2) -> visit.getVehicleIndex() > visit2.getVehicleIndex())
                 .penalizeLong(HardSoftLongScore.ONE_HARD,
-                        shipment -> shipment.getPickupVisit().getVehicleIndex() - shipment.getDeliveryVisit().getVehicleIndex())
-                .justifyWith((shipment, score) -> new ShipmentOrderJustification(shipment.getPickupVisit().getId(),
-                        shipment.getDeliveryVisit().getId()))
+                        (visit, visit2) -> visit.getVehicleIndex() - visit2.getVehicleIndex())
+                .justifyWith((visit, visit2, score) -> new ShipmentOrderJustification(visit.getId(),
+                        visit2.getId()))
                 .asConstraint(SHIPMENT_ORDER);
     }
 
@@ -93,12 +94,12 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
     }
 
     protected Constraint minimizeShipmentTravelTime(ConstraintFactory factory) {
-        return factory.forEach(Shipment.class)
-                .penalizeLong(HardSoftLongScore.ONE_SOFT,
-                        Shipment::getTotalDrivingTimeSeconds)
-                .justifyWith((shipment, score) -> new MinimizeTravelTimeJustification("Shipment",
-                        "[%s, %s]".formatted(shipment.getPickupVisit().getId(), shipment.getDeliveryVisit().getId()),
-                        shipment.getTotalDrivingTimeSeconds()))
+        return factory.forEachUniquePair(Visit.class)
+                .filter(Visit::isSameShipment)
+                .filter((visit, visit2) -> visit.isPickup())
+                .penalizeLong(HardSoftLongScore.ONE_SOFT, Visit::getTotalDrivingTimeSeconds)
+                .justifyWith((visit, visit2, score) -> new MinimizeTravelTimeJustification("Shipment",
+                        "[%s, %s]".formatted(visit.getId(), visit2.getId()), visit.getTotalDrivingTimeSeconds(visit2)))
                 .asConstraint(MINIMIZE_SHIPMENT_TRAVEL_TIME);
     }
 }
