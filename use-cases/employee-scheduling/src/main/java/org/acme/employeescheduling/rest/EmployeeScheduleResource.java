@@ -1,6 +1,5 @@
 package org.acme.employeescheduling.rest;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +26,6 @@ import ai.timefold.solver.core.api.solver.SolverManager;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
 import org.acme.employeescheduling.domain.EmployeeSchedule;
-import org.acme.employeescheduling.domain.ScheduleState;
 import org.acme.employeescheduling.rest.exception.EmployeeScheduleSolverException;
 import org.acme.employeescheduling.rest.exception.ErrorInfo;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -193,39 +191,6 @@ public class EmployeeScheduleResource {
         EmployeeSchedule schedule = getEmployeeScheduleAndCheckForExceptions(jobId);
         SolverStatus solverStatus = solverManager.getSolverStatus(jobId);
         return new EmployeeSchedule(schedule.getScore(), solverStatus);
-    }
-
-    @Operation(
-            summary = "Publish a schedule.")
-    @APIResponses(value = {
-            @APIResponse(responseCode = "200", description = "The schedule updated.",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(implementation = EmployeeSchedule.class))),
-            @APIResponse(responseCode = "404", description = "No schedule found.",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(implementation = ErrorInfo.class))),
-            @APIResponse(responseCode = "500", description = "Exception while trying to publish the schedule.",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(implementation = ErrorInfo.class)))
-    })
-    @POST
-    @Path("{jobId}/publish")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void
-            publish(@Parameter(description = "The job ID returned by the POST method.") @PathParam("jobId") String jobId) {
-        if (!getStatus(jobId).getSolverStatus().equals(SolverStatus.NOT_SOLVING)) {
-            throw new IllegalStateException("Cannot publish a schedule while solving is in progress.");
-        }
-        EmployeeSchedule schedule = getEmployeeScheduleAndCheckForExceptions(jobId);
-        ScheduleState scheduleState = schedule.getScheduleState();
-        LocalDate newHistoricDate = scheduleState.getFirstDraftDate();
-        LocalDate newDraftDate = scheduleState.getFirstDraftDate().plusDays(scheduleState.getPublishLength());
-
-        scheduleState.setLastHistoricDate(newHistoricDate);
-        scheduleState.setFirstDraftDate(newDraftDate);
-
-        dataGenerator.addDraftShifts(schedule);
-        jobIdToJob.put(jobId, Job.ofSchedule(schedule));
     }
 
     private record Job(EmployeeSchedule schedule, Throwable exception) {

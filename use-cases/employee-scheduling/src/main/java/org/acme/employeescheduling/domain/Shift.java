@@ -7,7 +7,7 @@ import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 
-@PlanningEntity(pinningFilter = ShiftPinningFilter.class)
+@PlanningEntity
 public class Shift {
     @PlanningId
     private String id;

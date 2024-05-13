@@ -31,25 +31,8 @@ let byLocationGroupDataSet = new vis.DataSet();
 let byLocationItemDataSet = new vis.DataSet();
 let byLocationTimeline = new vis.Timeline(byLocationPanel, byLocationItemDataSet, byLocationGroupDataSet, byLocationTimelineOptions);
 
-const today = new Date();
 let windowStart = JSJoda.LocalDate.now().toString();
 let windowEnd = JSJoda.LocalDate.parse(windowStart).plusDays(7).toString();
-
-byEmployeeTimeline.addCustomTime(today, 'published');
-byEmployeeTimeline.setCustomTimeMarker('Published Shifts', 'published', false);
-byEmployeeTimeline.setCustomTimeTitle('Published Shifts', 'published');
-
-byEmployeeTimeline.addCustomTime(today, 'draft');
-byEmployeeTimeline.setCustomTimeMarker('Draft Shifts', 'draft', false);
-byEmployeeTimeline.setCustomTimeTitle('Draft Shifts', 'draft');
-
-byLocationTimeline.addCustomTime(today, 'published');
-byLocationTimeline.setCustomTimeMarker('Published Shifts', 'published', false);
-byLocationTimeline.setCustomTimeTitle('Published Shifts', 'published');
-
-byLocationTimeline.addCustomTime(today, 'draft');
-byLocationTimeline.setCustomTimeMarker('Draft Shifts', 'draft', false);
-byLocationTimeline.setCustomTimeTitle('Draft Shifts', 'draft');
 
 $(document).ready(function () {
     replaceQuickstartTimefoldAutoHeaderFooter();
@@ -62,9 +45,6 @@ $(document).ready(function () {
     });
     $("#analyzeButton").click(function () {
         analyze();
-    });
-    $("#publish").click(function () {
-        publish();
     });
     // HACK to allow vis-timeline to work within Bootstrap tabs
     $("#byEmployeeTab").on('shown.bs.tab', function (event) {
@@ -173,7 +153,7 @@ function renderSchedule(schedule) {
     const availabilityMap = new Map();
 
     // Show only first 7 days of draft
-    const scheduleStart = schedule.scheduleState.firstDraftDate;
+    const scheduleStart = schedule.shifts.map(shift => JSJoda.LocalDateTime.parse(shift.start).toLocalDate()).sort()[0].toString();
     const scheduleEnd = JSJoda.LocalDate.parse(scheduleStart).plusDays(7).toString();
 
     windowStart = scheduleStart;
@@ -186,12 +166,6 @@ function renderSchedule(schedule) {
 
     byEmployeeItemDataSet.clear();
     byLocationItemDataSet.clear();
-
-    byEmployeeTimeline.setCustomTime(schedule.scheduleState.lastHistoricDate, 'published');
-    byEmployeeTimeline.setCustomTime(schedule.scheduleState.firstDraftDate, 'draft');
-
-    byLocationTimeline.setCustomTime(schedule.scheduleState.lastHistoricDate, 'published');
-    byLocationTimeline.setCustomTime(schedule.scheduleState.firstDraftDate, 'draft');
 
     schedule.availabilities.forEach((availability, index) => {
         const availabilityDate = JSJoda.LocalDate.parse(availability.date);
@@ -395,30 +369,15 @@ function refreshSolvingButtons(solving) {
     }
 }
 
-function publish() {
-    $.post(`/schedules/${scheduleId}/publish`, function () {
-        refreshSolvingButtons(true);
-        refreshSchedule();
-    }).fail(function (xhr, ajaxOptions, thrownError) {
-        showError("Publish failed.", xhr);
-    });
-}
-
 function refreshSolvingButtons(solving) {
     if (solving) {
         $("#solveButton").hide();
-        $("#publish").hide();
         $("#stopSolvingButton").show();
         if (autoRefreshIntervalId == null) {
             autoRefreshIntervalId = setInterval(refreshSchedule, 2000);
         }
     } else {
         $("#solveButton").show();
-        if (scheduleId != null) {
-            $("#publish").show();
-        } else {
-            $("#publish").hide();
-        }
         $("#stopSolvingButton").hide();
         if (autoRefreshIntervalId != null) {
             clearInterval(autoRefreshIntervalId);
