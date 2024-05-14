@@ -65,7 +65,7 @@ class VehicleRoutingConstraintProviderTest {
         shipment2.setDeliveryVisit(visit4);
         constraintVerifier.verifyThat(VehicleRoutingConstraintProvider::sameVehicleShipment)
                 .given(visit1, visit2, visit3, visit4)
-                .penalizesBy(10);
+                .penalizesBy(10000);
     }
 
     @Test

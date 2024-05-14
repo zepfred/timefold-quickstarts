@@ -1,0 +1,60 @@
+<plannerBenchmark xmlns="https://timefold.ai/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://timefold.ai/xsd/benchmark https://timefold.ai/xsd/benchmark/benchmark.xsd">
+    <inheritedSolverBenchmark>
+        <solver>
+            <termination>
+                <secondsSpentLimit>30</secondsSpentLimit>
+            </termination>
+        </solver>
+        <problemBenchmarks>
+            <problemStatisticType>STEP_SCORE</problemStatisticType>
+            <problemStatisticType>BEST_SCORE</problemStatisticType>
+            <problemStatisticType>MOVE_COUNT_PER_STEP</problemStatisticType>
+            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+
+    <solverBenchmark>
+        <name>Generic Moves</name>
+        <solver>
+            <environmentMode>FAST_ASSERT</environmentMode>
+            <constructionHeuristic/>
+            <localSearch/>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Generic Moves with Filters</name>
+        <solver>
+            <environmentMode>FAST_ASSERT</environmentMode>
+            <constructionHeuristic/>
+            <localSearch>
+                <unionMoveSelector>
+                    <listChangeMoveSelector>
+                        <filterClass>org.acme.vehiclerouting.solver.filter.ListChangeMoveShipmentFilter</filterClass>
+                    </listChangeMoveSelector>
+                    <listSwapMoveSelector>
+                        <filterClass>org.acme.vehiclerouting.solver.filter.ListSwapMoveShipmentFilter</filterClass>
+                    </listSwapMoveSelector>
+                </unionMoveSelector>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Custom Moves</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <unionMoveSelector>
+                    <moveIteratorFactory>
+                        <moveIteratorFactoryClass>org.acme.vehiclerouting.solver.factory.CustomListChangeMoveFactory
+                        </moveIteratorFactoryClass>
+                    </moveIteratorFactory>
+                    <moveIteratorFactory>
+                        <moveIteratorFactoryClass>org.acme.vehiclerouting.solver.factory.CustomListSwapMoveFactory
+                        </moveIteratorFactoryClass>
+                    </moveIteratorFactory>
+                </unionMoveSelector>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+</plannerBenchmark>

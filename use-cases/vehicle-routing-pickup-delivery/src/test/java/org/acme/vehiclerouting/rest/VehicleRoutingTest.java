@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.constructionheuristic.ConstructionHeuristicPhaseConfig;
@@ -24,17 +25,18 @@ import org.acme.vehiclerouting.solver.factory.CustomListChangeMoveFactory;
 import org.acme.vehiclerouting.solver.factory.CustomListSwapMoveFactory;
 import org.acme.vehiclerouting.solver.filter.ListChangeMoveShipmentFilter;
 import org.acme.vehiclerouting.solver.filter.ListSwapMoveShipmentFilter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@EnabledIfSystemProperty(named = "slowly", matches = "true")
 class VehicleRoutingTest {
 
     @Inject
     SolverConfig solverConfig;
+    @Inject
+    PlannerBenchmarkFactory benchmarkFactory;
 
     @Test
     void solve() {
@@ -61,7 +63,7 @@ class VehicleRoutingTest {
         SolverConfig updatedConfig2 = solverConfig.copyConfig();
         updatedConfig2
                 .withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(60))
+                .withTerminationSpentLimit(Duration.ofSeconds(30))
                 .getTerminationConfig().withBestScoreLimit(null);
         LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
         UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
@@ -81,7 +83,7 @@ class VehicleRoutingTest {
         SolverConfig updatedConfig3 = solverConfig.copyConfig();
         updatedConfig3
                 .withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(60))
+                .withTerminationSpentLimit(Duration.ofSeconds(30))
                 .getTerminationConfig().withBestScoreLimit(null);
         LocalSearchPhaseConfig localSearchPhaseConfig2 = new LocalSearchPhaseConfig();
         UnionMoveSelectorConfig unionMoveSelectorConfig2 = new UnionMoveSelectorConfig();
@@ -98,5 +100,18 @@ class VehicleRoutingTest {
         VehicleRoutePlan solution3 = solver3.solve(problem);
         assertThat(solution3.getScore()).isNotNull();
         assertThat(solution3.getScore().hardScore()).isZero();
+    }
+
+    @Test
+    @Disabled
+    void benchmark() {
+        VehicleRoutePlan problem = given()
+                .when().get("/demo-data/HARTFORT")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(VehicleRoutePlan.class);
+
+        benchmarkFactory.buildPlannerBenchmark(problem).benchmark();
     }
 }

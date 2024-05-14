@@ -59,6 +59,10 @@
             <groupId>ai.timefold.solver</groupId>
             <artifactId>timefold-solver-quarkus-jackson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ai.timefold.solver</groupId>
+            <artifactId>timefold-solver-quarkus-benchmark</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
