@@ -1,4 +1,4 @@
-package org.acme.vehiclerouting.solver;
+package org.acme.vehiclerouting.solver.listener;
 
 import ai.timefold.solver.core.api.domain.variable.VariableListener;
 import ai.timefold.solver.core.api.score.director.ScoreDirector;

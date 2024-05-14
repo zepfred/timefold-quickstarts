@@ -13,8 +13,8 @@ import ai.timefold.solver.core.api.domain.variable.NextElementShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.ShadowVariable;
 
-import org.acme.vehiclerouting.solver.ArrivalTimeUpdatingVariableListener;
-import org.acme.vehiclerouting.solver.WeightAtVisitVariableListener;
+import org.acme.vehiclerouting.solver.listener.ArrivalTimeUpdatingVariableListener;
+import org.acme.vehiclerouting.solver.listener.WeightAtVisitVariableListener;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -234,26 +234,6 @@ public class Visit {
     @JsonIgnore
     public boolean isSameVehicle(Visit other) {
         return getVehicle().equals(other.getVehicle());
-    }
-
-    @JsonIgnore
-    public long getTotalDrivingTimeSeconds(Visit other) {
-        Visit currentVisit = this;
-        Visit next = getNextVisit();
-        if (next == null) {
-            return 0;
-        }
-        long totalDrivingTime = currentVisit.getLocation().getDrivingTimeTo(next.getLocation());
-        while (!next.equals(other)) {
-            currentVisit = next;
-            next = next.getNextVisit();
-            if (next == null) {
-                return 0;
-            }
-            totalDrivingTime += currentVisit.getLocation().getDrivingTimeTo(next.getLocation());
-        }
-
-        return totalDrivingTime;
     }
 
     @Override

@@ -186,22 +186,18 @@ class VehicleRoutingConstraintProviderTest {
         LocalDateTime tomorrow_10_00 = LocalDateTime.of(TOMORROW, LocalTime.of(10, 0));
         Vehicle vehicle = new Vehicle("1", 100, LOCATION_1, tomorrow_07_00);
         Shipment shipment = new Shipment("1", 50);
-        Shipment shipment2 = new Shipment("2", 50);
         Visit visit1 = new Visit("1", "John", LOCATION_2, tomorrow_08_00, tomorrow_10_00, Duration.ofMinutes(30L), shipment);
         visit1.setVehicle(vehicle);
+        visit1.setArrivalTime(tomorrow_08_00);
         shipment.setPickupVisit(visit1);
-        Visit visit2 = new Visit("2", "Paul", LOCATION_3, tomorrow_08_00, tomorrow_10_00, Duration.ofMinutes(30L), shipment2);
+        Visit visit2 = new Visit("2", "Paul", LOCATION_3, tomorrow_08_00, tomorrow_10_00, Duration.ofMinutes(30L), shipment);
         visit2.setVehicle(vehicle);
-        shipment2.setPickupVisit(visit2);
-        visit1.setNextVisit(visit2);
-        Visit visit3 = new Visit("3", "Ann", LOCATION_2, tomorrow_08_00, tomorrow_10_00, Duration.ofMinutes(30L), shipment);
-        visit3.setVehicle(vehicle);
-        shipment.setDeliveryVisit(visit3);
-        visit2.setNextVisit(visit3);
+        visit2.setArrivalTime(tomorrow_10_00);
+        shipment.setDeliveryVisit(visit2);
 
         constraintVerifier.verifyThat(VehicleRoutingConstraintProvider::minimizeShipmentTravelTime)
-                .given(visit1, visit2, visit3)
-                .penalizesBy(1278L);
+                .given(visit1, visit2)
+                .penalizesBy(7200L);
     }
 
     static void connect(Vehicle vehicle, Visit... visits) {

@@ -1,4 +1,4 @@
-package org.acme.vehiclerouting.solver;
+package org.acme.vehiclerouting.solver.listener;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

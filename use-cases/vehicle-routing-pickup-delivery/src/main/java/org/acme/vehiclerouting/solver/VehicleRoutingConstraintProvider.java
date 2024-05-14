@@ -1,9 +1,12 @@
 package org.acme.vehiclerouting.solver;
 
+import java.util.concurrent.TimeUnit;
+
 import ai.timefold.solver.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import ai.timefold.solver.core.api.score.stream.Constraint;
 import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
+import ai.timefold.solver.core.api.score.stream.Joiners;
 
 import org.acme.vehiclerouting.domain.Vehicle;
 import org.acme.vehiclerouting.domain.Visit;
@@ -29,8 +32,8 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
                 pickupDeliveryOrder(factory),
                 vehicleCapacityAtVisit(factory),
                 serviceFinishedAfterMaxEndTime(factory),
-                minimizeVehicleTravelTime(factory)
-                //minimizeShipmentTravelTime(factory)
+                minimizeVehicleTravelTime(factory),
+                minimizeShipmentTravelTime(factory)
         };
     }
 
@@ -95,12 +98,15 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
     }
 
     protected Constraint minimizeShipmentTravelTime(ConstraintFactory factory) {
-        return factory.forEachUniquePair(Visit.class)
-                .filter(Visit::isSameShipment)
-                .filter((visit, visit2) -> visit.isPickup())
-                .penalizeLong(HardSoftLongScore.ONE_SOFT, Visit::getTotalDrivingTimeSeconds)
-                .justifyWith((visit, visit2, score) -> new MinimizeTravelTimeJustification("Shipment",
-                        "[%s, %s]".formatted(visit.getId(), visit2.getId()), visit.getTotalDrivingTimeSeconds(visit2)))
+        return factory.forEach(Visit.class)
+                .filter(Visit::isPickup)
+                .join(Visit.class, Joiners.equal(visit -> visit.getShipment().getDeliveryVisit().getId(), Visit::getId))
+                .expand((pickup, delivery) -> TimeUnit.SECONDS.toChronoUnit().between(pickup.getArrivalTime(),
+                        delivery.getArrivalTime()))
+                .filter((pickup, delivery, shipmentTime) -> shipmentTime > 0)
+                .penalizeLong(HardSoftLongScore.ONE_SOFT, (pickup, delivery, rideTime) -> rideTime)
+                .justifyWith((pickup, delivery, shipmentTime, score) -> new MinimizeTravelTimeJustification("Shipment",
+                        "[%s, %s]".formatted(pickup.getId(), delivery.getId()), shipmentTime))
                 .asConstraint(MINIMIZE_SHIPMENT_TRAVEL_TIME);
     }
 }
