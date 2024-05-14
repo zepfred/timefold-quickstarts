@@ -52,7 +52,7 @@ public class Visit {
     @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
     @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceVariableName = "previousVisit")
-    @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceVariableName = "vehicle")
+    @ShadowVariable(variableListenerClass = WeightAtVisitVariableListener.class, sourceVariableName = "nextVisit")
     private Integer weightAtVisit;
 
     public Visit() {

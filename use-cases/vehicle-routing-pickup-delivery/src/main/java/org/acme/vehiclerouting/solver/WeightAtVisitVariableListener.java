@@ -18,11 +18,9 @@ public class WeightAtVisitVariableListener implements VariableListener<VehicleRo
     @Override
     public void afterVariableChanged(ScoreDirector<VehicleRoutePlan> scoreDirector, Visit visit) {
         if (visit.getVehicle() == null) {
-            if (visit.getArrivalTime() != null) {
-                scoreDirector.beforeVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
-                visit.setWeightAtVisit(null);
-                scoreDirector.afterVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
-            }
+            scoreDirector.beforeVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
+            visit.setWeightAtVisit(null);
+            scoreDirector.afterVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
             return;
         }
 

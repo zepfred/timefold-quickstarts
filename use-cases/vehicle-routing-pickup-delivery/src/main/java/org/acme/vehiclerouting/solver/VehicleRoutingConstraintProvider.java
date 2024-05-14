@@ -62,6 +62,7 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
 
     protected Constraint vehicleCapacityAtVisit(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
+                .filter(visit -> visit.getWeightAtVisit() != null)
                 .filter(visit -> visit.getWeightAtVisit() > visit.getVehicle().getCapacity())
                 .penalizeLong(HardSoftLongScore.ONE_HARD,
                         visit -> visit.getWeightAtVisit() - visit.getVehicle().getCapacity())
