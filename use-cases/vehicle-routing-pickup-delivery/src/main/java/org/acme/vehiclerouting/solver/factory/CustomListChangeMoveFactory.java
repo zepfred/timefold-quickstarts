@@ -180,7 +180,7 @@ public class CustomListChangeMoveFactory implements MoveIteratorFactory<VehicleR
                     !vehicle.getVisits().isEmpty() ? workingRandom.nextInt(pickupVisitIndex + 1, vehicle.getVisits().size())
                             : 1;
             var originalDeliveryVisitIndex = originalDeliveryVisit.getVehicleIndex();
-            if (originalPickuptVisit.isSameVehicle(originalDeliveryVisit) && originalDeliveryVisitIndex > 0) {
+            if (originalPickuptVisit.getVehicle() == originalDeliveryVisit.getVehicle() && originalDeliveryVisitIndex > 0) {
                 // The first move removes one item from the list, and we need to adjust the original delivery index
                 originalDeliveryVisitIndex--;
             }

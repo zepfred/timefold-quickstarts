@@ -43,8 +43,8 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
 
     protected Constraint sameVehicleShipment(ConstraintFactory factory) {
         return factory.forEachUniquePair(Visit.class)
-                .filter(Visit::isSameShipment)
-                .filter((visit, visit2) -> !visit.isSameVehicle(visit2))
+                .filter((visit, visit2) -> visit.getShipment() == visit2.getShipment())
+                .filter((visit, visit2) -> visit.getVehicle() != visit2.getVehicle())
                 .penalizeLong(HardSoftLongScore.ONE_HARD, (visit, ignore) -> visit.getShipment().getWeight() * 1000)
                 .justifyWith((visit, visit2, score) -> new ShipmentVehicleJustification(visit.getId(),
                         visit.getVehicle().getId(), visit2.getId(), visit2.getVehicle().getId()))
@@ -53,7 +53,7 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
 
     protected Constraint pickupDeliveryOrder(ConstraintFactory factory) {
         return factory.forEachUniquePair(Visit.class)
-                .filter(Visit::isSameShipment)
+                .filter((visit, visit2) -> visit.getShipment() == visit2.getShipment())
                 .filter((visit, visit2) -> visit.isPickup())
                 .filter((visit, visit2) -> visit.getVehicleIndex() > visit2.getVehicleIndex())
                 .penalizeLong(HardSoftLongScore.ONE_HARD,

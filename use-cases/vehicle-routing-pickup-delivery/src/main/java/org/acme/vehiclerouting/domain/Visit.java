@@ -226,16 +226,6 @@ public class Visit {
         return this.shipment.getPickupVisit().equals(this);
     }
 
-    @JsonIgnore
-    public boolean isSameShipment(Visit other) {
-        return this.shipment.equals(other.shipment);
-    }
-
-    @JsonIgnore
-    public boolean isSameVehicle(Visit other) {
-        return getVehicle().equals(other.getVehicle());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
