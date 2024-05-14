@@ -25,15 +25,12 @@ public class EmployeeSchedule {
     @PlanningScore
     private HardSoftScore score;
 
-    private ScheduleState scheduleState;
-
     private SolverStatus solverStatus;
 
     // No-arg constructor required for Timefold
     public EmployeeSchedule() {}
 
-    public EmployeeSchedule(ScheduleState scheduleState, List<Availability> availabilities, List<Employee> employees, List<Shift> shifts) {
-        this.scheduleState = scheduleState;
+    public EmployeeSchedule(List<Availability> availabilities, List<Employee> employees, List<Shift> shifts) {
         this.availabilities = availabilities;
         this.employees = employees;
         this.shifts = shifts;
@@ -42,14 +39,6 @@ public class EmployeeSchedule {
     public EmployeeSchedule(HardSoftScore score, SolverStatus solverStatus) {
         this.score = score;
         this.solverStatus = solverStatus;
-    }
-
-    public ScheduleState getScheduleState() {
-        return scheduleState;
-    }
-
-    public void setScheduleState(ScheduleState scheduleState) {
-        this.scheduleState = scheduleState;
     }
 
     public List<Availability> getAvailabilities() {

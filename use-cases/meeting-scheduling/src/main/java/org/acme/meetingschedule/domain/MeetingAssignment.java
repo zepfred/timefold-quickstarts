@@ -12,12 +12,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @PlanningEntity
 public class MeetingAssignment {
 
+    @PlanningId
     private String id;
     private Meeting meeting;
+    @PlanningPin
     private boolean pinned;
 
     // Planning variables: changes during planning, between score calculations.
+    @PlanningVariable
     private TimeGrain startingTimeGrain;
+    @PlanningVariable
     private Room room;
 
     public MeetingAssignment() {
@@ -38,7 +42,6 @@ public class MeetingAssignment {
         this.room = room;
     }
 
-    @PlanningId
     public String getId() {
         return id;
     }
@@ -55,7 +58,6 @@ public class MeetingAssignment {
         this.meeting = meeting;
     }
 
-    @PlanningPin
     public boolean isPinned() {
         return pinned;
     }
@@ -64,7 +66,6 @@ public class MeetingAssignment {
         this.pinned = pinned;
     }
 
-    @PlanningVariable
     public TimeGrain getStartingTimeGrain() {
         return startingTimeGrain;
     }
@@ -73,7 +74,6 @@ public class MeetingAssignment {
         this.startingTimeGrain = startingTimeGrain;
     }
 
-    @PlanningVariable
     public Room getRoom() {
         return room;
     }

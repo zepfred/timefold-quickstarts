@@ -142,6 +142,11 @@ class EmployeeSchedulingConstraintProviderTest {
                 .penalizesBy((int) Duration.ofHours(8).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
                 .given(employee1,
+                        unavailability,
+                        new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
+                .penalizesBy((int) Duration.ofHours(32).toMinutes());
+        constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
+                .given(employee1,
                        unavailability,
                        new Shift("1", DAY_START_TIME.plusDays(1), DAY_END_TIME.plusDays(1), "Location", "Skill", employee1))
                 .penalizes(0);
@@ -170,6 +175,11 @@ class EmployeeSchedulingConstraintProviderTest {
                 .rewardsWith((int) Duration.ofHours(8).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)
                 .given(employee1,
+                        desired,
+                        new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
+                .rewardsWith((int) Duration.ofHours(32).toMinutes());
+        constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)
+                .given(employee1,
                        desired,
                        new Shift("1", DAY_START_TIME.plusDays(1), DAY_END_TIME.plusDays(1), "Location", "Skill", employee1))
                 .rewards(0);
@@ -196,6 +206,11 @@ class EmployeeSchedulingConstraintProviderTest {
                        undesired,
                        new Shift("1", DAY_START_TIME, DAY_END_TIME, "Location", "Skill", employee1))
                 .penalizesBy((int) Duration.ofHours(8).toMinutes());
+        constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
+                .given(employee1,
+                        undesired,
+                        new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
+                .penalizesBy((int) Duration.ofHours(32).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
                 .given(employee1,
                        undesired,

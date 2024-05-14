@@ -2,6 +2,8 @@ package org.acme.vehiclerouting.domain;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
@@ -31,12 +33,17 @@ public class Visit {
     private LocalDateTime maxEndTime;
     private Duration serviceDuration;
 
+    @JsonIdentityReference(alwaysAsId = true)
+    @InverseRelationShadowVariable(sourceVariableName = "visits")
     private Vehicle vehicle;
-
+    @JsonIdentityReference(alwaysAsId = true)
+    @PreviousElementShadowVariable(sourceVariableName = "visits")
     private Visit previousVisit;
-
+    @JsonIdentityReference(alwaysAsId = true)
+    @NextElementShadowVariable(sourceVariableName = "visits")
     private Visit nextVisit;
-
+    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
+    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
 
     public Visit() {
@@ -93,8 +100,6 @@ public class Visit {
         return serviceDuration;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @InverseRelationShadowVariable(sourceVariableName = "visits")
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -103,8 +108,6 @@ public class Visit {
         this.vehicle = vehicle;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @PreviousElementShadowVariable(sourceVariableName = "visits")
     public Visit getPreviousVisit() {
         return previousVisit;
     }
@@ -113,8 +116,6 @@ public class Visit {
         this.previousVisit = previousVisit;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @NextElementShadowVariable(sourceVariableName = "visits")
     public Visit getNextVisit() {
         return nextVisit;
     }
@@ -123,8 +124,6 @@ public class Visit {
         this.nextVisit = nextVisit;
     }
 
-    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
-    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
@@ -164,7 +163,16 @@ public class Visit {
         if (arrivalTime == null) {
             return 0;
         }
-        return Duration.between(maxEndTime, arrivalTime.plus(serviceDuration)).toMinutes();
+        return roundDurationToNextOrEqualMinutes(Duration.between(maxEndTime, arrivalTime.plus(serviceDuration)));
+    }
+
+    private static long roundDurationToNextOrEqualMinutes(Duration duration) {
+        var remainder = duration.minus(duration.truncatedTo(ChronoUnit.MINUTES));
+        var minutes = duration.toMinutes();
+        if (remainder.equals(Duration.ZERO)) {
+            return minutes;
+        }
+        return minutes + 1;
     }
 
     @JsonIgnore

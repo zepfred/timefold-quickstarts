@@ -1,14 +1,16 @@
 package org.acme.schooltimetabling.solver;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+
 import ai.timefold.solver.test.api.score.stream.ConstraintVerifier;
+
 import org.acme.schooltimetabling.domain.Lesson;
 import org.acme.schooltimetabling.domain.Room;
 import org.acme.schooltimetabling.domain.Timeslot;
 import org.acme.schooltimetabling.domain.Timetable;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 
 class TimetableConstraintProviderTest {
 
@@ -74,6 +76,13 @@ class TimetableConstraintProviderTest {
         Lesson thirdTuesdayLessonWithGap = new Lesson("4", "Subject4", teacher, "Group4", TIMESLOT4, ROOM1);
         constraintVerifier.verifyThat(TimetableConstraintProvider::teacherTimeEfficiency)
                 .given(singleLessonOnMonday, firstTuesdayLesson, secondTuesdayLesson, thirdTuesdayLessonWithGap)
+                .rewardsWith(1); // Second tuesday lesson immediately follows the first.
+
+        // Reverse ID order
+        Lesson altSecondTuesdayLesson = new Lesson("2", "Subject2", teacher, "Group3", TIMESLOT3, ROOM1);
+        Lesson altFirstTuesdayLesson = new Lesson("3", "Subject3", teacher, "Group2", TIMESLOT2, ROOM1);
+        constraintVerifier.verifyThat(TimetableConstraintProvider::teacherTimeEfficiency)
+                .given(altSecondTuesdayLesson, altFirstTuesdayLesson)
                 .rewardsWith(1); // Second tuesday lesson immediately follows the first.
     }
 

@@ -179,7 +179,6 @@ function renderScheduleByRoom(schedule) {
 
             const color = stay.patientGender == 'MALE' ? '#729FCF' : '#FCE94F';
             unassignedPatients.append($(`<div class="col"/>`).append($(`<div class="card" style="background-color: ${color}"/>`).append(unassignedPatientElement)));
-            console.log(stay)
             byRoomItemData.add({
                 id: stay.id,
                 group: stay.id,

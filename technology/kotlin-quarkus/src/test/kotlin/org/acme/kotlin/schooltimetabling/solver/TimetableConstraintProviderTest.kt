@@ -77,6 +77,13 @@ class TimetableConstraintProviderTest {
         constraintVerifier.verifyThat(TimeTableConstraintProvider::teacherTimeEfficiency)
             .given(singleLessonOnMonday, firstTuesdayLesson, secondTuesdayLesson, thirdTuesdayLessonWithGap)
             .rewardsWith(1) // Second tuesday lesson immediately follows the first.
+
+        // Reverse ID order
+        val altSecondTuesdayLesson = Lesson("2", "Subject2", teacher, "Group3", TIMESLOT3, ROOM1)
+        val altFirstTuesdayLesson = Lesson("3", "Subject3", teacher, "Group2", TIMESLOT2, ROOM1)
+        constraintVerifier.verifyThat(TimeTableConstraintProvider::teacherTimeEfficiency)
+            .given(altSecondTuesdayLesson, altFirstTuesdayLesson)
+            .rewardsWith(1); // Second tuesday lesson immediately follows the first.
     }
 
     @Test

@@ -1,10 +1,19 @@
 package org.acme.foodpackaging.rest;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
+import ai.timefold.solver.core.api.score.buildin.hardmediumsoftlong.HardMediumSoftLongScore;
+import ai.timefold.solver.core.api.solver.ScoreAnalysisFetchPolicy;
+import ai.timefold.solver.core.api.solver.SolutionManager;
 import ai.timefold.solver.core.api.solver.SolverManager;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
@@ -16,11 +25,20 @@ public class PackagingScheduleResource {
 
     public static final String SINGLETON_SOLUTION_ID = "1";
 
-    @Inject
-    PackagingScheduleRepository repository;
+    private PackagingScheduleRepository repository;
+
+    private SolverManager<PackagingSchedule, String> solverManager;
+
+    private SolutionManager<PackagingSchedule, HardMediumSoftLongScore> solutionManager;
 
     @Inject
-    SolverManager<PackagingSchedule, String> solverManager;
+    public PackagingScheduleResource(PackagingScheduleRepository repository,
+            SolverManager<PackagingSchedule, String> solverManager,
+            SolutionManager<PackagingSchedule, HardMediumSoftLongScore> solutionManager) {
+        this.repository = repository;
+        this.solverManager = solverManager;
+        this.solutionManager = solutionManager;
+    }
 
     @GET
     public PackagingSchedule get() {
@@ -40,6 +58,15 @@ public class PackagingScheduleResource {
                 .withProblemFinder(id -> repository.read())
                 .withBestSolutionConsumer(schedule -> repository.write(schedule))
                 .run();
+    }
+
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("analyze")
+    public ScoreAnalysis<HardMediumSoftLongScore> analyze(@QueryParam("fetchPolicy") ScoreAnalysisFetchPolicy fetchPolicy) {
+        PackagingSchedule problem = repository.read();
+        return fetchPolicy == null ? solutionManager.analyze(problem) : solutionManager.analyze(problem, fetchPolicy);
     }
 
     @POST

@@ -1,5 +1,14 @@
 package org.acme.orderpicking.solver;
 
+import static org.acme.orderpicking.domain.Shelving.newShelvingId;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_A;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_C;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_D;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_E;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_1;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_2;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_3;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,7 +16,8 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import io.quarkus.test.junit.QuarkusTest;
+import ai.timefold.solver.test.api.score.stream.ConstraintVerifier;
+
 import org.acme.orderpicking.domain.Order;
 import org.acme.orderpicking.domain.OrderItem;
 import org.acme.orderpicking.domain.OrderPickingSolution;
@@ -19,16 +29,8 @@ import org.acme.orderpicking.domain.TrolleyStep;
 import org.acme.orderpicking.domain.Warehouse;
 import org.acme.orderpicking.domain.WarehouseLocation;
 import org.junit.jupiter.api.Test;
-import ai.timefold.solver.test.api.score.stream.ConstraintVerifier;
 
-import static org.acme.orderpicking.domain.Shelving.newShelvingId;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_A;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_C;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_D;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_E;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_1;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_2;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_3;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class OrderPickingConstraintProviderTest {

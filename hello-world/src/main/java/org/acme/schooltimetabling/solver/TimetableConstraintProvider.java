@@ -83,8 +83,8 @@ public class TimetableConstraintProvider implements ConstraintProvider {
     Constraint teacherTimeEfficiency(ConstraintFactory constraintFactory) {
         // A teacher prefers to teach sequential lessons and dislikes gaps between lessons.
         return constraintFactory
-                .forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getTeacher),
+                .forEach(Lesson.class)
+                .join(Lesson.class, Joiners.equal(Lesson::getTeacher),
                         Joiners.equal((lesson) -> lesson.getTimeslot().getDayOfWeek()))
                 .filter((lesson1, lesson2) -> {
                     Duration between = Duration.between(lesson1.getTimeslot().getEndTime(),

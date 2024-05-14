@@ -113,7 +113,7 @@ function renderSchedule(schedule) {
 function renderScheduleByCrew(schedule) {
     const unassignedCrew = $("#unassignedCrew");
     unassignedCrew.children().remove();
-    let unassignedJobsCount = 0;
+    let unassignedCrewCount = 0;
     byCrewGroupData.clear();
     byCrewItemData.clear();
 
@@ -149,7 +149,7 @@ function renderScheduleByCrew(schedule) {
     $.each(schedule.flightAssignments, (_, assignment) => {
         const flight = flightMap.get(assignment.flight);
         if (assignment.employee == null) {
-            unassignedJobsCount++;
+            unassignedCrewCount++;
             const departureDateTime = JSJoda.LocalDateTime.parse(flight.departureUTCDateTime);
             const arrivalDateTime = JSJoda.LocalDateTime.parse(flight.arrivalUTCDateTime);
             const unassignedElement = $(`<div class="card-body"/>`)
@@ -178,7 +178,9 @@ function renderScheduleByCrew(schedule) {
             });
         }
     });
-
+    if (unassignedCrewCount === 0) {
+        unassignedCrew.append($(`<p/>`).text(`There are no unassigned crew.`));
+    }
     byCrewTimeline.setWindow(JSJoda.LocalDateTime.now().minusMinutes(1).toString(),
         JSJoda.LocalDateTime.now().plusDays(4).withHour(23).withMinute(59).toString());
     byCrewTimeline.redraw();

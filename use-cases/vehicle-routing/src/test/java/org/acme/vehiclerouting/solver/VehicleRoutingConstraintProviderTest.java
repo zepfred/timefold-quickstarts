@@ -91,6 +91,7 @@ class VehicleRoutingConstraintProviderTest {
     void serviceFinishedAfterMaxEndTime() {
         LocalDateTime tomorrow_07_00 = LocalDateTime.of(TOMORROW, LocalTime.of(7, 0));
         LocalDateTime tomorrow_08_00 = LocalDateTime.of(TOMORROW, LocalTime.of(8, 0));
+        LocalDateTime tomorrow_08_00_01 = LocalDateTime.of(TOMORROW, LocalTime.of(8, 0, 1));
         LocalDateTime tomorrow_08_40 = LocalDateTime.of(TOMORROW, LocalTime.of(8, 40));
         LocalDateTime tomorrow_09_00 = LocalDateTime.of(TOMORROW, LocalTime.of(9, 0));
         LocalDateTime tomorrow_10_30 = LocalDateTime.of(TOMORROW, LocalTime.of(10, 30));
@@ -107,6 +108,12 @@ class VehicleRoutingConstraintProviderTest {
         constraintVerifier.verifyThat(VehicleRoutingConstraintProvider::serviceFinishedAfterMaxEndTime)
                 .given(vehicleA, visit1, visit2)
                 .penalizesBy(90 + visit2.getServiceDuration().toMinutes());
+
+        visit2.setArrivalTime(tomorrow_08_00_01);
+
+        constraintVerifier.verifyThat(VehicleRoutingConstraintProvider::serviceFinishedAfterMaxEndTime)
+                .given(vehicleA, visit1, visit2)
+                .penalizesBy(1);
     }
 
     static void connect(Vehicle vehicle, Visit... visits) {

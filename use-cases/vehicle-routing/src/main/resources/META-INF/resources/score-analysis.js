@@ -14,7 +14,6 @@ function analyzeScore(solution, endpointPath) {
 function visualizeScoreAnalysis(scoreAnalysisModalContent, solution, endpointPath) {
     $('#scoreAnalysisScoreLabel').text(`(${solution.score})`);
     $.put(endpointPath, JSON.stringify(solution), function (scoreAnalysis) {
-        console.log(scoreAnalysis)
         let constraints = scoreAnalysis.constraints;
         constraints.sort(compareConstraintsBySeverity);
         constraints.map(addDerivedScoreAttributes);
@@ -117,7 +116,6 @@ function visualizeConstraintMatches(analysisTBody, row, constraintIndex, matches
         row.append($(`<td/>`).append($(`<a/>`).attr("data-toggle", "collapse").attr('id', "row" + constraintIndex + "Button" + recommendationIndex).attr('href', "#row" + constraintIndex + "Collapse").append($(`<span/>`).addClass('fas').addClass('fa-chevron-down'))));
     } else {
         row.append($(`<td/>`).append($(`<a/>`).attr("data-toggle", "collapse").attr('href', "#row" + constraintIndex + "Collapse").append($(`<span/>`).addClass('fas').addClass('fa-chevron-down')).click(function (e) {
-            console.log('clicou', e)
             matchesRow.collapse('toggle');
             let target = $(e.target);
             if (target.hasClass('fa-chevron-down')) {

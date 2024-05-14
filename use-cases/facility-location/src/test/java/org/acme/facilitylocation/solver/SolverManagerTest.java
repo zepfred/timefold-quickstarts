@@ -1,5 +1,7 @@
 package org.acme.facilitylocation.solver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.concurrent.ExecutionException;
 
 import jakarta.inject.Inject;
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-public class SolverManagerTest {
+class SolverManagerTest {
 
     @Inject
     SolverManager<FacilityLocationProblem, Long> solverManager;
@@ -30,12 +32,14 @@ public class SolverManagerTest {
                 .setSouthWestCorner(new Location(-10, -10))
                 .setNorthEastCorner(new Location(10, 10))
                 .build();
-        solverManager.solveBuilder()
+
+        FacilityLocationProblem solution = solverManager.solveBuilder()
                 .withProblemId(0L)
                 .withProblemFinder(id -> problem)
                 .withFinalBestSolutionConsumer(SolverManagerTest::printSolution)
                 .run()
                 .getFinalBestSolution();
+        assertThat(solution.getScore().isFeasible()).isTrue();
     }
 
     static void printSolution(FacilityLocationProblem solution) {

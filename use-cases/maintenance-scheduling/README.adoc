@@ -83,7 +83,7 @@ The container image name
 +
 [source, shell]
 ----
-$ docker run -p 8080:8080 $USER/timefold-solver-quarkus-maintenance-scheduling-quickstart:1.0-SNAPSHOT
+$ docker run -p 8080:8080 $USER/maintenance-scheduling:1.0-SNAPSHOT
 ----
 
 [[native]]

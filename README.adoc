@@ -19,6 +19,10 @@ a|* <<vehicle-routing, Vehicle Routing>>
 * <<bed-allocation-scheduling, Bed Allocation Scheduling>>
 * <<flight-crew-scheduling, Flight Crew Scheduling>>
 * <<meeting-scheduling, Meeting Scheduling>>
+* <<sports-leaghe-scheduling, Sports League Scheduling>>
+* <<task-assigning, Task Assigning>>
+* <<project-job-scheduling, Project Job Scheduling>>
+* <<tournament-scheduling, Tournament Scheduling>>
 
 a|* link:hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle)
 * link:use-cases/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
@@ -121,6 +125,38 @@ Assign timeslots and rooms for meetings to produce a better schedule.
 image::use-cases/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
 
 * link:use-cases/meeting-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
+
+=== Sports League Scheduling
+
+Assign rounds to matches to produce a better schedule for league matches.
+
+image::use-cases/sports-league-scheduling/quarkus-sports-league-scheduling-screenshot.png[]
+
+* link:use-cases/sports-league-scheduling/README.adoc[Run quarkus-sports-league-scheduling] (Java, Maven, Quarkus)
+
+=== Task Assigning
+
+Assign employees to tasks to produce a better plan for task assignments.
+
+image::use-cases/task-assigning/quarkus-task-assigning-screenshot.png[]
+
+* link:use-cases/task-assigning/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
+
+=== Project Job Scheduling
+
+Assign jobs for execution to produce a better schedule for project job allocations.
+
+image::use-cases/project-job-scheduling/quarkus-project-job-scheduling-screenshot.png[]
+
+* link:use-cases/project-job-scheduling/README.adoc[Run quarkus-project-job-scheduling] (Java, Maven, Quarkus)
+
+=== Tournament Scheduling
+
+Tournament Scheduling service assigning teams to tournament matches.
+
+image::use-cases/tournament-scheduling/quarkus-tournament-scheduling-screenshot.png[]
+
+* link:use-cases/tournament-scheduling/README.adoc[Run quarkus-tournament-scheduling] (Java, Maven, Quarkus)
 
 == Legal notice
 

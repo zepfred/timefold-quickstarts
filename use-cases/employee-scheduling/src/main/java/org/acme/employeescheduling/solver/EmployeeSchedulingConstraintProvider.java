@@ -81,8 +81,11 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
 
     Constraint unavailableEmployee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Shift.class)
-                .join(Availability.class, Joiners.equal((Shift shift) -> shift.getStart().toLocalDate(), Availability::getDate),
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee))
+                .join(Availability.class,
+                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
+                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
+                                availability -> availability.getDate().atStartOfDay(),
+                                availability -> availability.getDate().plusDays(1).atStartOfDay()))
                 .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.UNAVAILABLE)
                 .penalize(HardSoftScore.ONE_HARD,
                         (shift, availability) -> getShiftDurationInMinutes(shift))
@@ -91,8 +94,11 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
 
     Constraint desiredDayForEmployee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Shift.class)
-                .join(Availability.class, Joiners.equal((Shift shift) -> shift.getStart().toLocalDate(), Availability::getDate),
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee))
+                .join(Availability.class,
+                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
+                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
+                                availability -> availability.getDate().atStartOfDay(),
+                                availability -> availability.getDate().plusDays(1).atStartOfDay()))
                 .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.DESIRED)
                 .reward(HardSoftScore.ONE_SOFT,
                         (shift, availability) -> getShiftDurationInMinutes(shift))
@@ -101,8 +107,12 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
 
     Constraint undesiredDayForEmployee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Shift.class)
-                .join(Availability.class, Joiners.equal((Shift shift) -> shift.getStart().toLocalDate(), Availability::getDate),
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee))
+                .join(Availability.class,
+                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
+                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
+                                availability -> availability.getDate().atStartOfDay(),
+                                availability -> availability.getDate().plusDays(1).atStartOfDay())
+                        )
                 .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.UNDESIRED)
                 .penalize(HardSoftScore.ONE_SOFT,
                         (shift, availability) -> getShiftDurationInMinutes(shift))

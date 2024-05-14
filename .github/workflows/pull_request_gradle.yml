@@ -1,24 +1,42 @@
 name: Gradle
 
 on:
+  push:
+    branches: [stable, development, '*.x']
+    paths:
+      - '**/*.gradle'
+      - '**/*.java'
+      - '**/*.kt'
+      - '**/*.versions.toml'
+      - '**/versions.properties'
+      - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
+    paths:
+      - '**/*.gradle'
+      - '**/*.java'
+      - '**/*.kt'
+      - '**/*.versions.toml'
+      - '**/versions.properties'
+      - '.github/**/*.yml'
 
 jobs:
   build:
     concurrency:
-      group: pull_request_gradle-${{ github.event_name }}-${{ github.head_ref }}-${{ matrix.quickstartDir }}
+      group: pull_request_gradle-${{ github.event_name }}-${{ github.head_ref }}-${{ matrix.module }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        quickstartDir: ['hello-world', 'use-cases/school-timetabling', 'technology/java-spring-boot']
+        module: ['hello-world', 'use-cases/school-timetabling', 'technology/java-spring-boot']
+        java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
       # Clone timefold-solver
       # Need to check for stale repo, since Github is not aware of the build chain and therefore doesn't automate it.
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
-        id: checkout-solver
+        if: github.head_ref # Only true if this is a PR.
+        id: checkout-solver-pr
         uses: actions/checkout@v4
         continue-on-error: true
         with:
@@ -27,15 +45,15 @@ jobs:
           path: ./timefold-solver
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Checkout timefold-solver (main) # Checkout the main branch if the PR branch does not exist
-        if: steps.checkout-solver.outcome != 'success'
+        if: ${{ steps.checkout-solver-pr.outcome != 'success' }}
         uses: actions/checkout@v4
         with:
           repository: TimefoldAI/timefold-solver
           ref: main
           path: ./timefold-solver
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-      - name: Prevent stale fork of timefold-solver
-        if: steps.checkout-solver.outcome == 'success'
+      - name: Prevent stale fork of timefold-solver # Solver can't be stale if development/stable branch requested.
+        if: ${{ steps.checkout-solver-pr.outcome == 'success' }}
         env:
           BLESSED_REPO: "timefold-solver"
           BLESSED_BRANCH: ${{ endsWith(github.head_ref, '.x') && github.head_ref || 'main' }}
@@ -51,31 +69,16 @@ jobs:
           path: './timefold-quickstarts'
 
       # Build the solver
-      - name: "Setup Java and Maven"
+      - name: "Setup Java and Gradle"
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: ${{matrix.java-version}}
           distribution: 'temurin'
-          cache: 'maven'
+          cache: 'gradle'
       - name: Quickly build timefold-solver
         working-directory: ./timefold-solver
         run: mvn -B -Dquickly clean install
 
-        # Build and test the Gradle-enabled quickstarts
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
       - name: Build and test timefold-quickstarts
-        working-directory: ./timefold-quickstarts/${{ matrix.quickstartDir }}
+        working-directory: ./timefold-quickstarts/${{ matrix.module }}
         run: gradle build
-      - name: Cleanup Gradle Cache
-        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties

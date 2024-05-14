@@ -1,69 +1,91 @@
 package org.acme.schooltimetabling.rest;
 
-import ai.timefold.solver.core.api.solver.SolverStatus;
-import io.restassured.http.ContentType;
-import org.acme.schooltimetabling.domain.Timetable;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.awaitility.Awaitility.await;
 
 import java.time.Duration;
 
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
+import ai.timefold.solver.core.api.solver.SolverStatus;
+
+import org.acme.schooltimetabling.domain.Timetable;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 @SpringBootTest(properties = {
         // Effectively disable spent-time termination in favor of the best-score-limit
         "timefold.solver.termination.spent-limit=1h",
         "timefold.solver.termination.best-score-limit=0hard/*soft" },
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TimetableControllerTest {
 
-    @Test
-    void solveDemoDataUntilFeasible() {
-        Timetable testTimetable = given()
-                .when().get("/demo-data/SMALL")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(Timetable.class);
+    @LocalServerPort
+    String port;
 
-        String jobId = given()
-                .contentType(ContentType.JSON)
-                .body(testTimetable)
-                .expect().contentType(ContentType.TEXT)
-                .when().post("/timetables")
-                .then()
-                .statusCode(200)
-                .extract()
-                .asString();
+    @Test
+    void testSolve() {
+        WebTestClient client = WebTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .build();
+
+        Timetable testTimetable = client.get()
+                .uri("/demo-data/SMALL")
+                .exchange()
+                .expectBody(Timetable.class)
+                .returnResult()
+                .getResponseBody();
+
+        String jobId = client.post()
+                .uri("/timetables")
+                .bodyValue(testTimetable)
+                .exchange()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
 
         await()
                 .atMost(Duration.ofMinutes(1))
                 .pollInterval(Duration.ofMillis(500L))
                 .until(() -> SolverStatus.NOT_SOLVING.name().equals(
-                        get("/timetables/" + jobId + "/status")
-                                .jsonPath().get("solverStatus")));
+                        client.get()
+                                .uri("/timetables/" + jobId + "/status")
+                                .exchange()
+                                .expectBody(JsonNode.class)
+                                .returnResult()
+                                .getResponseBody()
+                                .get("solverStatus")
+                                .asText()));
 
-        Timetable solution = get("/timetables/" + jobId).then().extract().as(Timetable.class);
-        assertEquals(SolverStatus.NOT_SOLVING, solution.getSolverStatus());
-        assertNotNull(solution.getLessons());
-        assertNotNull(solution.getTimeslots());
-        assertNotNull(solution.getRooms());
-        assertNotNull(solution.getLessons().get(0).getRoom());
-        assertNotNull(solution.getLessons().get(0).getTimeslot());
-        assertTrue(solution.getScore().isFeasible());
+        client.get()
+                .uri("/timetables/" + jobId)
+                .exchange()
+                .expectBody()
+                .jsonPath("solverStatus").isEqualTo("NOT_SOLVING")
+                .jsonPath("timeslots").isArray()
+                .jsonPath("timeslots").isNotEmpty()
+                .jsonPath("rooms").isArray()
+                .jsonPath("rooms").isNotEmpty()
+                .jsonPath("lessons[0].room").isNotEmpty()
+                .jsonPath("lessons[0].timeslot").isNotEmpty()
+                .jsonPath("score").isNotEmpty();
     }
 
     @Test
     void analyze() {
-        Timetable testTimetable = given()
-                .when().get("/demo-data/SMALL")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(Timetable.class);
+        WebTestClient client = WebTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .build();
+
+        Timetable testTimetable = client.get()
+                .uri("/demo-data/SMALL")
+                .exchange()
+                .expectBody(Timetable.class)
+                .returnResult()
+                .getResponseBody();
+
         var roomList = testTimetable.getRooms();
         var timeslotList = testTimetable.getTimeslots();
         int i = 0;
@@ -73,29 +95,21 @@ class TimetableControllerTest {
             i += 1;
         }
 
-        String analysis = given()
-                .contentType(ContentType.JSON)
-                .body(testTimetable)
-                .expect().contentType(ContentType.JSON)
-                .when()
-                .put("/timetables/analyze")
-                .then()
-                .extract()
-                .asString();
-        assertNotNull(analysis); // Too long to validate in its entirety.
+        client.put()
+                .uri("/timetables/analyze")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(testTimetable)
+                .exchange()
+                .expectBody()
+                .jsonPath("score").isNotEmpty();
 
-        String analysis2 = given()
-                .contentType(ContentType.JSON)
-                .queryParam("fetchPolicy", "FETCH_SHALLOW")
-                .body(testTimetable)
-                .expect().contentType(ContentType.JSON)
-                .when()
-                .put("/timetables/analyze")
-                .then()
-                .extract()
-                .asString();
-        assertNotNull(analysis2); // Too long to validate in its entirety.
+        client.put()
+                .uri("/timetables/analyze?fetchPolicy=FETCH_SHALLOW")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(testTimetable)
+                .exchange()
+                .expectBody()
+                .jsonPath("score").isNotEmpty();
     }
-
 
 }

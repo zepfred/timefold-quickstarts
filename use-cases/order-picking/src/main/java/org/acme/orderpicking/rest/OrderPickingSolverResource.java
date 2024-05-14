@@ -4,10 +4,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
+import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
+import ai.timefold.solver.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
+import ai.timefold.solver.core.api.solver.ScoreAnalysisFetchPolicy;
+import ai.timefold.solver.core.api.solver.SolutionManager;
 import ai.timefold.solver.core.api.solver.SolverManager;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
@@ -22,11 +31,18 @@ public class OrderPickingSolverResource {
     private static final String PROBLEM_ID = "1";
     private final AtomicBoolean solverWasNeverStarted = new AtomicBoolean(true);
 
-    @Inject
-    SolverManager<OrderPickingSolution, String> solverManager;
+    private SolverManager<OrderPickingSolution, String> solverManager;
+    private SolutionManager<OrderPickingSolution, HardSoftLongScore> solutionManager;
+    private OrderPickingRepository orderPickingRepository;
 
     @Inject
-    OrderPickingRepository orderPickingRepository;
+    public OrderPickingSolverResource(SolverManager<OrderPickingSolution, String> solverManager,
+            SolutionManager<OrderPickingSolution, HardSoftLongScore> solutionManager,
+            OrderPickingRepository orderPickingRepository) {
+        this.solverManager = solverManager;
+        this.solutionManager = solutionManager;
+        this.orderPickingRepository = orderPickingRepository;
+    }
 
     @GET
     public OrderPickingPlanning getBestSolution() {
@@ -44,6 +60,15 @@ public class OrderPickingSolverResource {
                 .withProblemFinder((problemId) -> orderPickingRepository.find())
                 .withBestSolutionConsumer(orderPickingRepository::save)
                 .run();
+    }
+
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("analyze")
+    public ScoreAnalysis<HardSoftLongScore> analyze(@QueryParam("fetchPolicy") ScoreAnalysisFetchPolicy fetchPolicy) {
+        OrderPickingSolution problem = orderPickingRepository.find();
+        return fetchPolicy == null ? solutionManager.analyze(problem) : solutionManager.analyze(problem, fetchPolicy);
     }
 
     @POST

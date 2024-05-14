@@ -22,8 +22,11 @@ public class BedPlan {
     @PlanningEntityCollectionProperty
     private List<Stay> stays;
     @JsonIgnore
+    @ProblemFactCollectionProperty
     private List<Room> rooms;
     @JsonIgnore
+    @ProblemFactCollectionProperty
+    @ValueRangeProvider
     private List<Bed> beds;
 
     @PlanningScore
@@ -66,7 +69,6 @@ public class BedPlan {
         this.departments = departments;
     }
 
-    @ProblemFactCollectionProperty
     public List<Room> getRooms() {
         return rooms;
     }
@@ -75,8 +77,6 @@ public class BedPlan {
         this.rooms = rooms;
     }
 
-    @ProblemFactCollectionProperty
-    @ValueRangeProvider
     public List<Bed> getBeds() {
         return beds;
     }

@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.acme</groupId>
-    <artifactId>timefold-solver-quarkus-conference-scheduling-quickstart</artifactId>
+    <artifactId>conference-scheduling</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.io.quarkus>3.8.3</version.io.quarkus>
-        <version.ai.timefold.solver>1.9.0</version.ai.timefold.solver>
+        <version.io.quarkus>3.9.4</version.io.quarkus>
+        <version.ai.timefold.solver>1.10.0</version.ai.timefold.solver>
 
         <version.compiler.plugin>3.13.0</version.compiler.plugin>
         <version.resources.plugin>3.3.1</version.resources.plugin>
@@ -154,11 +154,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire.plugin}</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                    </systemPropertyVariables>
-                </configuration>
             </plugin>
         </plugins>
     </build>

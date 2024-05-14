@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
-import ai.timefold.solver.core.api.domain.entity.PlanningPin;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
@@ -41,11 +40,6 @@ public class Talk {
     private Set<Talk> prerequisiteTalks;
     private int favoriteCount;
     private int crowdControlRisk;
-    private Timeslot publishedTimeslot;
-    private Room publishedRoom;
-
-    @PlanningPin
-    private boolean pinnedByUser = false;
 
     @PlanningVariable
     private Timeslot timeslot;
@@ -71,8 +65,7 @@ public class Talk {
             String language, int favoriteCount, int crowdControlRisk) {
         this(code, title, talkType, speakers, themeTrackTags, sectorTags, audienceTypes, audienceLevel, contentTags,
                 language, emptySet(), emptySet(), emptySet(), emptySet(), emptySet(), emptySet(), emptySet(),
-                emptySet(), emptySet(), emptySet(), favoriteCount, crowdControlRisk, null,
-                null);
+                emptySet(), emptySet(), emptySet(), favoriteCount, crowdControlRisk);
     }
 
     public Talk(String code, String title, TalkType talkType, List<Speaker> speakers, Set<String> themeTrackTags,
@@ -80,8 +73,7 @@ public class Talk {
             String language, Set<String> requiredTimeslotTags, Set<String> preferredTimeslotTags,
             Set<String> prohibitedTimeslotTags, Set<String> undesiredTimeslotTags, Set<String> requiredRoomTags,
             Set<String> preferredRoomTags, Set<String> prohibitedRoomTags, Set<String> undesiredRoomTags,
-            Set<String> mutuallyExclusiveTalksTags, Set<Talk> prerequisiteTalks, int favoriteCount, int crowdControlRisk,
-            Timeslot publishedTimeslot, Room publishedRoom) {
+            Set<String> mutuallyExclusiveTalksTags, Set<Talk> prerequisiteTalks, int favoriteCount, int crowdControlRisk) {
         this.code = code;
         this.title = title;
         this.talkType = talkType;
@@ -104,8 +96,6 @@ public class Talk {
         this.prerequisiteTalks = prerequisiteTalks;
         this.favoriteCount = favoriteCount;
         this.crowdControlRisk = crowdControlRisk;
-        this.publishedTimeslot = publishedTimeslot;
-        this.publishedRoom = publishedRoom;
     }
 
     @ValueRangeProvider
@@ -539,30 +529,6 @@ public class Talk {
 
     public void setCrowdControlRisk(int crowdControlRisk) {
         this.crowdControlRisk = crowdControlRisk;
-    }
-
-    public Timeslot getPublishedTimeslot() {
-        return publishedTimeslot;
-    }
-
-    public void setPublishedTimeslot(Timeslot publishedTimeslot) {
-        this.publishedTimeslot = publishedTimeslot;
-    }
-
-    public Room getPublishedRoom() {
-        return publishedRoom;
-    }
-
-    public void setPublishedRoom(Room publishedRoom) {
-        this.publishedRoom = publishedRoom;
-    }
-
-    public boolean isPinnedByUser() {
-        return pinnedByUser;
-    }
-
-    public void setPinnedByUser(boolean pinnedByUser) {
-        this.pinnedByUser = pinnedByUser;
     }
 
     public Timeslot getTimeslot() {
