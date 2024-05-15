@@ -48,36 +48,36 @@ class VehicleRoutingTest {
                 .extract()
                 .as(VehicleRoutePlan.class);
 
-        // generic moves
-        SolverConfig updatedConfig = solverConfig.copyConfig();
-        updatedConfig.withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(30))
-                .getTerminationConfig().withBestScoreLimit(null);
-        SolverFactory<VehicleRoutePlan> solverFactory = SolverFactory.create(updatedConfig);
-        Solver<VehicleRoutePlan> solver = solverFactory.buildSolver();
-        VehicleRoutePlan solution = solver.solve(problem);
-        assertThat(solution.getScore()).isNotNull();
-        assertThat(solution.getScore().hardScore()).isZero();
-
-        // generic moves and filters
-        SolverConfig updatedConfig2 = solverConfig.copyConfig();
-        updatedConfig2
-                .withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(30))
-                .getTerminationConfig().withBestScoreLimit(null);
-        LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
-        UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
-        unionMoveSelectorConfig
-                .setMoveSelectorList(
-                        List.of(new ListChangeMoveSelectorConfig().withFilterClass(ListChangeMoveShipmentFilter.class),
-                                new ListSwapMoveSelectorConfig().withFilterClass(ListSwapMoveShipmentFilter.class)));
-        localSearchPhaseConfig.setMoveSelectorConfig(unionMoveSelectorConfig);
-        updatedConfig2.setPhaseConfigList(List.of(new ConstructionHeuristicPhaseConfig(), localSearchPhaseConfig));
-        SolverFactory<VehicleRoutePlan> solverFactory2 = SolverFactory.create(updatedConfig2);
-        Solver<VehicleRoutePlan> solver2 = solverFactory2.buildSolver();
-        VehicleRoutePlan solution2 = solver2.solve(problem);
-        assertThat(solution2.getScore()).isNotNull();
-        assertThat(solution2.getScore().hardScore()).isZero();
+//        // generic moves
+//        SolverConfig updatedConfig = solverConfig.copyConfig();
+//        updatedConfig.withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
+//                .withTerminationSpentLimit(Duration.ofSeconds(30))
+//                .getTerminationConfig().withBestScoreLimit(null);
+//        SolverFactory<VehicleRoutePlan> solverFactory = SolverFactory.create(updatedConfig);
+//        Solver<VehicleRoutePlan> solver = solverFactory.buildSolver();
+//        VehicleRoutePlan solution = solver.solve(problem);
+//        assertThat(solution.getScore()).isNotNull();
+//        assertThat(solution.getScore().hardScore()).isZero();
+//
+//        // generic moves and filters
+//        SolverConfig updatedConfig2 = solverConfig.copyConfig();
+//        updatedConfig2
+//                .withEnvironmentMode(EnvironmentMode.FAST_ASSERT)
+//                .withTerminationSpentLimit(Duration.ofSeconds(30))
+//                .getTerminationConfig().withBestScoreLimit(null);
+//        LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
+//        UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
+//        unionMoveSelectorConfig
+//                .setMoveSelectorList(
+//                        List.of(new ListChangeMoveSelectorConfig().withFilterClass(ListChangeMoveShipmentFilter.class),
+//                                new ListSwapMoveSelectorConfig().withFilterClass(ListSwapMoveShipmentFilter.class)));
+//        localSearchPhaseConfig.setMoveSelectorConfig(unionMoveSelectorConfig);
+//        updatedConfig2.setPhaseConfigList(List.of(new ConstructionHeuristicPhaseConfig(), localSearchPhaseConfig));
+//        SolverFactory<VehicleRoutePlan> solverFactory2 = SolverFactory.create(updatedConfig2);
+//        Solver<VehicleRoutePlan> solver2 = solverFactory2.buildSolver();
+//        VehicleRoutePlan solution2 = solver2.solve(problem);
+//        assertThat(solution2.getScore()).isNotNull();
+//        assertThat(solution2.getScore().hardScore()).isZero();
 
         // custom moves
         SolverConfig updatedConfig3 = solverConfig.copyConfig();

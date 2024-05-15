@@ -45,10 +45,8 @@ public class CustomListSwapMove extends AbstractMove<VehicleRoutePlan> {
             int toIndex = Math.max(leftPickupVisit.getVehicleIndex(), rightPickupVisit.getVehicleIndex()) + 1;
             innerScoreDirector.beforeListVariableChanged(listVariableDescriptor, leftPickupVisit.getVehicle(), fromIndex,
                     toIndex);
-            listVariableDescriptor.setElement(leftPickupVisit.getVehicle(), leftPickupVisit.getVehicleIndex(),
-                    rightPickupVisit);
-            listVariableDescriptor.setElement(rightPickupVisit.getVehicle(), rightPickupVisit.getVehicleIndex(),
-                    leftPickupVisit);
+            leftPickupVisit.getVehicle().getVisits().set(leftPickupVisit.getVehicleIndex(), rightPickupVisit);
+            rightPickupVisit.getVehicle().getVisits().set(rightPickupVisit.getVehicleIndex(), leftPickupVisit);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, leftPickupVisit.getVehicle(), fromIndex,
                     toIndex);
         } else {
@@ -56,10 +54,8 @@ public class CustomListSwapMove extends AbstractMove<VehicleRoutePlan> {
                     leftPickupVisit.getVehicleIndex(), leftPickupVisit.getVehicleIndex() + 1);
             innerScoreDirector.beforeListVariableChanged(listVariableDescriptor, rightPickupVisit.getVehicle(),
                     rightPickupVisit.getVehicleIndex(), rightPickupVisit.getVehicleIndex() + 1);
-            listVariableDescriptor.setElement(leftPickupVisit.getVehicle(), leftPickupVisit.getVehicleIndex(),
-                    rightPickupVisit);
-            listVariableDescriptor.setElement(rightPickupVisit.getVehicle(), rightPickupVisit.getVehicleIndex(),
-                    leftPickupVisit);
+            leftPickupVisit.getVehicle().getVisits().set(leftPickupVisit.getVehicleIndex(), rightPickupVisit);
+            rightPickupVisit.getVehicle().getVisits().set(rightPickupVisit.getVehicleIndex(), leftPickupVisit);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, leftPickupVisit.getVehicle(),
                     leftPickupVisit.getVehicleIndex(), leftPickupVisit.getVehicleIndex() + 1);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, rightPickupVisit.getVehicle(),
@@ -71,10 +67,8 @@ public class CustomListSwapMove extends AbstractMove<VehicleRoutePlan> {
             int toIndex = Math.max(leftDeliveryVisit.getVehicleIndex(), rightDeliveryVisit.getVehicleIndex()) + 1;
             innerScoreDirector.beforeListVariableChanged(listVariableDescriptor, leftDeliveryVisit.getVehicle(), fromIndex,
                     toIndex);
-            listVariableDescriptor.setElement(leftDeliveryVisit.getVehicle(), leftDeliveryVisit.getVehicleIndex(),
-                    rightDeliveryVisit);
-            listVariableDescriptor.setElement(rightDeliveryVisit.getVehicle(), rightDeliveryVisit.getVehicleIndex(),
-                    leftDeliveryVisit);
+            leftDeliveryVisit.getVehicle().getVisits().set(leftDeliveryVisit.getVehicleIndex(), rightDeliveryVisit);
+            rightDeliveryVisit.getVehicle().getVisits().set(rightDeliveryVisit.getVehicleIndex(), leftDeliveryVisit);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, leftDeliveryVisit.getVehicle(), fromIndex,
                     toIndex);
         } else {
@@ -82,10 +76,8 @@ public class CustomListSwapMove extends AbstractMove<VehicleRoutePlan> {
                     leftDeliveryVisit.getVehicleIndex(), leftDeliveryVisit.getVehicleIndex() + 1);
             innerScoreDirector.beforeListVariableChanged(listVariableDescriptor, rightDeliveryVisit.getVehicle(),
                     rightDeliveryVisit.getVehicleIndex(), rightDeliveryVisit.getVehicleIndex() + 1);
-            listVariableDescriptor.setElement(leftDeliveryVisit.getVehicle(), leftDeliveryVisit.getVehicleIndex(),
-                    rightDeliveryVisit);
-            listVariableDescriptor.setElement(rightDeliveryVisit.getVehicle(), rightDeliveryVisit.getVehicleIndex(),
-                    leftDeliveryVisit);
+            leftDeliveryVisit.getVehicle().getVisits().set(leftDeliveryVisit.getVehicleIndex(), rightDeliveryVisit);
+            rightDeliveryVisit.getVehicle().getVisits().set(rightDeliveryVisit.getVehicleIndex(), leftDeliveryVisit);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, leftDeliveryVisit.getVehicle(),
                     leftDeliveryVisit.getVehicleIndex(), leftDeliveryVisit.getVehicleIndex() + 1);
             innerScoreDirector.afterListVariableChanged(listVariableDescriptor, rightDeliveryVisit.getVehicle(),

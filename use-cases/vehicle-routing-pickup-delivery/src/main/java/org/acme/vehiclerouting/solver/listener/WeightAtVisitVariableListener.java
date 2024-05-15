@@ -24,12 +24,20 @@ public class WeightAtVisitVariableListener implements VariableListener<VehicleRo
             return;
         }
 
-        int weight = visit.getVehicle().getVisits().subList(0, visit.getVehicleIndex()).stream()
-                .mapToInt(v -> v.isPickup() ? v.getShipment().getWeight() : Math.negateExact(v.getShipment().getWeight()))
-                .sum();
-        scoreDirector.beforeVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
-        visit.setWeightAtVisit(weight);
-        scoreDirector.afterVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
+        int weight = 0;
+        for (int i = 0; i < visit.getVehicleIndex(); i++) {
+            Visit previousVisit = visit.getVehicle().getVisits().get(i);
+            if (previousVisit.isPickup()) {
+                weight += previousVisit.getShipment().getWeight();
+            } else {
+                weight -= previousVisit.getShipment().getWeight();
+            }
+        }
+        if (visit.getWeightAtVisit() == null || visit.getWeightAtVisit() != weight) {
+            scoreDirector.beforeVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
+            visit.setWeightAtVisit(weight);
+            scoreDirector.afterVariableChanged(visit, WEIGHT_AT_VISIT_FIELD);
+        }
     }
 
     @Override

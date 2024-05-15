@@ -3,7 +3,7 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>30</secondsSpentLimit>
+                <secondsSpentLimit>180</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
