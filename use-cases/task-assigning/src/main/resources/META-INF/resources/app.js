@@ -135,37 +135,37 @@ function renderScheduleByEmployee(plan) {
     }
 
     $.each(tasks, (_, task) => {
+        const taskType = taskTypeMap.get(task.taskType);
+        const customer = customerMap.get(task.customer);
+
+        const skillsDiv = $("<div />").prop("class", "col");
+        taskType.requiredSkills.sort().forEach(s => {
+            skillsDiv.append($(`<span class="badge text-bg-primary m-1"/>`).text(s))
+        });
+
+
+        const customerDiv = $("<div />").prop("class", "col");
+        customerDiv.append($(`<span class="badge m-1" style="background-color: ${pickColor(customer.id)}" />`).text(customer.name));
+
+        let priorityElement = $("<small class='ms-2 mt-1 card-text text-muted align-bottom float-end' />");
+        if (task.priority === "MINOR") {
+            priorityElement.append($(`<span class='fas fa-solid fa-chevron-down' style="color: green" title='Minor Priority'/>`));
+        } else if (task.priority === "MAJOR") {
+            priorityElement.append($(`<span class='fas fa-solid fa-chevron-up' style="color: red" title='Major Priority'/>`));
+        } else {
+            priorityElement.append($(`<span class='fas fa-solid fa-chevron-circle-up' style="color: red" title='Critical Priority'/>`));
+        }
         if (task.employee == null) {
             unassignedCount++;
-            const taskType = taskTypeMap.get(task.taskType);
             const unassignedElement = $(`<div class="card-body p-2"/>`)
                 .append($(`<h5 class="card-title mb-1"/>`).text(`${taskType.title}-${task.indexInTaskType}`));
 
-            const skillsDiv = $("<div />").prop("class", "col");
             unassignedElement.append(skillsDiv);
-            taskType.requiredSkills.sort().forEach(s => {
-                skillsDiv.append($(`<span class="badge text-bg-primary m-1"/>`).text(s))
-            });
-
-            const customer = customerMap.get(task.customer);
-            const customerDiv = $("<div />").prop("class", "col");
             unassignedElement.append(customerDiv);
-            customerDiv.append($(`<span class="badge m-1" style="background-color: ${pickColor(customer.id)}" />`).text(customer.name))
-
-            let priority = $("<small class='ms-2 mt-1 card-text text-muted align-bottom float-end' />");
-            if (task.priority === "MINOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: green" title='Minor Priority'/>`));
-            } else if (task.priority === "MAJOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-up' style="color: red" title='Major Priority'/>`));
-            } else {
-                priority.append($(`<span class='fas fa-solid fa-chevron-circle-up' style="color: red" title='Critical Priority'/>`));
-            }
-            unassignedElement.append(priority);
+            unassignedElement.append(priorityElement);
             unassigned.append($(`<div class="pl-1" />`).append($(`<div class="card" />`).append(unassignedElement)));
         } else {
-            const taskType = taskTypeMap.get(task.taskType);
             const employee = employeeMap.get(task.employee);
-            const customer = customerMap.get(task.customer);
             const affinity = employee.customerToAffinity[task.customer];
             let affinityMultiplier = 4;
             let affinityIcon = "<span class='fas fa-solid fa-exclamation-circle' style='color: red' title='No Affinity'/>";
@@ -183,25 +183,9 @@ function renderScheduleByEmployee(plan) {
             const employeeElement = $(`<div class="card-body p-2"/>`)
                 .append($(`<h5 class="card-title mb-1"/>`).text(`${taskType.title}-${task.indexInTaskType} `).append($(affinityIcon)));
 
-            const skillsDiv = $("<div />").prop("class", "col");
             employeeElement.append(skillsDiv);
-            taskType.requiredSkills.sort().forEach(s => {
-                skillsDiv.append($(`<span class="badge text-bg-primary m-1"/>`).text(s))
-            });
-
-            const customerDiv = $("<div />").prop("class", "col");
             employeeElement.append(customerDiv);
-            customerDiv.append($(`<span class="badge m-1" style="background-color: ${pickColor(customer.id)}" />`).text(customer.name))
-
-            let priority = $("<small class='ms-2 mt-1 card-text text-muted align-bottom float-end' />");
-            if (task.priority === "MINOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: green" title='Minor Priority'/>`));
-            } else if (task.priority === "MAJOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-up' style="color: red" title='Major Priority'/>`));
-            } else {
-                priority.append($(`<span class='fas fa-solid fa-chevron-circle-up' style="color: red" title='Critical Priority'/>`));
-            }
-            employeeElement.append(priority);
+            employeeElement.append(priorityElement);
             const startTime = JSJoda.LocalDateTime.now().withHour(8).withMinute(0).withSecond(0)
                 .plusMinutes(task.startTime);
             const duration = affinityMultiplier * taskType.baseDuration;
