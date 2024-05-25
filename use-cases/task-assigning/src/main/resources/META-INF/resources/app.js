@@ -154,7 +154,7 @@ function renderScheduleByEmployee(plan) {
 
             let priority = $("<small class='ms-2 mt-1 card-text text-muted align-bottom float-end' />");
             if (task.priority === "MINOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: blue" title='Minor Priority'/>`));
+                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: green" title='Minor Priority'/>`));
             } else if (task.priority === "MAJOR") {
                 priority.append($(`<span class='fas fa-solid fa-chevron-up' style="color: red" title='Major Priority'/>`));
             } else {
@@ -195,7 +195,7 @@ function renderScheduleByEmployee(plan) {
 
             let priority = $("<small class='ms-2 mt-1 card-text text-muted align-bottom float-end' />");
             if (task.priority === "MINOR") {
-                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: red" title='Minor Priority'/>`));
+                priority.append($(`<span class='fas fa-solid fa-chevron-down' style="color: green" title='Minor Priority'/>`));
             } else if (task.priority === "MAJOR") {
                 priority.append($(`<span class='fas fa-solid fa-chevron-up' style="color: red" title='Major Priority'/>`));
             } else {
