@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: ['hello-world', 'use-cases/school-timetabling', 'technology/java-spring-boot']
+        module: ['java/hello-world', 'java/school-timetabling', 'java/spring-boot-integration']
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
