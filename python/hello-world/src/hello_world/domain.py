@@ -15,7 +15,7 @@ class Timeslot:
     end_time: time
 
     def __str__(self):
-        return f'{self.day_of_week} {self.start_time.strftime('%H:%M')}'
+        return f'{self.day_of_week} {self.start_time.strftime("%H:%M")}'
 
 
 @dataclass
