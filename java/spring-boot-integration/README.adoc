@@ -6,6 +6,15 @@ image::./springboot-school-timetabling-screenshot.png[]
 
 * <<run,Run the application>>
 
+== Prerequisites
+
+. Install Java and Maven, for example with https://sdkman.io[Sdkman]:
++
+----
+$ sdk install java
+$ sdk install maven
+----
+
 [[run]]
 == Run the application
 

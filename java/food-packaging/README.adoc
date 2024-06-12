@@ -9,6 +9,15 @@ image::./quarkus-food-packaging-screenshot.png[]
 * <<container,Run the application in a container>>
 * <<native,Run it native>>
 
+== Prerequisites
+
+. Install Java and Maven, for example with https://sdkman.io[Sdkman]:
++
+----
+$ sdk install java
+$ sdk install maven
+----
+
 [[run]]
 == Run the application
 
