@@ -3,13 +3,13 @@ name: Python
 on:
   push:
     branches: [stable, development, '*.x']
-    paths-ignore:
+    paths:
       - '**/*.py'
       - '**/pyproject.toml'
       - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
-    paths-ignore:
+    paths:
       - '**/*.py'
       - '**/pyproject.toml'
       - '.github/**/*.yml'
@@ -124,5 +124,5 @@ jobs:
       - name: Build and test timefold-quickstarts
         working-directory: ./timefold-quickstarts
         env:
-          TIMEFOLD_SOLVER_PYTHON_DIST: "../timefold-solver-python/dist"
+          TIMEFOLD_SOLVER_PYTHON_DIST: "${{ github.workspace }}/timefold-solver-python/dist"
         run: .github/scripts/run_python_tests.sh
