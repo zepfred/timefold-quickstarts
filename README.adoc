@@ -28,6 +28,7 @@ a|* link:java/hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle
 * link:java/school-timetabling/README.adoc[Quarkus] (Java, Maven or Gradle, Quarkus)
 * link:java/spring-boot-integration/README.adoc[Spring Boot] (Java, Maven or Gradle, Spring Boot)
 * link:kotlin/school-timetabling/README.adoc[Kotlin] (Kotlin, Maven, Quarkus)
+* link:python/hello-world/README.adoc[Python] (Python)
 |===
 
 == Use cases
@@ -39,6 +40,9 @@ Find the most efficient routes for vehicles to reach visits, taking into account
 image::java/vehicle-routing/quarkus-vehicle-routing-screenshot.png[]
 
 * link:java/vehicle-routing/README.adoc[Run quarkus-vehicle-routing] (Java, Maven, Quarkus)
+
+* link:python/vehicle-routing/README.adoc[Run python-vehicle-routing] (Python, FastAPI)
+
 
 === Maintenance scheduling
 
@@ -55,6 +59,8 @@ Schedule shifts to employees, accounting for employee availability and shift ski
 image::java/employee-scheduling/quarkus-employee-scheduling-screenshot.png[]
 
 * link:java/employee-scheduling/README.adoc[Run quarkus-employee-scheduling] (Java, Maven, Quarkus)
+
+* link:python/employee-scheduling/README.adoc[Run python-employee-scheduling] (Python, FastAPI)
 
 === Food Packaging
 
@@ -81,6 +87,7 @@ image::java/school-timetabling/quarkus-school-timetabling-screenshot.png[]
 * link:java/school-timetabling/README.adoc[Run quarkus-school-timetabling] (Java, Maven or Gradle, Quarkus)
 * link:java/spring-boot-integration/README.adoc[Run spring-boot-school-timetabling] (Java, Maven or Gradle, Spring Boot)
 * link:kotlin/school-timetabling/README.adoc[Run kotlin-quarkus-school-timetabling] (Kotlin, Maven, Quarkus)
+* link:python/school-timetabling/README.adoc[Run python-school-timetabling] (Python, FastAPI)
 
 Without a UI:
 
