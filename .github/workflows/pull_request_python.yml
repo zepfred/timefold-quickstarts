@@ -60,7 +60,7 @@ jobs:
       # Need to check for stale repo, since Github is not aware of the build chain and therefore doesn't automate it.
       - name: Checkout timefold-solver-python (PR) # Checkout the PR branch first, if it exists
         if: github.head_ref # Only true if this is a PR.
-        id: checkout-solver-pr
+        id: checkout-solver-python-pr
         uses: actions/checkout@v4
         continue-on-error: true
         with:
@@ -69,7 +69,7 @@ jobs:
           path: ./timefold-solver-python
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Checkout timefold-solver-python (main) # Checkout the main branch if the PR branch does not exist
-        if: ${{ steps.checkout-solver-pr.outcome != 'success' }}
+        if: ${{ steps.checkout-solver-python-pr.outcome != 'success' }}
         uses: actions/checkout@v4
         with:
           repository: TimefoldAI/timefold-solver-python
@@ -77,7 +77,7 @@ jobs:
           path: ./timefold-solver-python
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Prevent stale fork of timefold-solver-python # Solver can't be stale if development/stable branch requested.
-        if: ${{ steps.checkout-solver-pr.outcome == 'success' }}
+        if: ${{ steps.checkout-solver-python-pr.outcome == 'success' }}
         env:
           BLESSED_REPO: "timefold-solver-python"
           BLESSED_BRANCH: ${{ endsWith(github.head_ref, '.x') && github.head_ref || 'main' }}
