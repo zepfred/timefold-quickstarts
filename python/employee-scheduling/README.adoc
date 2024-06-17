@@ -11,7 +11,7 @@ image::./python-employee-scheduling-screenshot.png[]
 [[prerequisites]]
 == Prerequisites
 
-. Install https://www.python.org/downloads/[Python 3.10+]
+. Install https://www.python.org/downloads/[Python 3.11+]
 
 . Install JDK 17+, for example with https://sdkman.io[Sdkman]:
 +
