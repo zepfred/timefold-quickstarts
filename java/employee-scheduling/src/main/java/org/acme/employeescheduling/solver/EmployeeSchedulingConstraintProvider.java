@@ -1,7 +1,9 @@
 package org.acme.employeescheduling.solver;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.score.stream.Constraint;
@@ -9,8 +11,6 @@ import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
 import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 import ai.timefold.solver.core.api.score.stream.Joiners;
 
-import org.acme.employeescheduling.domain.Availability;
-import org.acme.employeescheduling.domain.AvailabilityType;
 import org.acme.employeescheduling.domain.Shift;
 
 public class EmployeeSchedulingConstraintProvider implements ConstraintProvider {
@@ -23,8 +23,8 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
         LocalDateTime shift1End = shift1.getEnd();
         LocalDateTime shift2Start = shift2.getStart();
         LocalDateTime shift2End = shift2.getEnd();
-        return (int) Duration.between((shift1Start.compareTo(shift2Start) > 0) ? shift1Start : shift2Start,
-                (shift1End.compareTo(shift2End) < 0) ? shift1End : shift2End).toMinutes();
+        return (int) Duration.between((shift1Start.isAfter(shift2Start)) ? shift1Start : shift2Start,
+                (shift1End.isBefore(shift2End)) ? shift1End : shift2End).toMinutes();
     }
 
     private static int getShiftDurationInMinutes(Shift shift) {
@@ -39,8 +39,8 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
                 atLeast10HoursBetweenTwoShifts(constraintFactory),
                 oneShiftPerDay(constraintFactory),
                 unavailableEmployee(constraintFactory),
-                desiredDayForEmployee(constraintFactory),
                 undesiredDayForEmployee(constraintFactory),
+                desiredDayForEmployee(constraintFactory),
         };
     }
 
@@ -81,42 +81,41 @@ public class EmployeeSchedulingConstraintProvider implements ConstraintProvider 
 
     Constraint unavailableEmployee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Shift.class)
-                .join(Availability.class,
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
-                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
-                                availability -> availability.getDate().atStartOfDay(),
-                                availability -> availability.getDate().plusDays(1).atStartOfDay()))
-                .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.UNAVAILABLE)
-                .penalize(HardSoftScore.ONE_HARD,
-                        (shift, availability) -> getShiftDurationInMinutes(shift))
+                .filter(shift -> {
+                    Set<LocalDate> unavailableDates = shift.getEmployee().getUnavailableDates();
+                    return unavailableDates.contains(shift.getStart().toLocalDate())
+                        // The contains() check is ignored for a shift ends at midnight (00:00:00).
+                        || (shift.getEnd().isAfter(shift.getStart().toLocalDate().plusDays(1).atStartOfDay())
+                                && unavailableDates.contains(shift.getEnd().toLocalDate()));
+                })
+                .penalize(HardSoftScore.ONE_HARD, EmployeeSchedulingConstraintProvider::getShiftDurationInMinutes)
                 .asConstraint("Unavailable employee");
-    }
-
-    Constraint desiredDayForEmployee(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEach(Shift.class)
-                .join(Availability.class,
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
-                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
-                                availability -> availability.getDate().atStartOfDay(),
-                                availability -> availability.getDate().plusDays(1).atStartOfDay()))
-                .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.DESIRED)
-                .reward(HardSoftScore.ONE_SOFT,
-                        (shift, availability) -> getShiftDurationInMinutes(shift))
-                .asConstraint("Desired day for employee");
     }
 
     Constraint undesiredDayForEmployee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Shift.class)
-                .join(Availability.class,
-                        Joiners.equal(Shift::getEmployee, Availability::getEmployee),
-                        Joiners.overlapping(Shift::getStart, Shift::getEnd,
-                                availability -> availability.getDate().atStartOfDay(),
-                                availability -> availability.getDate().plusDays(1).atStartOfDay())
-                        )
-                .filter((shift, availability) -> availability.getAvailabilityType() == AvailabilityType.UNDESIRED)
-                .penalize(HardSoftScore.ONE_SOFT,
-                        (shift, availability) -> getShiftDurationInMinutes(shift))
+                .filter(shift -> {
+                    Set<LocalDate> undesiredDates = shift.getEmployee().getUndesiredDates();
+                    return undesiredDates.contains(shift.getStart().toLocalDate())
+                        // The contains() check is ignored for a shift ends at midnight (00:00:00).
+                        || (shift.getEnd().isAfter(shift.getStart().toLocalDate().plusDays(1).atStartOfDay())
+                        && undesiredDates.contains(shift.getEnd().toLocalDate()));
+                })
+                .penalize(HardSoftScore.ONE_SOFT, EmployeeSchedulingConstraintProvider::getShiftDurationInMinutes)
                 .asConstraint("Undesired day for employee");
+    }
+
+    Constraint desiredDayForEmployee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(Shift.class)
+            .filter(shift -> {
+                Set<LocalDate> desiredDates = shift.getEmployee().getDesiredDates();
+                return desiredDates.contains(shift.getStart().toLocalDate())
+                    // The contains() check is ignored for a shift ends at midnight (00:00:00).
+                    || (shift.getEnd().isAfter(shift.getStart().toLocalDate().plusDays(1).atStartOfDay())
+                    && desiredDates.contains(shift.getEnd().toLocalDate()));
+            })
+            .reward(HardSoftScore.ONE_SOFT, EmployeeSchedulingConstraintProvider::getShiftDurationInMinutes)
+            .asConstraint("Desired day for employee");
     }
 
 }

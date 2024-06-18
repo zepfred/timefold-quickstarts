@@ -1,5 +1,6 @@
 package org.acme.employeescheduling.domain;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
@@ -8,16 +9,23 @@ import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 public class Employee {
     @PlanningId
     private String name;
-
     private Set<String> skills;
+
+    private Set<LocalDate> unavailableDates;
+    private Set<LocalDate> undesiredDates;
+    private Set<LocalDate> desiredDates;
 
     public Employee() {
 
     }
 
-    public Employee(String name, Set<String> skills) {
+    public Employee(String name, Set<String> skills,
+        Set<LocalDate> unavailableDates, Set<LocalDate> undesiredDates, Set<LocalDate> desiredDates) {
         this.name = name;
         this.skills = skills;
+        this.unavailableDates = unavailableDates;
+        this.undesiredDates = undesiredDates;
+        this.desiredDates = desiredDates;
     }
 
     public String getName() {
@@ -34,6 +42,30 @@ public class Employee {
 
     public void setSkills(Set<String> skills) {
         this.skills = skills;
+    }
+
+    public Set<LocalDate> getUnavailableDates() {
+        return unavailableDates;
+    }
+
+    public void setUnavailableDates(Set<LocalDate> unavailableDates) {
+        this.unavailableDates = unavailableDates;
+    }
+
+    public Set<LocalDate> getUndesiredDates() {
+        return undesiredDates;
+    }
+
+    public void setUndesiredDates(Set<LocalDate> undesiredDates) {
+        this.undesiredDates = undesiredDates;
+    }
+
+    public Set<LocalDate> getDesiredDates() {
+        return desiredDates;
+    }
+
+    public void setDesiredDates(Set<LocalDate> desiredDates) {
+        this.desiredDates = desiredDates;
     }
 
     @Override

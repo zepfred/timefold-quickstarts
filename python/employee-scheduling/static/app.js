@@ -2,6 +2,10 @@ let autoRefreshIntervalId = null;
 const zoomMin = 2 * 1000 * 60 * 60 * 24 // 2 day in milliseconds
 const zoomMax = 4 * 7 * 1000 * 60 * 60 * 24 // 4 weeks in milliseconds
 
+const UNAVAILABLE_COLOR = '#ef2929' // Tango Scarlet Red
+const UNDESIRED_COLOR = '#f57900' // Tango Orange
+const DESIRED_COLOR = '#73d216' // Tango Chameleon
+
 let demoDataId = null;
 let scheduleId = null;
 let loadedSchedule = null;
@@ -97,28 +101,27 @@ function fetchDemoData() {
     });
 }
 
-function getAvailabilityColor(availabilityType) {
-    switch (availabilityType) {
-        case 'DESIRED':
-            return ' #73d216'; // Tango Chameleon
 
-        case 'UNDESIRED':
-            return ' #f57900'; // Tango Orange
-
-        case 'UNAVAILABLE':
-            return ' #ef2929 '; // Tango Scarlet Red
-
-
-        default:
-            throw new Error('Unknown availability type: ' + availabilityType);
-    }
-}
-
-function getShiftColor(shift, availabilityMap) {
-    const shiftDate = JSJoda.LocalDateTime.parse(shift.start).toLocalDate().toString();
-    const mapKey = shift.employee.name + '-' + shiftDate;
-    if (availabilityMap.has(mapKey)) {
-        return getAvailabilityColor(availabilityMap.get(mapKey));
+function getShiftColor(shift, employee) {
+    const shiftStart = JSJoda.LocalDateTime.parse(shift.start);
+    const shiftStartDateString = shiftStart.toLocalDate().toString();
+    const shiftEnd = JSJoda.LocalDateTime.parse(shift.end);
+    const shiftEndDateString = shiftEnd.toLocalDate().toString();
+    if (employee.unavailableDates.includes(shiftStartDateString) ||
+        // The contains() check is ignored for a shift end at midnight (00:00:00).
+        (shiftEnd.isAfter(shiftStart.toLocalDate().plusDays(1).atStartOfDay()) &&
+            employee.unavailableDates.includes(shiftEndDateString))) {
+        return UNAVAILABLE_COLOR
+    } else if (employee.undesiredDates.includes(shiftStartDateString) ||
+        // The contains() check is ignored for a shift end at midnight (00:00:00).
+        (shiftEnd.isAfter(shiftStart.toLocalDate().plusDays(1).atStartOfDay()) &&
+            employee.undesiredDates.includes(shiftEndDateString))) {
+        return UNDESIRED_COLOR
+    } else if (employee.desiredDates.includes(shiftStartDateString) ||
+        // The contains() check is ignored for a shift end at midnight (00:00:00).
+        (shiftEnd.isAfter(shiftStart.toLocalDate().plusDays(1).atStartOfDay()) &&
+            employee.desiredDates.includes(shiftEndDateString))) {
+        return DESIRED_COLOR
     } else {
         return " #729fcf"; // Tango Sky Blue
     }
@@ -150,7 +153,6 @@ function renderSchedule(schedule) {
 
     const unassignedShifts = $("#unassignedShifts");
     const groups = [];
-    const availabilityMap = new Map();
 
     // Show only first 7 days of draft
     const scheduleStart = schedule.shifts.map(shift => JSJoda.LocalDateTime.parse(shift.start).toLocalDate()).sort()[0].toString();
@@ -167,23 +169,6 @@ function renderSchedule(schedule) {
     byEmployeeItemDataSet.clear();
     byLocationItemDataSet.clear();
 
-    schedule.availabilities.forEach((availability, index) => {
-        const availabilityDate = JSJoda.LocalDate.parse(availability.date);
-        const start = availabilityDate.atStartOfDay().toString();
-        const end = availabilityDate.plusDays(1).atStartOfDay().toString();
-        const byEmployeeShiftElement = $(`<div/>`)
-            .append($(`<h5 class="card-title mb-1"/>`).text(availability.availabilityType));
-        const mapKey = availability.employee.name + '-' + availabilityDate.toString();
-        availabilityMap.set(mapKey, availability.availabilityType);
-        byEmployeeItemDataSet.add({
-            id: 'availability-' + index, group: availability.employee.name,
-            content: byEmployeeShiftElement.html(),
-            start: start, end: end,
-            type: "background",
-            style: "opacity: 0.5; background-color: " + getAvailabilityColor(availability.availabilityType),
-        });
-    });
-
 
     schedule.employees.forEach((employee, index) => {
         const employeeGroupElement = $('<div class="card-body p-2"/>')
@@ -192,6 +177,49 @@ function renderSchedule(schedule) {
             .append($('<div/>')
                 .append($(employee.skills.map(skill => `<span class="badge me-1 mt-1" style="background-color:#d3d7cf">${skill}</span>`).join(''))));
         byEmployeeGroupDataSet.add({id: employee.name, content: employeeGroupElement.html()});
+
+        employee.unavailableDates.forEach((rawDate, dateIndex) => {
+            const date = JSJoda.LocalDate.parse(rawDate)
+            const start = date.atStartOfDay().toString();
+            const end = date.plusDays(1).atStartOfDay().toString();
+            const byEmployeeShiftElement = $(`<div/>`)
+                .append($(`<h5 class="card-title mb-1"/>`).text("Unavailable"));
+            byEmployeeItemDataSet.add({
+                id: "employee-" + index + "-unavailability-" + dateIndex, group: employee.name,
+                content: byEmployeeShiftElement.html(),
+                start: start, end: end,
+                type: "background",
+                style: "opacity: 0.5; background-color: " + UNAVAILABLE_COLOR,
+            });
+        });
+        employee.undesiredDates.forEach((rawDate, dateIndex) => {
+            const date = JSJoda.LocalDate.parse(rawDate)
+            const start = date.atStartOfDay().toString();
+            const end = date.plusDays(1).atStartOfDay().toString();
+            const byEmployeeShiftElement = $(`<div/>`)
+                .append($(`<h5 class="card-title mb-1"/>`).text("Undesired"));
+            byEmployeeItemDataSet.add({
+                id: "employee-" + index + "-undesired-" + dateIndex, group: employee.name,
+                content: byEmployeeShiftElement.html(),
+                start: start, end: end,
+                type: "background",
+                style: "opacity: 0.5; background-color: " + UNDESIRED_COLOR,
+            });
+        });
+        employee.desiredDates.forEach((rawDate, dateIndex) => {
+            const date = JSJoda.LocalDate.parse(rawDate)
+            const start = date.atStartOfDay().toString();
+            const end = date.plusDays(1).atStartOfDay().toString();
+            const byEmployeeShiftElement = $(`<div/>`)
+                .append($(`<h5 class="card-title mb-1"/>`).text("Desired"));
+            byEmployeeItemDataSet.add({
+                id: "employee-" + index + "-desired-" + dateIndex, group: employee.name,
+                content: byEmployeeShiftElement.html(),
+                start: start, end: end,
+                type: "background",
+                style: "opacity: 0.5; background-color: " + DESIRED_COLOR,
+            });
+        });
     });
 
     schedule.shifts.forEach((shift, index) => {
@@ -231,7 +259,7 @@ function renderSchedule(schedule) {
                 .append($('<div/>')
                     .append($(`<span class="badge me-1 mt-1" style="background-color:${skillColor}">${shift.requiredSkill}</span>`)));
 
-            const shiftColor = getShiftColor(shift, availabilityMap);
+            const shiftColor = getShiftColor(shift, shift.employee);
             byEmployeeItemDataSet.add({
                 id: 'shift-' + index, group: shift.employee.name,
                 content: byEmployeeShiftElement.html(),

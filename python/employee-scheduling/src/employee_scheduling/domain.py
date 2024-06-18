@@ -24,11 +24,6 @@ def validate_score(v: Any, info: ValidationInfo) -> Any:
 ScoreValidator = BeforeValidator(validate_score)
 
 
-DESIRED = 'DESIRED'
-UNDESIRED = 'UNDESIRED'
-UNAVAILABLE = 'UNAVAILABLE'
-
-
 class BaseSchema(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel,
@@ -40,6 +35,9 @@ class BaseSchema(BaseModel):
 class Employee(BaseSchema):
     name: Annotated[str, PlanningId]
     skills: set[str]
+    unavailable_dates: set[date]
+    undesired_dates: set[date]
+    desired_dates: set[date]
 
 
 @planning_entity
@@ -57,16 +55,8 @@ class Shift(BaseSchema):
                         Field(default=None)]
 
 
-class Availability(BaseSchema):
-    id: Annotated[str, PlanningId]
-    employee: Employee
-    date: date
-    availability_type: str
-
-
 @planning_solution
 class EmployeeSchedule(BaseSchema):
-    availabilities: Annotated[list[Availability], ProblemFactCollectionProperty]
     employees: Annotated[list[Employee], ProblemFactCollectionProperty, ValueRangeProvider]
     shifts: Annotated[list[Shift], PlanningEntityCollectionProperty]
     score: Annotated[HardSoftScore | None,

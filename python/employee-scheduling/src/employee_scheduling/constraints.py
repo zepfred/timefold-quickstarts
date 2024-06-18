@@ -1,8 +1,8 @@
 from timefold.solver.score import (ConstraintFactory, Joiners, constraint_provider,
                                    HardSoftScore)
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
-from .domain import Availability, Shift, DESIRED, UNDESIRED, UNAVAILABLE
+from .domain import Employee, Shift
 
 
 def get_minute_overlap(shift1: Shift, shift2: Shift) -> int:
@@ -21,8 +21,8 @@ def scheduling_constraints(constraint_factory: ConstraintFactory):
         at_least_10_hours_between_two_shifts(constraint_factory),
         one_shift_per_day(constraint_factory),
         unavailable_employee(constraint_factory),
-        desired_day_for_employee(constraint_factory),
         undesired_day_for_employee(constraint_factory),
+        desired_day_for_employee(constraint_factory),
     ]
 
 
@@ -72,52 +72,40 @@ def one_shift_per_day(constraint_factory: ConstraintFactory):
 
 def unavailable_employee(constraint_factory: ConstraintFactory):
     return (constraint_factory.for_each(Shift)
-            .join(Availability,
-                  Joiners.equal(lambda shift: shift.employee.name,
-                                lambda availability: availability.employee.name),
-                  Joiners.overlapping(lambda shift: shift.start,
-                                      lambda shift: shift.end,
-                                      lambda availability: datetime.combine(availability.date, time(0,0)),
-                                      lambda availability: datetime.combine(availability.date, time(23, 59)))
-                  )
-            .filter(lambda shift, availability: availability.availability_type == UNAVAILABLE)
-            .penalize(HardSoftScore.ONE_HARD,
-                      lambda shift, availability: get_shift_duration_in_minutes(shift))
-            .as_constraint("Unavailable employee")
+            .filter(lambda shift: shift.start.date() in shift.employee.unavailable_dates or (
+                # The in check is ignored for a shift ends at midnight (00:00:00).
+                shift.end.time() != datetime.min.time()
+                and shift.end.date() in shift.employee.unavailable_dates)
             )
-
-
-def desired_day_for_employee(constraint_factory: ConstraintFactory):
-    return (constraint_factory.for_each(Shift)
-            .join(Availability,
-                  Joiners.equal(lambda shift: shift.employee.name,
-                                lambda availability: availability.employee.name),
-                  Joiners.overlapping(lambda shift: shift.start,
-                                      lambda shift: shift.end,
-                                      lambda availability: datetime.combine(availability.date, time(0,0)),
-                                      lambda availability: datetime.combine(availability.date, time(23, 59)))
-                  )
-            .filter(lambda shift, availability: availability.availability_type == DESIRED)
-            .reward(HardSoftScore.ONE_SOFT,
-                    lambda shift, availability: get_shift_duration_in_minutes(shift))
-            .as_constraint("Desired day for employee")
+            .penalize(HardSoftScore.ONE_HARD,
+                      lambda shift: get_shift_duration_in_minutes(shift))
+            .as_constraint("Unavailable employee")
             )
 
 
 def undesired_day_for_employee(constraint_factory: ConstraintFactory):
     return (constraint_factory.for_each(Shift)
-            .join(Availability,
-                  Joiners.equal(lambda shift: shift.employee.name,
-                                lambda availability: availability.employee.name),
-                  Joiners.overlapping(lambda shift: shift.start,
-                                      lambda shift: shift.end,
-                                      lambda availability: datetime.combine(availability.date, time(0,0)),
-                                      lambda availability: datetime.combine(availability.date, time(23, 59))),
-                  )
-            .filter(lambda shift, availability: availability.availability_type == UNDESIRED)
+            .filter(lambda shift: shift.start.date() in shift.employee.undesired_dates or (
+                # The in check is ignored for a shift ends at midnight (00:00:00).
+                shift.end.time() != datetime.min.time()
+                and shift.end.date() in shift.employee.undesired_dates)
+            )
             .penalize(HardSoftScore.ONE_SOFT,
-                      lambda shift, availability: get_shift_duration_in_minutes(shift))
+                      lambda shift: get_shift_duration_in_minutes(shift))
             .as_constraint("Undesired day for employee")
+            )
+
+
+def desired_day_for_employee(constraint_factory: ConstraintFactory):
+    return (constraint_factory.for_each(Shift)
+            .filter(lambda shift: shift.start.date() in shift.employee.desired_dates or (
+                # The in check is ignored for a shift ends at midnight (00:00:00).
+                shift.end.time() != datetime.min.time()
+                and shift.end.date() in shift.employee.desired_dates)
+            )
+            .reward(HardSoftScore.ONE_SOFT,
+                    lambda shift: get_shift_duration_in_minutes(shift))
+            .as_constraint("Desired day for employee")
             )
 
 
@@ -127,6 +115,6 @@ __all__ = ['scheduling_constraints',
            'at_least_10_hours_between_two_shifts',
            'one_shift_per_day',
            'unavailable_employee',
-           'desired_day_for_employee',
            'undesired_day_for_employee',
+           'desired_day_for_employee',
            ]

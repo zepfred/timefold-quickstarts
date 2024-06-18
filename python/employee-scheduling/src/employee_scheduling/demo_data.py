@@ -4,8 +4,7 @@ from enum import Enum
 from random import Random
 from typing import Generator
 
-from .domain import (EmployeeSchedule, Employee, Availability,
-                     Shift, DESIRED, UNDESIRED, UNAVAILABLE)
+from .domain import (EmployeeSchedule, Employee, Shift)
 
 
 class DemoData(Enum):
@@ -51,7 +50,7 @@ def generate_demo_data() -> EmployeeSchedule:
     initial_roster_length_in_days = 14
     start_date = earliest_monday_on_or_after(date.today())
 
-    random = Random(0)
+    random = Random(37)
     shift_template_index = 0
     for location in LOCATIONS:
         location_to_shift_start_time_list_map[location] = SHIFT_START_TIMES_COMBOS[shift_template_index]
@@ -69,9 +68,11 @@ def generate_demo_data() -> EmployeeSchedule:
         employees.append(Employee(
             name=name_permutations[i],
             skills=set(skills),
+            unavailable_dates=set(),
+            undesired_dates=set(),
+            desired_dates=set(),
         ))
 
-    availabilities: list[Availability] = []
     shifts: list[Shift] = []
 
     def id_generator():
@@ -87,15 +88,13 @@ def generate_demo_data() -> EmployeeSchedule:
         employees_with_availabilities_on_day = random.sample(employees, count)
         current_date = start_date + timedelta(days=i)
         for employee in employees_with_availabilities_on_day:
-            availability_type = random.choice((DESIRED,
-                                               UNDESIRED,
-                                               UNAVAILABLE))
-            availabilities.append(Availability(
-                id=str(len(availabilities)),
-                employee=employee,
-                date=current_date,
-                availability_type=availability_type,
-            ))
+            rand_num = random.randint(0, 2)
+            if rand_num == 0:
+                employee.unavailable_dates.add(current_date)
+            elif rand_num == 1:
+                employee.undesired_dates.add(current_date)
+            elif rand_num == 2:
+                employee.desired_dates.add(current_date)
         shifts += generate_shifts_for_day(current_date, random, ids)
 
     shift_count = 0
@@ -104,7 +103,6 @@ def generate_demo_data() -> EmployeeSchedule:
         shift_count += 1
 
     return EmployeeSchedule(
-        availabilities=availabilities,
         employees=employees,
         shifts=shifts
     )

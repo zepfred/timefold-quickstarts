@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import org.acme.employeescheduling.domain.Availability;
-import org.acme.employeescheduling.domain.AvailabilityType;
 import org.acme.employeescheduling.domain.Employee;
 import org.acme.employeescheduling.domain.EmployeeSchedule;
 import org.acme.employeescheduling.domain.Shift;
@@ -73,26 +72,26 @@ public class DemoDataGenerator {
         for (int i = 0; i < 15; i++) {
             Set<String> skills = pickSubset(List.of(OPTIONAL_SKILLS), random, 3, 1);
             skills.add(pickRandom(REQUIRED_SKILLS, random));
-            Employee employee = new Employee(namePermutations.get(i), skills);
+            Employee employee = new Employee(namePermutations.get(i), skills, new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>());
             employees.add(employee);
         }
         employeeSchedule.setEmployees(employees);
 
-        List<Availability> availabilities = new LinkedList<>();
         List<Shift> shifts = new LinkedList<>();
-        int count = 0;
         for (int i = 0; i < initialRosterLengthInDays; i++) {
-            Set<Employee> employeesWithAvailabitiesOnDay = pickSubset(employees, random, 4, 3, 2, 1);
+            Set<Employee> employeesWithAvailabilitiesOnDay = pickSubset(employees, random, 4, 3, 2, 1);
             LocalDate date = startDate.plusDays(i);
-            for (Employee employee : employeesWithAvailabitiesOnDay) {
-                AvailabilityType availabilityType = pickRandom(AvailabilityType.values(), random);
-                availabilities.add(new Availability(Integer.toString(count++), employee, date, availabilityType));
+            for (Employee employee : employeesWithAvailabilitiesOnDay) {
+                switch (random.nextInt(3)) {
+                    case 0 -> employee.getUnavailableDates().add(date);
+                    case 1 -> employee.getUndesiredDates().add(date);
+                    case 2 -> employee.getDesiredDates().add(date);
+                }
             }
             shifts.addAll(generateShiftsForDay(date, random));
         }
         AtomicInteger countShift = new AtomicInteger();
         shifts.forEach(s -> s.setId(Integer.toString(countShift.getAndIncrement())));
-        employeeSchedule.setAvailabilities(availabilities);
         employeeSchedule.setShifts(shifts);
 
         return employeeSchedule;

@@ -15,13 +15,13 @@ constraint_verifier = ConstraintVerifier.build(scheduling_constraints, EmployeeS
 
 
 def test_required_skill():
-    employee = Employee(name="Amy", skills=set())
+    employee = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
     (constraint_verifier.verify_that(required_skill)
     .given(employee,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee))
     .penalizes(1))
     
-    employee = Employee(name="Beth", skills={"Skill"})
+    employee = Employee(name="Beth", skills={"Skill"}, unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
     (constraint_verifier.verify_that(required_skill)
     .given(employee,
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee))
@@ -29,196 +29,160 @@ def test_required_skill():
 
 
 def test_overlapping_shifts():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=8) // timedelta(minutes=1)))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location 2", required_skill="Skill", employee=employee2))
     .penalizes(0))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=AFTERNOON_START_TIME, end=AFTERNOON_END_TIME, location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=4) // timedelta(minutes=1)))
 
 
 def test_one_shift_per_day():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes(1))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location 2", required_skill="Skill", employee=employee2))
     .penalizes(0))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=AFTERNOON_START_TIME, end=AFTERNOON_END_TIME, location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes(1))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes(0))
 
 
 def test_at_least_10_hours_between_shifts():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
     
     (constraint_verifier.verify_that(at_least_10_hours_between_two_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=AFTERNOON_END_TIME, end=DAY_START_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes_by(360))
     
     (constraint_verifier.verify_that(at_least_10_hours_between_two_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_END_TIME, end=DAY_START_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes_by(600))
     
     (constraint_verifier.verify_that(at_least_10_hours_between_two_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_END_TIME + timedelta(hours=10), end=DAY_START_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes(0))
     
     (constraint_verifier.verify_that(at_least_10_hours_between_two_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=AFTERNOON_END_TIME, end=DAY_START_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee2))
     .penalizes(0))
     
     (constraint_verifier.verify_that(no_overlapping_shifts)
-    .given(employee1,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
            Shift(id="2", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location 2", required_skill="Skill", employee=employee1))
     .penalizes(0))
 
 
 def test_unavailable_employee():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
-    unavailability = Availability(id="1", employee=employee1, date=DAY_1, availability_type=UNAVAILABLE)
-    desired = Availability(id="2", employee=employee1, date=DAY_1, availability_type=DESIRED)
-    
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates={DAY_1}, undesired_dates=set(), desired_dates=set())
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+
     (constraint_verifier.verify_that(unavailable_employee)
-    .given(employee1,
-           unavailability,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=8) // timedelta(minutes=1)))
     
     (constraint_verifier.verify_that(unavailable_employee)
-    .given(employee1,
-           unavailability,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=32) // timedelta(minutes=1)))
     
     (constraint_verifier.verify_that(unavailable_employee)
-    .given(employee1,
-           unavailability,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
     .penalizes(0))
     
     (constraint_verifier.verify_that(unavailable_employee)
-    .given(employee1,
-           unavailability,
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
     .penalizes(0))
-    
-    (constraint_verifier.verify_that(unavailable_employee)
-    .given(employee1,
-           desired,
+
+
+def test_undesired_day_for_employee():
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates={DAY_1}, desired_dates=set())
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+
+    (constraint_verifier.verify_that(undesired_day_for_employee)
+    .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
+    .penalizes_by(timedelta(hours=8) // timedelta(minutes=1)))
+    
+    (constraint_verifier.verify_that(undesired_day_for_employee)
+    .given(employee1, employee2,
+           Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
+    .penalizes_by(timedelta(hours=32) // timedelta(minutes=1)))
+    
+    (constraint_verifier.verify_that(undesired_day_for_employee)
+    .given(employee1, employee2,
+           Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
+    .penalizes(0))
+    
+    (constraint_verifier.verify_that(undesired_day_for_employee)
+    .given(employee1, employee2,
+           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
     .penalizes(0))
 
 
 def test_desired_day_for_employee():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
-    unavailability = Availability(id="1", employee=employee1, date=DAY_1, availability_type=UNAVAILABLE)
-    desired = Availability(id="2", employee=employee1, date=DAY_1, availability_type=DESIRED)
-    
-    (constraint_verifier.verify_that(desired_day_for_employee)
-    .given(employee1,
-           desired,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .rewards_with(timedelta(hours=8) // timedelta(minutes=1)))
-    
-    (constraint_verifier.verify_that(desired_day_for_employee)
-    .given(employee1,
-           desired,
-           Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .rewards_with(timedelta(hours=32) // timedelta(minutes=1)))
-    
-    (constraint_verifier.verify_that(desired_day_for_employee)
-    .given(employee1,
-           desired,
-           Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
-    .rewards(0))
-    
-    (constraint_verifier.verify_that(desired_day_for_employee)
-    .given(employee1,
-           desired,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
-    .rewards(0))
-    
-    (constraint_verifier.verify_that(desired_day_for_employee)
-    .given(employee1,
-           unavailability,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .rewards(0))
+    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates={DAY_1})
+    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
 
+    (constraint_verifier.verify_that(desired_day_for_employee)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
+     .rewards_with(timedelta(hours=8) // timedelta(minutes=1)))
 
-def test_undesired_day_for_employee():
-    employee1 = Employee(name="Amy", skills={"Skill"})
-    employee2 = Employee(name="Beth", skills={"Skill"})
-    unavailability = Availability(id="1", employee=employee1, date=DAY_1, availability_type=UNAVAILABLE)
-    undesired = Availability(id="2", employee=employee1, date=DAY_1, availability_type=UNDESIRED)
-    
-    (constraint_verifier.verify_that(undesired_day_for_employee)
-    .given(employee1,
-           undesired,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .penalizes_by(timedelta(hours=8) // timedelta(minutes=1)))
-    
-    (constraint_verifier.verify_that(undesired_day_for_employee)
-    .given(employee1,
-           undesired,
-           Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .penalizes_by(timedelta(hours=32) // timedelta(minutes=1)))
-    
-    (constraint_verifier.verify_that(undesired_day_for_employee)
-    .given(employee1,
-           undesired,
-           Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
-    .penalizes(0))
-    
-    (constraint_verifier.verify_that(undesired_day_for_employee)
-    .given(employee1,
-           undesired,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
-    .penalizes(0))
+    (constraint_verifier.verify_that(desired_day_for_employee)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
+     .rewards_with(timedelta(hours=32) // timedelta(minutes=1)))
 
-    (constraint_verifier.verify_that(undesired_day_for_employee)
-    .given(employee1,
-           unavailability,
-           Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
-    .penalizes(0))
+    (constraint_verifier.verify_that(desired_day_for_employee)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
+     .rewards(0))
+
+    (constraint_verifier.verify_that(desired_day_for_employee)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
+     .rewards(0))
