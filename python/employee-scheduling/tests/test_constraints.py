@@ -15,13 +15,13 @@ constraint_verifier = ConstraintVerifier.build(scheduling_constraints, EmployeeS
 
 
 def test_required_skill():
-    employee = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee = Employee(name="Amy")
     (constraint_verifier.verify_that(required_skill)
     .given(employee,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee))
     .penalizes(1))
     
-    employee = Employee(name="Beth", skills={"Skill"}, unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee = Employee(name="Beth", skills={"Skill"})
     (constraint_verifier.verify_that(required_skill)
     .given(employee,
            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee))
@@ -29,8 +29,8 @@ def test_required_skill():
 
 
 def test_overlapping_shifts():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy")
+    employee2 = Employee(name="Beth")
     (constraint_verifier.verify_that(no_overlapping_shifts)
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
@@ -51,8 +51,8 @@ def test_overlapping_shifts():
 
 
 def test_one_shift_per_day():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy")
+    employee2 = Employee(name="Beth")
     (constraint_verifier.verify_that(no_overlapping_shifts)
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
@@ -79,8 +79,8 @@ def test_one_shift_per_day():
 
 
 def test_at_least_10_hours_between_shifts():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy")
+    employee2 = Employee(name="Beth")
     
     (constraint_verifier.verify_that(at_least_10_hours_between_two_shifts)
     .given(employee1, employee2,
@@ -114,8 +114,8 @@ def test_at_least_10_hours_between_shifts():
 
 
 def test_unavailable_employee():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates={DAY_1}, undesired_dates=set(), desired_dates=set())
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy", unavailable_dates={DAY_1})
+    employee2 = Employee(name="Beth")
 
     (constraint_verifier.verify_that(unavailable_employee)
     .given(employee1, employee2,
@@ -139,8 +139,8 @@ def test_unavailable_employee():
 
 
 def test_undesired_day_for_employee():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates={DAY_1}, desired_dates=set())
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy", undesired_dates={DAY_1})
+    employee2 = Employee(name="Beth")
 
     (constraint_verifier.verify_that(undesired_day_for_employee)
     .given(employee1, employee2,
@@ -164,8 +164,8 @@ def test_undesired_day_for_employee():
 
 
 def test_desired_day_for_employee():
-    employee1 = Employee(name="Amy", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates={DAY_1})
-    employee2 = Employee(name="Beth", skills=set(), unavailable_dates=set(), undesired_dates=set(), desired_dates=set())
+    employee1 = Employee(name="Amy", desired_dates={DAY_1})
+    employee2 = Employee(name="Beth")
 
     (constraint_verifier.verify_that(desired_day_for_employee)
      .given(employee1, employee2,

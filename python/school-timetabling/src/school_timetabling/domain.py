@@ -36,10 +36,7 @@ def validate_score(v: Any, info: ValidationInfo) -> Any:
     if isinstance(v, HardSoftScore) or v is None:
         return v
     if isinstance(v, str):
-        hard_part, soft_part = v.split('/')
-        hard = int(hard_part.rstrip('hard'))
-        soft = int(soft_part.rstrip('soft'))
-        return HardSoftScore.of(hard, soft)
+        return HardSoftScore.parse(v)
     raise ValueError('"score" should be a string')
 
 
