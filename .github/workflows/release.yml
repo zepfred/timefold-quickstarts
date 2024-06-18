@@ -50,7 +50,7 @@ jobs:
           git checkout -B ${{ github.event.inputs.releaseBranch }}
           export OLD_JAVA_VERSION="$(find . -name pom.xml -exec grep '<version.ai.timefold.solver>' {} \;|tail -n 1|cut -d\> -f1 --complement|cut -d\< -f1)"
           export NEW_JAVA_VERSION="${{ github.event.inputs.java-version }}"
-          export OLD_PYTHON_VERSION="$(find . -name pyproject.toml -exec grep 'timefold-solver ==' {} \;|tail -n 1|cut -d\' -f1 --complement|cut -d\= -f3|cut -d\' -f1|xargs)"
+          export OLD_PYTHON_VERSION="$(find . -name pyproject.toml -exec grep 'timefold ==' {} \;|tail -n 1|cut -d\' -f1 --complement|cut -d\= -f3|cut -d\' -f1|xargs)"
           export NEW_PYTHON_VERSION="${{ github.event.inputs.python-version }}"
           .github/scripts/change_versions.sh
           mvn verify
@@ -80,7 +80,7 @@ jobs:
           git checkout ${{ github.event.inputs.releaseBranch }}
           export OLD_JAVA_VERSION="$(find . -name pom.xml -exec grep '<version.ai.timefold.solver>' {} \;|tail -n 1|cut -d\> -f1 --complement|cut -d\< -f1)"
           export NEW_JAVA_VERSION="999-SNAPSHOT"
-          export OLD_PYTHON_VERSION="$(find . -name pyproject.toml -exec grep 'timefold-solver ==' {} \;|tail -n 1|cut -d\' -f1 --complement|cut -d\= -f3|cut -d\' -f1|xargs)"
+          export OLD_PYTHON_VERSION="$(find . -name pyproject.toml -exec grep 'timefold ==' {} \;|tail -n 1|cut -d\' -f1 --complement|cut -d\= -f3|cut -d\' -f1|xargs)"
           export NEW_PYTHON_VERSION="999-dev0"
           .github/scripts/change_versions.sh
           git commit -am "build: move back to version $NEW_VERSION"
