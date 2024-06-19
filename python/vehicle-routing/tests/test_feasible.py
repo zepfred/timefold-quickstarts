@@ -1,4 +1,4 @@
-from vehicle_routing.routes import json_to_vehicle_route_plan, app
+from vehicle_routing.rest_api import json_to_vehicle_route_plan, app
 
 from fastapi.testclient import TestClient
 from time import sleep

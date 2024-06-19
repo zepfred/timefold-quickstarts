@@ -1,6 +1,6 @@
 import uvicorn
 
-from .routes import app
+from .rest_api import app
 
 
 def main():

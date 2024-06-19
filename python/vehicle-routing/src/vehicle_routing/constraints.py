@@ -1,16 +1,18 @@
 from timefold.solver.score import ConstraintFactory, HardSoftScore, constraint_provider
 
-from .domain import Vehicle
-from .justifications import VehicleCapacityJustification, MinimizeTravelTimeJustification
+from .domain import *
+from .score_analysis import *
 
 VEHICLE_CAPACITY = "vehicleCapacity"
 MINIMIZE_TRAVEL_TIME = "minimizeTravelTime"
 
 
 @constraint_provider
-def vehicle_routing_constraints(factory: ConstraintFactory):
+def define_constraints(factory: ConstraintFactory):
     return [
+        # Hard constraints
         vehicle_capacity(factory),
+        # Soft constraints
         minimize_travel_time(factory)
     ]
 
@@ -48,6 +50,3 @@ def minimize_travel_time(factory: ConstraintFactory):
                           vehicle.calculate_total_driving_time_seconds()))
         .as_constraint(MINIMIZE_TRAVEL_TIME)
     )
-
-
-__all__ = ['vehicle_routing_constraints', 'vehicle_capacity', 'minimize_travel_time']

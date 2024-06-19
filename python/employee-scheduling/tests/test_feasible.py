@@ -2,8 +2,8 @@ from timefold.solver import SolverFactory
 from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
                                     TerminationConfig, Duration, TerminationCompositionStyle)
 
-from employee_scheduling.domain import EmployeeSchedule, Shift
-from employee_scheduling.constraints import scheduling_constraints
+from employee_scheduling.domain import *
+from employee_scheduling.constraints import define_constraints
 from employee_scheduling.demo_data import generate_demo_data
 
 
@@ -13,7 +13,7 @@ def test_feasible():
             solution_class=EmployeeSchedule,
             entity_class_list=[Shift],
             score_director_factory_config=ScoreDirectorFactoryConfig(
-                constraint_provider_function=scheduling_constraints
+                constraint_provider_function=define_constraints
             ),
             termination_config=TerminationConfig(
                 termination_config_list=[

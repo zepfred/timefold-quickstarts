@@ -2,8 +2,8 @@ from timefold.solver import SolverFactory
 from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
                                     TerminationConfig, Duration, TerminationCompositionStyle)
 
-from hello_world.domain import Timetable, Lesson
-from hello_world.constraints import school_timetabling_constraints
+from hello_world.domain import *
+from hello_world.constraints import define_constraints
 from hello_world.main import generate_demo_data, DemoData
 
 
@@ -13,7 +13,7 @@ def test_feasible():
             solution_class=Timetable,
             entity_class_list=[Lesson],
             score_director_factory_config=ScoreDirectorFactoryConfig(
-                constraint_provider_function=school_timetabling_constraints
+                constraint_provider_function=define_constraints
             ),
             termination_config=TerminationConfig(
                 termination_config_list=[

@@ -1,27 +1,9 @@
-from timefold.solver import SolverManager, SolverFactory, SolutionManager
-from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
-                                    TerminationConfig, Duration)
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from .domain import EmployeeSchedule, Shift
-from .constraints import scheduling_constraints
+from .domain import EmployeeSchedule
 from .demo_data import DemoData, generate_demo_data
-
-
-solver_config = SolverConfig(
-    solution_class=EmployeeSchedule,
-    entity_class_list=[Shift],
-    score_director_factory_config=ScoreDirectorFactoryConfig(
-        constraint_provider_function=scheduling_constraints
-    ),
-    termination_config=TerminationConfig(
-        spent_limit=Duration(seconds=30)
-    )
-)
-
-solver_manager = SolverManager.create(SolverFactory.create(solver_config))
-solution_manager = SolutionManager.create(solver_manager)
+from .solver import solver_manager, solution_manager
 
 app = FastAPI(docs_url='/q/swagger-ui')
 data_sets: dict[str, EmployeeSchedule] = {}

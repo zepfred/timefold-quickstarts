@@ -1,6 +1,23 @@
 from timefold.solver.score import ConstraintJustification
 from dataclasses import dataclass, field
 
+from .json_serialization import *
+
+
+
+@dataclass
+class MatchAnalysisDTO:
+    name: str
+    score: Annotated[HardSoftScore, ScoreSerializer]
+    justification: object
+
+
+@dataclass
+class ConstraintAnalysisDTO:
+    name: str
+    weight: Annotated[HardSoftScore, ScoreSerializer]
+    matches: list[MatchAnalysisDTO]
+    score: Annotated[HardSoftScore, ScoreSerializer]
 
 @dataclass
 class VehicleCapacityJustification(ConstraintJustification):
@@ -24,9 +41,3 @@ class MinimizeTravelTimeJustification(ConstraintJustification):
         self.description = (f"Vehicle '{self.vehicle_name}' total travel time is "
                             f"{self.total_driving_time_seconds // (60 * 60)} hours "
                             f"{round(self.total_driving_time_seconds / 60)} minutes.")
-
-
-__all__ = [
-    'VehicleCapacityJustification',
-    'MinimizeTravelTimeJustification',
-]

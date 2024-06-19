@@ -2,20 +2,17 @@ from timefold.solver.score import (constraint_provider, HardSoftScore, Joiners,
                                    ConstraintFactory, Constraint)
 from datetime import time
 
-from .domain import Lesson
-from .justifications import (RoomConflictJustification, TeacherConflictJustification,
-                             StudentGroupConflictJustification, TeacherRoomStabilityJustification,
-                             TeacherTimeEfficiencyJustification, StudentGroupSubjectVarietyJustification)
+from .domain import *
+from .score_analysis import *
 
 
 @constraint_provider
-def school_timetabling_constraints(constraint_factory: ConstraintFactory):
+def define_constraints(constraint_factory: ConstraintFactory):
     return [
         # Hard constraints
         room_conflict(constraint_factory),
         teacher_conflict(constraint_factory),
         student_group_conflict(constraint_factory),
-
         # Soft constraints
         teacher_room_stability(constraint_factory),
         teacher_time_efficiency(constraint_factory),

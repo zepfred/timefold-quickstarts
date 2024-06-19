@@ -6,8 +6,8 @@ from datetime import time
 import logging
 import argparse
 
-from .domain import Lesson, Timeslot, Room, Timetable
-from .constraints import school_timetabling_constraints
+from .domain import *
+from .constraints import define_constraints
 
 
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +27,7 @@ def main():
             solution_class=Timetable,
             entity_class_list=[Lesson],
             score_director_factory_config=ScoreDirectorFactoryConfig(
-                constraint_provider_function=school_timetabling_constraints
+                constraint_provider_function=define_constraints
             ),
             termination_config=TerminationConfig(
                 # The solver runs only for 5 seconds on this small dataset.

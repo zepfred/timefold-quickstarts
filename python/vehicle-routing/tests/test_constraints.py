@@ -11,7 +11,7 @@ LOCATION_1 = Location(latitude=0, longitude=0)
 LOCATION_2 = Location(latitude=3, longitude=4)
 LOCATION_3 = Location(latitude=-1, longitude=1)
 
-constraint_verifier = ConstraintVerifier.build(vehicle_routing_constraints, VehicleRoutePlan, Vehicle, Visit)
+constraint_verifier = ConstraintVerifier.build(define_constraints, VehicleRoutePlan, Vehicle, Visit)
 
 
 def test_vehicle_capacity_unpenalized():

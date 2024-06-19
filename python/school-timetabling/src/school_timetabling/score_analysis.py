@@ -1,7 +1,8 @@
 from timefold.solver.score import ConstraintJustification
 from dataclasses import dataclass, field
 
-from .domain import Lesson
+from .json_serialization import *
+from .domain import *
 
 
 @dataclass
@@ -89,11 +90,14 @@ class StudentGroupSubjectVarietyJustification(ConstraintJustification):
                             f"and at '{self.lesson_b.timeslot.day_of_week} {self.lesson_b.timeslot.start_time}'")
 
 
-__all__ = [
-    'RoomConflictJustification',
-    'TeacherConflictJustification',
-    'StudentGroupConflictJustification',
-    'TeacherRoomStabilityJustification',
-    'TeacherTimeEfficiencyJustification',
-    'StudentGroupSubjectVarietyJustification',
-]
+class MatchAnalysisDTO(JsonDomainBase):
+    name: str
+    score: Annotated[HardSoftScore, ScoreSerializer]
+    justification: object
+
+
+class ConstraintAnalysisDTO(JsonDomainBase):
+    name: str
+    weight: Annotated[HardSoftScore, ScoreSerializer]
+    matches: list[MatchAnalysisDTO]
+    score: Annotated[HardSoftScore, ScoreSerializer]

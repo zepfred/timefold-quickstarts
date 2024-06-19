@@ -1,5 +1,4 @@
-from timefold.solver.score import (ConstraintFactory, Joiners, constraint_provider,
-                                   HardSoftScore)
+from timefold.solver.score import (constraint_provider, ConstraintFactory, Joiners, HardSoftScore)
 from datetime import datetime, time, timedelta
 
 from .domain import Employee, Shift
@@ -14,13 +13,15 @@ def get_shift_duration_in_minutes(shift: Shift) -> int:
 
 
 @constraint_provider
-def scheduling_constraints(constraint_factory: ConstraintFactory):
+def define_constraints(constraint_factory: ConstraintFactory):
     return [
+        # Hard constraints
         required_skill(constraint_factory),
         no_overlapping_shifts(constraint_factory),
         at_least_10_hours_between_two_shifts(constraint_factory),
         one_shift_per_day(constraint_factory),
         unavailable_employee(constraint_factory),
+        # Soft constraints
         undesired_day_for_employee(constraint_factory),
         desired_day_for_employee(constraint_factory),
     ]
@@ -107,14 +108,3 @@ def desired_day_for_employee(constraint_factory: ConstraintFactory):
                     lambda shift: get_shift_duration_in_minutes(shift))
             .as_constraint("Desired day for employee")
             )
-
-
-__all__ = ['scheduling_constraints',
-           'required_skill',
-           'no_overlapping_shifts',
-           'at_least_10_hours_between_two_shifts',
-           'one_shift_per_day',
-           'unavailable_employee',
-           'undesired_day_for_employee',
-           'desired_day_for_employee',
-           ]

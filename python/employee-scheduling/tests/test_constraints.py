@@ -1,8 +1,8 @@
 from timefold.solver.test import ConstraintVerifier
+from datetime import date, datetime, time, timedelta
 
 from employee_scheduling.domain import *
 from employee_scheduling.constraints import *
-from datetime import date, datetime, time, timedelta
 
 
 DAY_1 = date(2021, 2, 1)
@@ -11,7 +11,7 @@ DAY_END_TIME = datetime.combine(DAY_1, time(17, 0))
 AFTERNOON_START_TIME = datetime.combine(DAY_1, time(13, 0))
 AFTERNOON_END_TIME = datetime.combine(DAY_1, time(21, 0))
 
-constraint_verifier = ConstraintVerifier.build(scheduling_constraints, EmployeeSchedule, Shift)
+constraint_verifier = ConstraintVerifier.build(define_constraints, EmployeeSchedule, Shift)
 
 
 def test_required_skill():
@@ -146,17 +146,17 @@ def test_undesired_day_for_employee():
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=8) // timedelta(minutes=1)))
-    
+
     (constraint_verifier.verify_that(undesired_day_for_employee)
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME - timedelta(days=1), end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
     .penalizes_by(timedelta(hours=32) // timedelta(minutes=1)))
-    
+
     (constraint_verifier.verify_that(undesired_day_for_employee)
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME + timedelta(days=1), end=DAY_END_TIME + timedelta(days=1), location="Location", required_skill="Skill", employee=employee1))
     .penalizes(0))
-    
+
     (constraint_verifier.verify_that(undesired_day_for_employee)
     .given(employee1, employee2,
            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))

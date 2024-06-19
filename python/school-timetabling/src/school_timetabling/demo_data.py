@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import time
 
-from .domain import Timetable, Lesson, Room, Timeslot
+from .domain import *
 
 
 class DemoData(Enum):

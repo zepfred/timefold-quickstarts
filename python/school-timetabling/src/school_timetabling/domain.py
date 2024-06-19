@@ -6,65 +6,25 @@ from timefold.solver.domain import (planning_entity, planning_solution, Planning
 from timefold.solver.score import HardSoftScore
 from datetime import time
 from pydantic import BaseModel, ConfigDict, Field, PlainSerializer, BeforeValidator, PlainValidator, ValidationInfo
-from pydantic.alias_generators import to_camel
 from typing import Annotated, Any
 
-
-def make_list_item_validator(key: str):
-    def validator(v: Any, info: ValidationInfo) -> Any:
-        if v is None:
-            return None
-
-        if not isinstance(v, str) or not info.context:
-            return v
-
-        return info.context.get(key)[v]
-
-    return BeforeValidator(validator)
+from .json_serialization import *
 
 
-RoomDeserializer = make_list_item_validator('rooms')
-TimeslotDeserializer = make_list_item_validator('timeslots')
-
-IdSerializer = PlainSerializer(lambda item: item.id if item is not None else None,
-                               return_type=str | None)
-ScoreSerializer = PlainSerializer(lambda score: str(score) if score is not None else None,
-                                  return_type=str | None)
-
-
-def validate_score(v: Any, info: ValidationInfo) -> Any:
-    if isinstance(v, HardSoftScore) or v is None:
-        return v
-    if isinstance(v, str):
-        return HardSoftScore.parse(v)
-    raise ValueError('"score" should be a string')
-
-
-ScoreValidator = BeforeValidator(validate_score)
-
-
-class BaseSchema(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=to_camel,
-        populate_by_name=True,
-        from_attributes=True,
-    )
-
-
-class Timeslot(BaseSchema):
+class Timeslot(JsonDomainBase):
     id: Annotated[str, PlanningId]
     day_of_week: str
     start_time: time
     end_time: time
 
 
-class Room(BaseSchema):
+class Room(JsonDomainBase):
     id: Annotated[str, PlanningId]
     name: str
 
 
 @planning_entity
-class Lesson(BaseSchema):
+class Lesson(JsonDomainBase):
     id: Annotated[str, PlanningId]
     subject: str
     teacher: str
@@ -82,7 +42,7 @@ class Lesson(BaseSchema):
 
 
 @planning_solution
-class Timetable(BaseSchema):
+class Timetable(JsonDomainBase):
     id: str
     timeslots: Annotated[list[Timeslot],
                          ProblemFactCollectionProperty,
@@ -98,16 +58,3 @@ class Timetable(BaseSchema):
                      ScoreValidator,
                      Field(default=None)]
     solver_status: Annotated[SolverStatus, Field(default=SolverStatus.NOT_SOLVING)]
-
-
-class MatchAnalysisDTO(BaseSchema):
-    name: str
-    score: Annotated[HardSoftScore, ScoreSerializer]
-    justification: object
-
-
-class ConstraintAnalysisDTO(BaseSchema):
-    name: str
-    weight: Annotated[HardSoftScore, ScoreSerializer]
-    matches: list[MatchAnalysisDTO]
-    score: Annotated[HardSoftScore, ScoreSerializer]

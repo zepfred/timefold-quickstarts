@@ -1,11 +1,8 @@
 from timefold.solver.test import ConstraintVerifier
 from datetime import time
 
-from school_timetabling.domain import Timetable, Lesson, Room, Timeslot
-from school_timetabling.constraints import (school_timetabling_constraints, room_conflict,
-                                            teacher_conflict, student_group_conflict,
-                                            teacher_room_stability, teacher_time_efficiency,
-                                            student_group_subject_variety)
+from school_timetabling.domain import *
+from school_timetabling.constraints import *
 
 
 ROOM1 = Room(id="1", name="Room1")
@@ -16,7 +13,7 @@ TIMESLOT2 = Timeslot(id="2", day_of_week="TUESDAY", start_time=time(12, 0), end_
 TIMESLOT3 = Timeslot(id="3", day_of_week="TUESDAY", start_time=time(13, 0), end_time=time(14, 0))
 TIMESLOT4 = Timeslot(id="4", day_of_week="TUESDAY", start_time=time(15, 0), end_time=time(16, 0))
 
-constraint_verifier = ConstraintVerifier.build(school_timetabling_constraints, Timetable, Lesson)
+constraint_verifier = ConstraintVerifier.build(define_constraints, Timetable, Lesson)
 
 
 def test_room_conflict():

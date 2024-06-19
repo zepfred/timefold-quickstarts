@@ -1,28 +1,12 @@
 from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
-from timefold.solver import SolverManager, SolverFactory, SolutionManager
-from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
-                                    TerminationConfig, Duration)
 from typing import Annotated
 
-from .domain import Timetable, Lesson, Room, Timeslot, ConstraintAnalysisDTO, MatchAnalysisDTO
-from .constraints import school_timetabling_constraints
+from .domain import *
+from .score_analysis import *
+from .constraints import define_constraints
 from .demo_data import DemoData, generate_demo_data
-
-
-solver_config = SolverConfig(
-    solution_class=Timetable,
-    entity_class_list=[Lesson],
-    score_director_factory_config=ScoreDirectorFactoryConfig(
-        constraint_provider_function=school_timetabling_constraints
-    ),
-    termination_config=TerminationConfig(
-        spent_limit=Duration(seconds=30)
-    )
-)
-
-solver_manager = SolverManager.create(SolverFactory.create(solver_config))
-solution_manager = SolutionManager.create(solver_manager)
+from .solver import solver_manager, solution_manager
 
 app = FastAPI(docs_url='/q/swagger-ui')
 data_sets = {}

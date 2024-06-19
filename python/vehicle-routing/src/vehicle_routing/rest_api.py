@@ -1,32 +1,13 @@
 from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
-
-from timefold.solver import SolverManager, SolverFactory, SolutionManager, set_class_output_directory
-from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
-                                    TerminationConfig, Duration)
 from typing import Annotated
-import pathlib
 
-
-from .domain import VehicleRoutePlan, Vehicle, Visit, MatchAnalysisDTO, ConstraintAnalysisDTO
-from .constraints import vehicle_routing_constraints
+from .domain import *
+from .score_analysis import *
+from .constraints import define_constraints
 from .demo_data import DemoData, generate_demo_data
+from .solver import solver_manager, solution_manager
 
-set_class_output_directory(pathlib.Path('target'))
-
-solver_config = SolverConfig(
-    solution_class=VehicleRoutePlan,
-    entity_class_list=[Vehicle, Visit],
-    score_director_factory_config=ScoreDirectorFactoryConfig(
-        constraint_provider_function=vehicle_routing_constraints
-    ),
-    termination_config=TerminationConfig(
-        spent_limit=Duration(seconds=30)
-    )
-)
-
-solver_manager = SolverManager.create(solver_config)
-solution_manager = SolutionManager.create(solver_manager)
 
 app = FastAPI(docs_url='/q/swagger-ui')
 data_sets: dict[str, VehicleRoutePlan] = {}

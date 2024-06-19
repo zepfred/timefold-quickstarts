@@ -4,7 +4,7 @@ from enum import Enum
 from random import Random
 from typing import Generator
 
-from .domain import (EmployeeSchedule, Employee, Shift)
+from .domain import *
 
 
 class DemoData(Enum):
@@ -143,6 +143,3 @@ def generate_shifts_for_timeslot(timeslot_start: datetime, timeslot_end: datetim
             required_skill=required_skill))
 
     return shifts
-
-
-__all__ = ['DemoData', 'generate_demo_data']
