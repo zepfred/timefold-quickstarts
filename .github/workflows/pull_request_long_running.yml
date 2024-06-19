@@ -19,12 +19,12 @@ jobs:
     strategy:
       matrix:
         module: [
-          "technology/kotlin-quarkus", "use-cases/bed-allocation",
-          "use-cases/conference-scheduling", "use-cases/employee-scheduling", "use-cases/facility-location",
-          "use-cases/flight-crew-scheduling", "use-cases/food-packaging", "use-cases/maintenance-scheduling",
-          "use-cases/meeting-scheduling", "use-cases/order-picking", "use-cases/project-job-scheduling",
-          "use-cases/school-timetabling", "use-cases/sports-league-scheduling", "use-cases/task-assigning",
-          "use-cases/tournament-scheduling", "use-cases/vehicle-routing"
+          "kotlin/school-timetabling", "java/bed-allocation",
+          "java/conference-scheduling", "java/employee-scheduling", "java/facility-location",
+          "java/flight-crew-scheduling", "java/food-packaging", "java/maintenance-scheduling",
+          "java/meeting-scheduling", "java/order-picking", "java/project-job-scheduling",
+          "java/school-timetabling", "java/sports-league-scheduling", "java/task-assigning",
+          "java/tournament-scheduling", "java/vehicle-routing"
         ]
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
@@ -91,7 +91,7 @@ jobs:
     strategy:
       matrix:
         module: [
-          "technology/java-spring-boot"
+          "java/spring-boot-integration"
         ]
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
