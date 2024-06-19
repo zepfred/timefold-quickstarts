@@ -1,8 +1,14 @@
 name: Long-Running
 
 on:
-  pull_request:
+  # Enables the workflow to run on PRs from forks;
+  # token sharing is safe here, because enterprise is a private repo and therefore fully under our control.
+  pull_request_target:
     branches: [stable, development, '*.x']
+    types:
+      - opened
+      - reopened
+      - synchronize
     paths-ignore:
       - 'LICENSE*'
       - '.gitignore'
