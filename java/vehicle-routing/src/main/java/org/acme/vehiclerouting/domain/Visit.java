@@ -3,7 +3,6 @@ package org.acme.vehiclerouting.domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
@@ -22,7 +21,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = Visit.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @PlanningEntity
-public class Visit {
+public class Visit implements LocationAware {
 
     @PlanningId
     private String id;
@@ -50,7 +49,7 @@ public class Visit {
     }
 
     public Visit(String id, String name, Location location, int demand,
-                 LocalDateTime minStartTime, LocalDateTime maxEndTime, Duration serviceDuration) {
+            LocalDateTime minStartTime, LocalDateTime maxEndTime, Duration serviceDuration) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -72,6 +71,7 @@ public class Visit {
         this.name = name;
     }
 
+    @Override
     public Location getLocation() {
         return location;
     }

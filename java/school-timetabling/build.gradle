@@ -6,6 +6,7 @@ plugins {
 def quarkusVersion = "3.11.2"
 def timefoldVersion = "999-SNAPSHOT"
 def profile = System.properties['profile'] ?: ''
+def enterprise = System.properties['enterprise'] ?: ''
 
 group = "org.acme"
 version = "1.0-SNAPSHOT"
@@ -19,6 +20,10 @@ dependencies {
 
     implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
     implementation platform("ai.timefold.solver:timefold-solver-bom:${timefoldVersion}")
+    if (enterprise == 'true') {
+        implementation platform("ai.timefold.solver.enterprise:timefold-solver-enterprise-bom:${timefoldVersion}")
+        implementation "ai.timefold.solver.enterprise:timefold-solver-enterprise-quarkus"
+    }
 
     implementation "io.quarkus:quarkus-resteasy"
     implementation "io.quarkus:quarkus-resteasy-jackson"

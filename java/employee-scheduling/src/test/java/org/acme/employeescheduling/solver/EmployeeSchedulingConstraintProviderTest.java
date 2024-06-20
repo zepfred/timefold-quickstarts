@@ -30,7 +30,7 @@ class EmployeeSchedulingConstraintProviderTest {
     ConstraintVerifier<EmployeeSchedulingConstraintProvider, EmployeeSchedule> constraintVerifier;
 
     @Test
-    void testRequiredSkill() {
+    void requiredSkill() {
         Employee employee = new Employee("Amy", Set.of(), null, null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::requiredSkill)
                 .given(employee,
@@ -45,7 +45,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testOverlappingShifts() {
+    void overlappingShifts() {
         Employee employee1 = new Employee("Amy", null, null, null, null);
         Employee employee2 = new Employee("Beth", null, null, null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::noOverlappingShifts)
@@ -68,7 +68,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testOneShiftPerDay() {
+    void oneShiftPerDay() {
         Employee employee1 = new Employee("Amy", null, null, null, null);
         Employee employee2 = new Employee("Beth", null, null, null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::noOverlappingShifts)
@@ -97,7 +97,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testAtLeast10HoursBetweenConsecutiveShifts() {
+    void atLeast10HoursBetweenConsecutiveShifts() {
         Employee employee1 = new Employee("Amy", null, null, null, null);
         Employee employee2 = new Employee("Beth", null, null, null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::atLeast10HoursBetweenTwoShifts)
@@ -128,7 +128,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testUnavailableEmployee() {
+    void unavailableEmployee() {
         Employee employee1 = new Employee("Amy", null, Set.of(DAY_1), null, null);
         Employee employee2 = new Employee("Beth", null, Set.of(), null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
@@ -150,7 +150,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testUndesiredDayForEmployee() {
+    void undesiredDayForEmployee() {
         Employee employee1 = new Employee("Amy", null, null, Set.of(DAY_1), null);
         Employee employee2 = new Employee("Beth", null, null, Set.of(), null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
@@ -172,7 +172,7 @@ class EmployeeSchedulingConstraintProviderTest {
     }
 
     @Test
-    void testDesiredDayForEmployee() {
+    void desiredDayForEmployee() {
         Employee employee1 = new Employee("Amy", null, null, null, Set.of(DAY_1));
         Employee employee2 = new Employee("Beth", null, null, null, Set.of());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)

@@ -2,6 +2,7 @@ package org.acme.orderpicking.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.AnchorShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariableGraphType;
@@ -29,6 +30,8 @@ import ai.timefold.solver.core.api.domain.variable.PlanningVariableGraphType;
 @PlanningEntity
 public class TrolleyStep extends TrolleyOrTrolleyStep {
 
+    @PlanningId
+    private String id;
     private OrderItem orderItem;
 
     /**
@@ -55,8 +58,17 @@ public class TrolleyStep extends TrolleyOrTrolleyStep {
         //marshaling constructor.
     }
 
-    public TrolleyStep(OrderItem orderItem) {
+    public TrolleyStep(String id, OrderItem orderItem) {
+        this.id = id;
         this.orderItem = orderItem;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public OrderItem getOrderItem() {

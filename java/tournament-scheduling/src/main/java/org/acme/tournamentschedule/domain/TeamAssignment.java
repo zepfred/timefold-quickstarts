@@ -2,11 +2,13 @@ package org.acme.tournamentschedule.domain;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.entity.PlanningPin;
+import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 
 @PlanningEntity
 public class TeamAssignment {
 
+    @PlanningId
     private long id;
     private Day day;
     private int indexInDate;

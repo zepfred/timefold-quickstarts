@@ -1,18 +1,26 @@
 package org.acme.orderpicking.bootstrap;
 
+import static org.acme.orderpicking.domain.Shelving.newShelvingId;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_A;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_B;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_C;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_D;
+import static org.acme.orderpicking.domain.Warehouse.Column.COL_E;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_1;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_2;
+import static org.acme.orderpicking.domain.Warehouse.Row.ROW_3;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 
-import io.quarkus.runtime.StartupEvent;
 import org.acme.orderpicking.domain.Order;
 import org.acme.orderpicking.domain.OrderItem;
 import org.acme.orderpicking.domain.OrderPickingSolution;
@@ -23,15 +31,7 @@ import org.acme.orderpicking.domain.TrolleyStep;
 import org.acme.orderpicking.domain.WarehouseLocation;
 import org.acme.orderpicking.persistence.OrderPickingRepository;
 
-import static org.acme.orderpicking.domain.Shelving.newShelvingId;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_A;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_B;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_C;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_D;
-import static org.acme.orderpicking.domain.Warehouse.Column.COL_E;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_1;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_2;
-import static org.acme.orderpicking.domain.Warehouse.Row.ROW_3;
+import io.quarkus.runtime.StartupEvent;
 
 /**
  * Helper class for generating data sets.
@@ -64,7 +64,8 @@ public class DemoDataGenerator {
     /**
      * Start location for the trolleys.
      */
-    private static final WarehouseLocation START_LOCATION = new WarehouseLocation(Shelving.newShelvingId(COL_A, ROW_1), Shelving.Side.LEFT, 0);
+    private static final WarehouseLocation START_LOCATION =
+            new WarehouseLocation(Shelving.newShelvingId(COL_A, ROW_1), Shelving.Side.LEFT, 0);
 
     public enum ProductFamily {
         GENERAL_FOOD,
@@ -77,7 +78,7 @@ public class DemoDataGenerator {
         SNACKS,
         PETS
     }
-    
+
     public static class ProductFamilyPair {
         private final Product product;
         private final ProductFamily family;
@@ -102,27 +103,38 @@ public class DemoDataGenerator {
 
             new ProductFamilyPair(new Product(nextId(), "Tea Bags 240 packet", 2 * 6 * 15, null), ProductFamily.GENERAL_FOOD),
             new ProductFamilyPair(new Product(nextId(), "Tomato Soup Can", 10 * 10 * 10, null), ProductFamily.GENERAL_FOOD),
-            new ProductFamilyPair(new Product(nextId(), "Baked Beans in Tomato Sauce", 10 * 10 * 10, null), ProductFamily.GENERAL_FOOD),
+            new ProductFamilyPair(new Product(nextId(), "Baked Beans in Tomato Sauce", 10 * 10 * 10, null),
+                    ProductFamily.GENERAL_FOOD),
 
             new ProductFamilyPair(new Product(nextId(), "Classic Mint Sauce", 8 * 10 * 8, null), ProductFamily.GENERAL_FOOD),
             new ProductFamilyPair(new Product(nextId(), "Raspberry Conserve", 8 * 10 * 8, null), ProductFamily.GENERAL_FOOD),
-            new ProductFamilyPair(new Product(nextId(), "Orange Fine Shred Marmalade", 7 * 8 * 7, null), ProductFamily.GENERAL_FOOD),
+            new ProductFamilyPair(new Product(nextId(), "Orange Fine Shred Marmalade", 7 * 8 * 7, null),
+                    ProductFamily.GENERAL_FOOD),
 
             new ProductFamilyPair(new Product(nextId(), "Free Range Eggs 6 Pack", 15 * 10 * 8, null), ProductFamily.FRESH_FOOD),
             new ProductFamilyPair(new Product(nextId(), "Mature Cheddar 400G", 10 * 9 * 5, null), ProductFamily.FRESH_FOOD),
             new ProductFamilyPair(new Product(nextId(), "Butter Packet", 12 * 5 * 5, null), ProductFamily.FRESH_FOOD),
 
-            new ProductFamilyPair(new Product(nextId(), "Iceberg Lettuce Each", 2500, null), ProductFamily.FRUITS_AND_VEGETABLES),
+            new ProductFamilyPair(new Product(nextId(), "Iceberg Lettuce Each", 2500, null),
+                    ProductFamily.FRUITS_AND_VEGETABLES),
             new ProductFamilyPair(new Product(nextId(), "Carrots 1Kg", 1000, null), ProductFamily.FRUITS_AND_VEGETABLES),
-            new ProductFamilyPair(new Product(nextId(), "Organic Fair Trade Bananas 5 Pack", 1800, null), ProductFamily.FRUITS_AND_VEGETABLES),
-            new ProductFamilyPair(new Product(nextId(), "Gala Apple Minimum 5 Pack", 25 * 20 * 10, null), ProductFamily.FRUITS_AND_VEGETABLES),
-            new ProductFamilyPair(new Product(nextId(), "Orange Bag 3kg", 29 * 20 * 15, null), ProductFamily.FRUITS_AND_VEGETABLES),
+            new ProductFamilyPair(new Product(nextId(), "Organic Fair Trade Bananas 5 Pack", 1800, null),
+                    ProductFamily.FRUITS_AND_VEGETABLES),
+            new ProductFamilyPair(new Product(nextId(), "Gala Apple Minimum 5 Pack", 25 * 20 * 10, null),
+                    ProductFamily.FRUITS_AND_VEGETABLES),
+            new ProductFamilyPair(new Product(nextId(), "Orange Bag 3kg", 29 * 20 * 15, null),
+                    ProductFamily.FRUITS_AND_VEGETABLES),
 
-            new ProductFamilyPair(new Product(nextId(), "Fairy Non Biological Laundry Liquid 4.55L", 5000, null), ProductFamily.HOUSE_CLEANING),
-            new ProductFamilyPair(new Product(nextId(), "Toilet Tissue 8 Roll White", 50 * 20 * 20, null), ProductFamily.HOUSE_CLEANING),
-            new ProductFamilyPair(new Product(nextId(), "Kitchen Roll 200 Sheets x 2", 30 * 30 * 15, null), ProductFamily.HOUSE_CLEANING),
-            new ProductFamilyPair(new Product(nextId(), "Stainless Steel Cleaner 500Ml", 500, null), ProductFamily.HOUSE_CLEANING),
-            new ProductFamilyPair(new Product(nextId(), "Antibacterial Surface Spray", 12 * 4 * 25, null), ProductFamily.HOUSE_CLEANING),
+            new ProductFamilyPair(new Product(nextId(), "Fairy Non Biological Laundry Liquid 4.55L", 5000, null),
+                    ProductFamily.HOUSE_CLEANING),
+            new ProductFamilyPair(new Product(nextId(), "Toilet Tissue 8 Roll White", 50 * 20 * 20, null),
+                    ProductFamily.HOUSE_CLEANING),
+            new ProductFamilyPair(new Product(nextId(), "Kitchen Roll 200 Sheets x 2", 30 * 30 * 15, null),
+                    ProductFamily.HOUSE_CLEANING),
+            new ProductFamilyPair(new Product(nextId(), "Stainless Steel Cleaner 500Ml", 500, null),
+                    ProductFamily.HOUSE_CLEANING),
+            new ProductFamilyPair(new Product(nextId(), "Antibacterial Surface Spray", 12 * 4 * 25, null),
+                    ProductFamily.HOUSE_CLEANING),
 
             new ProductFamilyPair(new Product(nextId(), "Beef Lean Steak Mince 500g", 500, null), ProductFamily.MEET_AND_FISH),
             new ProductFamilyPair(new Product(nextId(), "Smoked Salmon 120G", 150, null), ProductFamily.MEET_AND_FISH),
@@ -141,10 +153,10 @@ public class DemoDataGenerator {
 
             new ProductFamilyPair(new Product(nextId(), "Schweppes Lemonade 2L", 2000, null), ProductFamily.DRINKS),
             new ProductFamilyPair(new Product(nextId(), "Coke Zero 8 x 330ml", 40 * 12 * 12, null), ProductFamily.DRINKS),
-            new ProductFamilyPair(new Product(nextId(), "Natural Mineral Water Still 6 X 1.5Ltr", 6 * 1500, null), ProductFamily.DRINKS),
+            new ProductFamilyPair(new Product(nextId(), "Natural Mineral Water Still 6 X 1.5Ltr", 6 * 1500, null),
+                    ProductFamily.DRINKS),
 
-            new ProductFamilyPair(new Product(nextId(), "Cocktail Crisps 6 Pack", 20 * 10 * 10, null), ProductFamily.SNACKS)
-    );
+            new ProductFamilyPair(new Product(nextId(), "Cocktail Crisps 6 Pack", 20 * 10 * 10, null), ProductFamily.SNACKS));
 
     private static final Map<ProductFamily, List<String>> SHELVINGS_PER_FAMILY = Map.of(
             ProductFamily.FRUITS_AND_VEGETABLES, List.of(
@@ -176,8 +188,7 @@ public class DemoDataGenerator {
             ProductFamily.HOUSE_CLEANING, List.of(newShelvingId(COL_E, ROW_2),
                     newShelvingId(COL_E, ROW_1)),
 
-            ProductFamily.PETS, List.of(newShelvingId(COL_E, ROW_3))
-    );
+            ProductFamily.PETS, List.of(newShelvingId(COL_E, ROW_3)));
 
     private static long currentId = 0;
 
@@ -217,9 +228,10 @@ public class DemoDataGenerator {
     }
 
     public List<TrolleyStep> buildTrolleySteps(Order order) {
+        int idx = 0;
         List<TrolleyStep> steps = new ArrayList<>();
         for (OrderItem item : order.getItems()) {
-            TrolleyStep trolleyStep = new TrolleyStep(item);
+            TrolleyStep trolleyStep = new TrolleyStep(order.getId() + "-" + idx++, item);
             steps.add(trolleyStep);
         }
         return steps;
@@ -227,8 +239,10 @@ public class DemoDataGenerator {
 
     public void validateBucketCapacity(int bucketCapacity) {
         if (bucketCapacity < getMaxProductSize()) {
-            throw new IllegalArgumentException("The selected bucketCapacity: " + bucketCapacity + ", is lower than the maximum product size: " + getMaxProductSize() + "." +
-                    " However for a matter of simplicity the problem was simplified on the assumption that products can always fit in a trolley bucket." +
+            throw new IllegalArgumentException("The selected bucketCapacity: " + bucketCapacity
+                    + ", is lower than the maximum product size: " + getMaxProductSize() + "." +
+                    " However for a matter of simplicity the problem was simplified on the assumption that products can always fit in a trolley bucket."
+                    +
                     " Please use a higher value");
         }
     }
@@ -262,12 +276,13 @@ public class DemoDataGenerator {
                     int shelvingIndex = random.nextInt(shelvingIds.size());
                     Shelving.Side shelvingSide = Shelving.Side.values()[random.nextInt(Shelving.Side.values().length)];
                     int shelvingRow = random.nextInt(Shelving.ROWS_SIZE) + 1;
-                    WarehouseLocation warehouseLocation = new WarehouseLocation(shelvingIds.get(shelvingIndex), shelvingSide, shelvingRow);
+                    WarehouseLocation warehouseLocation =
+                            new WarehouseLocation(shelvingIds.get(shelvingIndex), shelvingSide, shelvingRow);
                     return new Product(productFamilyPair.getProduct().getId(),
                             productFamilyPair.getProduct().getName(),
                             productFamilyPair.getProduct().getVolume(),
                             warehouseLocation);
-                }).collect(Collectors.toList());
+                }).toList();
     }
 
     public static int getMaxProductSize() {

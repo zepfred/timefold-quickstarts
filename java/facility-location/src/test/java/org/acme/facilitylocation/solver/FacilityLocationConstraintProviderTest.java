@@ -19,7 +19,7 @@ class FacilityLocationConstraintProviderTest {
     ConstraintVerifier<FacilityLocationConstraintProvider, FacilityLocationProblem> constraintVerifier;
 
     @Test
-    void penalizes_capacity_exceeded_by_a_single_consumer() {
+    void penalizesCapacityExceededByASingleConsumer() {
         Location location = new Location(1, 1);
         Facility facility = new Facility("1", location, 0, 20);
         Consumer consumer = new Consumer("1", location, 100);
@@ -31,7 +31,7 @@ class FacilityLocationConstraintProviderTest {
     }
 
     @Test
-    void no_penalty_when_demand_less_than_capacity() {
+    void noPenaltyWhenDemandLessThanCapacity() {
         Location location = new Location(1, 1);
         Facility facility = new Facility("1", location, 0, 100);
         Consumer consumer1 = new Consumer("1", location, 1);
@@ -47,7 +47,7 @@ class FacilityLocationConstraintProviderTest {
     }
 
     @Test
-    void no_penalty_when_consumer_not_assigned() {
+    void noPenaltyWhenConsumerNotAssigned() {
         Location location = new Location(1, 1);
         Facility facility = new Facility("1", location, 0, 1);
         Consumer consumer = new Consumer("1", location, 100);
@@ -58,7 +58,7 @@ class FacilityLocationConstraintProviderTest {
     }
 
     @Test
-    void should_penalize_setup_cost() {
+    void shouldPenalizeSetupCost() {
         long setupCost = 123;
         Location location = new Location(1, 1);
         Facility facility = new Facility("1", location, setupCost, 100);
@@ -71,7 +71,7 @@ class FacilityLocationConstraintProviderTest {
     }
 
     @Test
-    void should_penalize_distance_to_facility() {
+    void shouldPenalizeDistanceToFacility() {
         Location facilityLocation = new Location(0, 0);
         Location consumer1Location = new Location(10, 0);
         Location consumer2Location = new Location(0, 20);

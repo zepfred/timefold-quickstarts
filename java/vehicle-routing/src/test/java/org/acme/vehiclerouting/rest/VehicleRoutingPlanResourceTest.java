@@ -179,7 +179,7 @@ class VehicleRoutingPlanResourceTest {
     }
 
     @Test
-    void testRecommendedFit() {
+    void recommendedFit() {
         // Generate an initial solution
         VehicleRoutePlan solution = generateInitialSolution();
         assertNotNull(solution);

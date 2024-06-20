@@ -7,6 +7,7 @@ plugins {
 
 def timefoldVersion = "999-SNAPSHOT"
 def profile = System.properties['profile'] ?: ''
+def enterprise = System.properties['enterprise'] ?: ''
 
 group = "org.acme"
 archivesBaseName = "spring-boot-school-timetabling"
@@ -17,6 +18,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+bootRun {
+    if (enterprise == 'true') {
+        jvmArgs(["-Dspring.profiles.active=enterprise"])
+    }
+}
 
 repositories {
     mavenCentral()
@@ -25,6 +31,10 @@ repositories {
 
 dependencies {
     implementation platform("ai.timefold.solver:timefold-solver-bom:${timefoldVersion}")
+    if (enterprise == 'true') {
+        implementation platform("ai.timefold.solver.enterprise:timefold-solver-enterprise-bom:${timefoldVersion}")
+        implementation "ai.timefold.solver.enterprise:timefold-solver-enterprise-quarkus"
+    }
 
     // Spring-boot
     implementation "org.springframework.boot:spring-boot-starter-web"
