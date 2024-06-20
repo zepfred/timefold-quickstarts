@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.inject.Inject;
+
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.score.analysis.ConstraintAnalysis;
 import ai.timefold.solver.core.api.score.analysis.ScoreAnalysis;
 import ai.timefold.solver.core.api.solver.SolverStatus;
@@ -27,19 +30,27 @@ import org.acme.vehiclerouting.domain.dto.ApplyRecommendationRequest;
 import org.acme.vehiclerouting.domain.dto.RecommendationRequest;
 import org.acme.vehiclerouting.domain.dto.VehicleRecommendation;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.params.CoreConnectionPNames;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.config.ConnectionConfig;
+import io.restassured.config.HttpClientConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
 class VehicleRoutingPlanResourceTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    @Inject
+    PlannerBenchmarkFactory benchmarkFactory;
 
     @BeforeAll
     static void initializeJacksonParser() {
@@ -52,6 +63,18 @@ class VehicleRoutingPlanResourceTest {
     void solveDemoDataUntilFeasible() {
         VehicleRoutePlan solution = solveDemoData();
         assertTrue(solution.getScore().isFeasible());
+    }
+
+    @Test
+    void benchmark() {
+        VehicleRoutePlan problem = given()
+                .when().get("/demo-data/FIRENZE")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(VehicleRoutePlan.class);
+
+        benchmarkFactory.buildPlannerBenchmark(List.of(problem)).benchmark();
     }
 
     @Test

@@ -1,0 +1,52 @@
+<plannerBenchmark xmlns="https://timefold.ai/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://timefold.ai/xsd/benchmark https://timefold.ai/xsd/benchmark/benchmark.xsd">
+    <inheritedSolverBenchmark>
+        <solver>
+            <termination>
+                <secondsSpentLimit>60</secondsSpentLimit>
+            </termination>
+        </solver>
+        <problemBenchmarks>
+            <problemStatisticType>BEST_SCORE</problemStatisticType>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+
+    <solverBenchmark>
+        <name>Tabu Search</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>TABU_SEARCH</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Late Acceptance</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Tabu Search Nearby</name>
+        <solver>
+            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>TABU_SEARCH</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Late Acceptance Nearby</name>
+        <solver>
+            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+</plannerBenchmark>
