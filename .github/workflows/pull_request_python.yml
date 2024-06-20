@@ -4,14 +4,12 @@ on:
   push:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.py'
-      - '**/pyproject.toml'
+      - 'python/**/*'
       - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.py'
-      - '**/pyproject.toml'
+      - 'python/**/*'
       - '.github/**/*.yml'
 
 jobs:

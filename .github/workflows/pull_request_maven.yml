@@ -3,20 +3,18 @@ name: Maven
 on:
   push:
     branches: [stable, development, '*.x']
-    paths-ignore:
-      - 'LICENSE*'
-      - '.gitignore'
-      - '**.md'
-      - '**.adoc'
-      - '*.txt'
+    paths:
+      - 'pom.xml'
+      - 'java/**/*'
+      - 'kotlin/**/*'
+      - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
-    paths-ignore:
-      - 'LICENSE*'
-      - '.gitignore'
-      - '**.md'
-      - '**.adoc'
-      - '*.txt'
+    paths:
+      - 'pom.xml'
+      - 'java/**/*'
+      - 'kotlin/**/*'
+      - '.github/**/*.yml'
 
 jobs:
   build:

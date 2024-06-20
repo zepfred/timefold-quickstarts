@@ -1,4 +1,4 @@
-name: Long-Running
+name: Maven Long-Running
 
 on:
   # Enables the workflow to run on PRs from forks;
@@ -9,12 +9,11 @@ on:
       - opened
       - reopened
       - synchronize
-    paths-ignore:
-      - 'LICENSE*'
-      - '.gitignore'
-      - '**.md'
-      - '**.adoc'
-      - '*.txt'
+    paths:
+      - 'pom.xml'
+      - 'java/**/*'
+      - 'kotlin/**/*'
+      - '.github/**/*.yml'
 
 jobs:
   build-quarkus:
