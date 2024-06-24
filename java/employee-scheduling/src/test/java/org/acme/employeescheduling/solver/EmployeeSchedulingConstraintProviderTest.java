@@ -20,6 +20,7 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 class EmployeeSchedulingConstraintProviderTest {
     private static final LocalDate DAY_1 = LocalDate.of(2021, 2, 1);
+    private static final LocalDate DAY_3 = LocalDate.of(2021, 2, 3);
 
     private static final LocalDateTime DAY_START_TIME = DAY_1.atTime(LocalTime.of(9, 0));
     private static final LocalDateTime DAY_END_TIME = DAY_1.atTime(LocalTime.of(17, 0));
@@ -112,6 +113,11 @@ class EmployeeSchedulingConstraintProviderTest {
                 .penalizesBy(600);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::atLeast10HoursBetweenTwoShifts)
                 .given(employee1, employee2,
+                        new Shift("1", DAY_END_TIME, DAY_START_TIME.plusDays(1), "Location", "Skill", employee1),
+                        new Shift("2", DAY_START_TIME, DAY_END_TIME, "Location 2", "Skill", employee1))
+                .penalizesBy(600);
+        constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::atLeast10HoursBetweenTwoShifts)
+                .given(employee1, employee2,
                        new Shift("1", DAY_START_TIME, DAY_END_TIME, "Location", "Skill", employee1),
                        new Shift("2", DAY_END_TIME.plusHours(10), DAY_START_TIME.plusDays(1), "Location 2", "Skill", employee1))
                 .penalizes(0);
@@ -129,7 +135,7 @@ class EmployeeSchedulingConstraintProviderTest {
 
     @Test
     void unavailableEmployee() {
-        Employee employee1 = new Employee("Amy", null, Set.of(DAY_1), null, null);
+        Employee employee1 = new Employee("Amy", null, Set.of(DAY_1, DAY_3), null, null);
         Employee employee2 = new Employee("Beth", null, Set.of(), null, null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
                 .given(employee1, employee2,
@@ -138,7 +144,7 @@ class EmployeeSchedulingConstraintProviderTest {
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
                 .given(employee1, employee2,
                         new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
-                .penalizesBy((int) Duration.ofHours(32).toMinutes());
+                .penalizesBy((int) Duration.ofHours(17).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::unavailableEmployee)
                 .given(employee1, employee2,
                        new Shift("1", DAY_START_TIME.plusDays(1), DAY_END_TIME.plusDays(1), "Location", "Skill", employee1))
@@ -151,7 +157,7 @@ class EmployeeSchedulingConstraintProviderTest {
 
     @Test
     void undesiredDayForEmployee() {
-        Employee employee1 = new Employee("Amy", null, null, Set.of(DAY_1), null);
+        Employee employee1 = new Employee("Amy", null, null, Set.of(DAY_1, DAY_3), null);
         Employee employee2 = new Employee("Beth", null, null, Set.of(), null);
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
                 .given(employee1, employee2,
@@ -160,7 +166,7 @@ class EmployeeSchedulingConstraintProviderTest {
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
                 .given(employee1, employee2,
                         new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
-                .penalizesBy((int) Duration.ofHours(32).toMinutes());
+                .penalizesBy((int) Duration.ofHours(17).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::undesiredDayForEmployee)
                 .given(employee1, employee2,
                        new Shift("1", DAY_START_TIME.plusDays(1), DAY_END_TIME.plusDays(1), "Location", "Skill", employee1))
@@ -173,7 +179,7 @@ class EmployeeSchedulingConstraintProviderTest {
 
     @Test
     void desiredDayForEmployee() {
-        Employee employee1 = new Employee("Amy", null, null, null, Set.of(DAY_1));
+        Employee employee1 = new Employee("Amy", null, null, null, Set.of(DAY_1, DAY_3));
         Employee employee2 = new Employee("Beth", null, null, null, Set.of());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)
             .given(employee1, employee2,
@@ -182,7 +188,7 @@ class EmployeeSchedulingConstraintProviderTest {
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)
             .given(employee1, employee2,
                 new Shift("1", DAY_START_TIME.minusDays(1), DAY_END_TIME, "Location", "Skill", employee1))
-            .rewardsWith((int) Duration.ofHours(32).toMinutes());
+            .rewardsWith((int) Duration.ofHours(17).toMinutes());
         constraintVerifier.verifyThat(EmployeeSchedulingConstraintProvider::desiredDayForEmployee)
             .given(employee1, employee2,
                 new Shift("1", DAY_START_TIME.plusDays(1), DAY_END_TIME.plusDays(1), "Location", "Skill", employee1))
