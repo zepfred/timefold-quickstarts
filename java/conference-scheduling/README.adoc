@@ -2,7 +2,7 @@
 
 Assign conference talks to timeslots and rooms to produce a better schedule for speakers.
 
-image::./quarkus-conference-scheduling-screenshot.png[]
+image::./conference-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

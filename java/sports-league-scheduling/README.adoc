@@ -2,7 +2,7 @@
 
 Assign rounds to matches to produce a better schedule for league matches.
 
-image::./quarkus-sports-league-scheduling-screenshot.png[]
+image::./sports-league-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

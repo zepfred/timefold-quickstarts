@@ -2,7 +2,7 @@
 
 Assign employees to tasks to produce a better plan for task assignments.
 
-image::./quarkus-task-assigning-screenshot.png[]
+image::./task-assigning-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

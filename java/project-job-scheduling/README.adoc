@@ -2,7 +2,7 @@
 
 Assign jobs for execution to produce a better schedule for project job allocations.
 
-image::./quarkus-project-job-scheduling-screenshot.png[]
+image::./project-job-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

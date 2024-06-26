@@ -2,7 +2,7 @@
 
 Assign timeslots and rooms for meetings to produce a better schedule.
 
-image::./quarkus-meeting-scheduling-screenshot.png[]
+image::./meeting-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

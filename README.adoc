@@ -37,7 +37,7 @@ a|* link:java/hello-world/README.adoc[Java (Hello World)] (Java, Maven or Gradle
 
 Find the most efficient routes for vehicles to reach visits, taking into account vehicle capacity and time windows when visits are available. Sometimes also called "CVRPTW".
 
-image::java/vehicle-routing/quarkus-vehicle-routing-screenshot.png[]
+image::java/vehicle-routing/vehicle-routing-screenshot.png[]
 
 * link:java/vehicle-routing/README.adoc[Run quarkus-vehicle-routing] (Java, Maven, Quarkus)
 
@@ -48,7 +48,7 @@ image::java/vehicle-routing/quarkus-vehicle-routing-screenshot.png[]
 
 Schedule maintenance jobs to crews over time to reduce both premature and overdue maintenance.
 
-image::java/maintenance-scheduling/quarkus-maintenance-scheduling-screenshot.png[]
+image::java/maintenance-scheduling/maintenance-scheduling-screenshot.png[]
 
 * link:java/maintenance-scheduling/README.adoc[Run quarkus-maintenance-scheduling] (Java, Maven, Quarkus)
 
@@ -56,7 +56,7 @@ image::java/maintenance-scheduling/quarkus-maintenance-scheduling-screenshot.png
 
 Schedule shifts to employees, accounting for employee availability and shift skill requirements.
 
-image::java/employee-scheduling/quarkus-employee-scheduling-screenshot.png[]
+image::java/employee-scheduling/employee-scheduling-screenshot.png[]
 
 * link:java/employee-scheduling/README.adoc[Run quarkus-employee-scheduling] (Java, Maven, Quarkus)
 
@@ -66,7 +66,7 @@ image::java/employee-scheduling/quarkus-employee-scheduling-screenshot.png[]
 
 Schedule food packaging orders to manufacturing lines, to minimize downtime and fulfill all orders in time.
 
-image::java/food-packaging/quarkus-food-packaging-screenshot.png[]
+image::java/food-packaging/food-packaging-screenshot.png[]
 
 * link:java/food-packaging/README.adoc[Run quarkus-food-packaging] (Java, Maven, Quarkus)
 
@@ -74,7 +74,7 @@ image::java/food-packaging/quarkus-food-packaging-screenshot.png[]
 
 Generate an optimal picking plan for completing a set of orders.
 
-image::java/order-picking/quarkus-order-picking-screenshot.png[]
+image::java/order-picking/order-picking-screenshot.png[]
 
 * link:java/order-picking/README.adoc[Run quarkus-order-picking] (Java, Maven, Quarkus)
 
@@ -82,7 +82,7 @@ image::java/order-picking/quarkus-order-picking-screenshot.png[]
 
 Assign lessons to timeslots and rooms to produce a better schedule for teachers and students.
 
-image::java/school-timetabling/quarkus-school-timetabling-screenshot.png[]
+image::java/school-timetabling/school-timetabling-screenshot.png[]
 
 * link:java/school-timetabling/README.adoc[Run quarkus-school-timetabling] (Java, Maven or Gradle, Quarkus)
 * link:java/spring-boot-integration/README.adoc[Run spring-boot-school-timetabling] (Java, Maven or Gradle, Spring Boot)
@@ -97,7 +97,7 @@ Without a UI:
 
 Pick the best geographical locations for new stores, distribution centers, covid test centers or telco masts.
 
-image::java/facility-location/quarkus-facility-location-screenshot.png[]
+image::java/facility-location/facility-location-screenshot.png[]
 
 * link:java/facility-location/README.adoc[Run quarkus-facility-location] (Java, Maven, Quarkus)
 
@@ -105,7 +105,7 @@ image::java/facility-location/quarkus-facility-location-screenshot.png[]
 
 Assign conference talks to timeslots and rooms to produce a better schedule for speakers.
 
-image::java/conference-scheduling/quarkus-conference-scheduling-screenshot.png[]
+image::java/conference-scheduling/conference-scheduling-screenshot.png[]
 
 * link:java/conference-scheduling/README.adoc[Run quarkus-conference-scheduling] (Java, Maven, Quarkus)
 
@@ -113,7 +113,7 @@ image::java/conference-scheduling/quarkus-conference-scheduling-screenshot.png[]
 
 Assign beds to patient stays to produce a better schedule for hospitals.
 
-image::java/bed-allocation/quarkus-bed-scheduling-screenshot.png[]
+image::java/bed-allocation/bed-scheduling-screenshot.png[]
 
 * link:java/bed-allocation/README.adoc[Run quarkus-bed-allocation-scheduling] (Java, Maven, Quarkus)
 
@@ -121,7 +121,7 @@ image::java/bed-allocation/quarkus-bed-scheduling-screenshot.png[]
 
 Assign crew to flights to produce a better schedule for flight assignments.
 
-image::java/flight-crew-scheduling/quarkus-flight-crew-scheduling-screenshot.png[]
+image::java/flight-crew-scheduling/flight-crew-scheduling-screenshot.png[]
 
 * link:java/flight-crew-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
 
@@ -129,7 +129,7 @@ image::java/flight-crew-scheduling/quarkus-flight-crew-scheduling-screenshot.png
 
 Assign timeslots and rooms for meetings to produce a better schedule.
 
-image::java/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
+image::java/meeting-scheduling/meeting-scheduling-screenshot.png[]
 
 * link:java/meeting-scheduling/README.adoc[Run quarkus-flight-crew-scheduling] (Java, Maven, Quarkus)
 
@@ -137,7 +137,7 @@ image::java/meeting-scheduling/quarkus-meeting-scheduling-screenshot.png[]
 
 Assign rounds to matches to produce a better schedule for league matches.
 
-image::java/sports-league-scheduling/quarkus-sports-league-scheduling-screenshot.png[]
+image::java/sports-league-scheduling/sports-league-scheduling-screenshot.png[]
 
 * link:java/sports-league-scheduling/README.adoc[Run quarkus-sports-league-scheduling] (Java, Maven, Quarkus)
 
@@ -145,7 +145,7 @@ image::java/sports-league-scheduling/quarkus-sports-league-scheduling-screenshot
 
 Assign employees to tasks to produce a better plan for task assignments.
 
-image::java/task-assigning/quarkus-task-assigning-screenshot.png[]
+image::java/task-assigning/task-assigning-screenshot.png[]
 
 * link:java/task-assigning/README.adoc[Run quarkus-task-assigning] (Java, Maven, Quarkus)
 
@@ -153,7 +153,7 @@ image::java/task-assigning/quarkus-task-assigning-screenshot.png[]
 
 Assign jobs for execution to produce a better schedule for project job allocations.
 
-image::java/project-job-scheduling/quarkus-project-job-scheduling-screenshot.png[]
+image::java/project-job-scheduling/project-job-scheduling-screenshot.png[]
 
 * link:java/project-job-scheduling/README.adoc[Run quarkus-project-job-scheduling] (Java, Maven, Quarkus)
 
@@ -161,7 +161,7 @@ image::java/project-job-scheduling/quarkus-project-job-scheduling-screenshot.png
 
 Tournament Scheduling service assigning teams to tournament matches.
 
-image::java/tournament-scheduling/quarkus-tournament-scheduling-screenshot.png[]
+image::java/tournament-scheduling/tournament-scheduling-screenshot.png[]
 
 * link:java/tournament-scheduling/README.adoc[Run quarkus-tournament-scheduling] (Java, Maven, Quarkus)
 

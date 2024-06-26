@@ -2,7 +2,7 @@
 
 Assign crew to flights to produce a better schedule for flight assignments.
 
-image::./quarkus-flight-crew-scheduling-screenshot.png[]
+image::./flight-crew-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>

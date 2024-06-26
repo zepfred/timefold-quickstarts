@@ -2,7 +2,7 @@
 
 Schedule shifts to employees, accounting for employee availability and shift skill requirements.
 
-image::./quarkus-employee-scheduling-screenshot.png[]
+image::./employee-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
 * <<package,Run the packaged application>>
