@@ -23,9 +23,9 @@ public class Job {
 
     private Product product;
     private Duration duration;
-    private LocalDateTime readyDateTime;
-    private LocalDateTime idealEndDateTime;
-    private LocalDateTime dueDateTime;
+    private LocalDateTime minStartTime;
+    private LocalDateTime idealEndTime;
+    private LocalDateTime maxEndTime;
     /** Higher priority is a higher number. */
     private int priority;
     @PlanningPin
@@ -55,19 +55,19 @@ public class Job {
     public Job() {
     }
 
-    public Job(String id, String name, Product product, Duration duration, LocalDateTime readyDateTime, LocalDateTime idealEndDateTime, LocalDateTime dueDateTime, int priority, boolean pinned) {
-        this(id, name, product, duration, readyDateTime, idealEndDateTime, dueDateTime, priority, pinned, null, null);
+    public Job(String id, String name, Product product, Duration duration, LocalDateTime minStartTime, LocalDateTime idealEndTime, LocalDateTime maxEndTime, int priority, boolean pinned) {
+        this(id, name, product, duration, minStartTime, idealEndTime, maxEndTime, priority, pinned, null, null);
     }
 
-    public Job(String id, String name, Product product, Duration duration, LocalDateTime readyDateTime, LocalDateTime idealEndDateTime, LocalDateTime dueDateTime, int priority, boolean pinned,
-            LocalDateTime startCleaningDateTime, LocalDateTime startProductionDateTime) {
+    public Job(String id, String name, Product product, Duration duration, LocalDateTime minStartTime, LocalDateTime idealEndTime, LocalDateTime maxEndTime, int priority, boolean pinned,
+               LocalDateTime startCleaningDateTime, LocalDateTime startProductionDateTime) {
         this.id = id;
         this.name = name;
         this.product = product;
         this.duration = duration;
-        this.readyDateTime = readyDateTime;
-        this.idealEndDateTime = idealEndDateTime;
-        this.dueDateTime = dueDateTime;
+        this.minStartTime = minStartTime;
+        this.idealEndTime = idealEndTime;
+        this.maxEndTime = maxEndTime;
         this.priority = priority;
         this.startCleaningDateTime = startCleaningDateTime;
         this.startProductionDateTime = startProductionDateTime;
@@ -101,16 +101,16 @@ public class Job {
         return duration;
     }
 
-    public LocalDateTime getReadyDateTime() {
-        return readyDateTime;
+    public LocalDateTime getMinStartTime() {
+        return minStartTime;
     }
 
-    public LocalDateTime getIdealEndDateTime() {
-        return idealEndDateTime;
+    public LocalDateTime getIdealEndTime() {
+        return idealEndTime;
     }
 
-    public LocalDateTime getDueDateTime() {
-        return dueDateTime;
+    public LocalDateTime getMaxEndTime() {
+        return maxEndTime;
     }
 
     public int getPriority() {

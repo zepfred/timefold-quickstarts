@@ -22,8 +22,8 @@ public class MaintenanceScheduleConstraintProvider implements ConstraintProvider
         return new Constraint[] {
                 // Hard constraints
                 crewConflict(constraintFactory),
-                readyDate(constraintFactory),
-                dueDate(constraintFactory),
+                minStartDate(constraintFactory),
+                maxEndDate(constraintFactory),
                 // Soft constraints
                 beforeIdealEndDate(constraintFactory),
                 afterIdealEndDate(constraintFactory),
@@ -50,24 +50,24 @@ public class MaintenanceScheduleConstraintProvider implements ConstraintProvider
                 .asConstraint("Crew conflict");
     }
 
-    public Constraint readyDate(ConstraintFactory constraintFactory) {
+    public Constraint minStartDate(ConstraintFactory constraintFactory) {
         // Don't start a maintenance job before its ready to start.
         return constraintFactory.forEach(Job.class)
-                .filter(job -> job.getReadyDate() != null
-                        && job.getStartDate().isBefore(job.getReadyDate()))
+                .filter(job -> job.getMinStartDate() != null
+                        && job.getStartDate().isBefore(job.getMinStartDate()))
                 .penalizeLong(HardSoftLongScore.ONE_HARD,
-                        job -> DAYS.between(job.getStartDate(), job.getReadyDate()))
-                .asConstraint("Ready date");
+                        job -> DAYS.between(job.getStartDate(), job.getMinStartDate()))
+                .asConstraint("Min start date");
     }
 
-    public Constraint dueDate(ConstraintFactory constraintFactory) {
+    public Constraint maxEndDate(ConstraintFactory constraintFactory) {
         // Don't end a maintenance job after its due.
         return constraintFactory.forEach(Job.class)
-                .filter(job -> job.getDueDate() != null
-                        && job.getEndDate().isAfter(job.getDueDate()))
+                .filter(job -> job.getMaxEndDate() != null
+                        && job.getEndDate().isAfter(job.getMaxEndDate()))
                 .penalizeLong(HardSoftLongScore.ONE_HARD,
-                        job -> DAYS.between(job.getDueDate(), job.getEndDate()))
-                .asConstraint("Due date");
+                        job -> DAYS.between(job.getMaxEndDate(), job.getEndDate()))
+                .asConstraint("Max end date");
     }
 
     // ************************************************************************

@@ -18,8 +18,8 @@ public class Job {
 
     private String name;
     private int durationInDays;
-    private LocalDate readyDate; // Inclusive
-    private LocalDate dueDate; // Exclusive
+    private LocalDate minStartDate; // Inclusive
+    private LocalDate maxEndDate; // Exclusive
     private LocalDate idealEndDate; // Exclusive
 
     private Set<String> tags;
@@ -35,23 +35,23 @@ public class Job {
     public Job() {
     }
 
-    public Job(String id, String name, int durationInDays, LocalDate readyDate, LocalDate dueDate, LocalDate idealEndDate, Set<String> tags) {
+    public Job(String id, String name, int durationInDays, LocalDate minStartDate, LocalDate maxEndDate, LocalDate idealEndDate, Set<String> tags) {
         this.id = id;
         this.name = name;
         this.durationInDays = durationInDays;
-        this.readyDate = readyDate;
-        this.dueDate = dueDate;
+        this.minStartDate = minStartDate;
+        this.maxEndDate = maxEndDate;
         this.idealEndDate = idealEndDate;
         this.tags = tags;
     }
 
-    public Job(String id, String name, int durationInDays, LocalDate readyDate, LocalDate dueDate, LocalDate idealEndDate, Set<String> tags,
-            Crew crew, LocalDate startDate) {
+    public Job(String id, String name, int durationInDays, LocalDate minStartDate, LocalDate maxEndDate, LocalDate idealEndDate, Set<String> tags,
+               Crew crew, LocalDate startDate) {
         this.id = id;
         this.name = name;
         this.durationInDays = durationInDays;
-        this.readyDate = readyDate;
-        this.dueDate = dueDate;
+        this.minStartDate = minStartDate;
+        this.maxEndDate = maxEndDate;
         this.idealEndDate = idealEndDate;
         this.tags = tags;
         this.crew = crew;
@@ -80,12 +80,12 @@ public class Job {
         return durationInDays;
     }
 
-    public LocalDate getReadyDate() {
-        return readyDate;
+    public LocalDate getMinStartDate() {
+        return minStartDate;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getMaxEndDate() {
+        return maxEndDate;
     }
 
     public LocalDate getIdealEndDate() {

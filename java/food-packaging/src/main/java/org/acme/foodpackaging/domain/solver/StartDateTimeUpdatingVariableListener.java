@@ -91,8 +91,8 @@ public class StartDateTimeUpdatingVariableListener implements VariableListener<P
             } else {
                 startCleaningDateTime = endDateTime;
                 startProductionDateTime = startCleaningDateTime.plus(shadowJob.getProduct().getCleanupDuration(previousJob.getProduct()));
-                if (startProductionDateTime.isBefore(shadowJob.getReadyDateTime())) {
-                    startProductionDateTime = shadowJob.getReadyDateTime();
+                if (startProductionDateTime.isBefore(shadowJob.getMinStartTime())) {
+                    startProductionDateTime = shadowJob.getMinStartTime();
                 }
             }
         }
