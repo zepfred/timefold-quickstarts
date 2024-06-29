@@ -69,9 +69,9 @@ jobs:
           git merge -s ours --no-edit ${{ github.event.inputs.stableBranch }}
           git checkout ${{ github.event.inputs.releaseBranch }}-bump
           git merge --squash ${{ github.event.inputs.releaseBranch }}
-          git commit -m "build: release version ${{ github.event.inputs.version }}"
+          git commit -m "build: release version ${{ github.event.inputs.java-version }}"
           git push origin ${{ github.event.inputs.releaseBranch }}-bump
-          gh pr create --reviewer triceo --base ${{ github.event.inputs.stableBranch }} --head ${{ github.event.inputs.releaseBranch }}-bump --title "build: release version ${{ github.event.inputs.version }}" --body-file .github/workflows/release-pr-body.md
+          gh pr create --reviewer triceo --base ${{ github.event.inputs.stableBranch }} --head ${{ github.event.inputs.releaseBranch }}-bump --title "build: release version ${{ github.event.inputs.java-version }}" --body-file .github/workflows/release-pr-body.md
         env:
           GITHUB_TOKEN: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
 
