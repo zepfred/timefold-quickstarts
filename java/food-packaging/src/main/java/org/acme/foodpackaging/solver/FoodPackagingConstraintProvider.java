@@ -21,8 +21,7 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
                 idealEndDateTime(factory),
                 // Soft constraints
                 operatorCleaningConflict(factory),
-                minimizeAndLoadBalanceMakeSpan(factory)
-//                minimizeCleaningDuration(factory),
+                minimizeMakespan(factory)
         };
     }
 
@@ -71,14 +70,14 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
                 .asConstraint("Operator cleaning conflict");
     }
 
-    protected Constraint minimizeAndLoadBalanceMakeSpan(ConstraintFactory factory) {
+    protected Constraint minimizeMakespan(ConstraintFactory factory) {
         return factory.forEach(Job.class)
                 .filter(job -> job.getLine() != null && job.getNextJob() == null)
                 .penalizeLong(HardMediumSoftLongScore.ONE_SOFT, job -> {
                     long minutes = Duration.between(job.getLine().getStartDateTime(), job.getEndDateTime()).toMinutes();
                     return minutes * minutes;
                 })
-                .asConstraint("Minimize and load balance make span");
+                .asConstraint("Minimize make span");
     }
 
     // TODO Currently dwarfed by minimizeAndLoadBalanceMakeSpan in the same score level, because that squares
