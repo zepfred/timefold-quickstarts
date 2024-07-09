@@ -4,20 +4,16 @@ on:
   push:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.gradle'
-      - '**/*.java'
-      - '**/*.kt'
-      - '**/*.versions.toml'
-      - '**/versions.properties'
+      - 'settings.gradle'
+      - 'java/**/*'
+      - 'kotlin/**/*'
       - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.gradle'
-      - '**/*.java'
-      - '**/*.kt'
-      - '**/*.versions.toml'
-      - '**/versions.properties'
+      - 'settings.gradle'
+      - 'java/**/*'
+      - 'kotlin/**/*'
       - '.github/**/*.yml'
 
 jobs:

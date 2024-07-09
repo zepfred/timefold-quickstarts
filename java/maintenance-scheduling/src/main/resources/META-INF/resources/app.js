@@ -158,13 +158,13 @@ function renderSchedule(schedule) {
         });
         byJobItemData.add({
             id: job.id + "_readyToIdealEnd", group: job.id,
-            start: job.readyDate, end: job.idealEndDate,
+            start: job.minStartDate, end: job.idealEndDate,
             type: "background",
             style: "background-color: #8AE23433"
         });
         byJobItemData.add({
             id: job.id + "_idealEndToDue", group: job.id,
-            start: job.idealEndDate, end: job.dueDate,
+            start: job.idealEndDate, end: job.maxEndDate,
             type: "background",
             style: "background-color: #FCAF3E33"
         });
@@ -174,8 +174,8 @@ function renderSchedule(schedule) {
             const unassignedJobElement = $(`<div class="card-body p-2"/>`)
                 .append($(`<h5 class="card-title mb-1"/>`).text(job.name))
                 .append($(`<p class="card-text ms-2 mb-0"/>`).text(`${job.durationInDays} workdays`))
-                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Ready: ${job.readyDate}`))
-                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Due: ${job.dueDate}`));
+                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Start: ${job.minStartDate}`))
+                .append($(`<p class="card-text ms-2 mb-0"/>`).text(`End: ${job.maxEndDate}`));
             const byJobJobElement = $(`<div/>`)
                 .append($(`<h5 class="card-title mb-1"/>`).text(`Unassigned`));
             $.each(job.tags, (index, tag) => {
@@ -188,13 +188,13 @@ function renderSchedule(schedule) {
                 id: job.id,
                 group: job.id,
                 content: byJobJobElement.html(),
-                start: job.readyDate,
-                end: JSJoda.LocalDate.parse(job.readyDate).plusDays(job.durationInDays).toString(),
+                start: job.minStartDate,
+                end: JSJoda.LocalDate.parse(job.minStartDate).plusDays(job.durationInDays).toString(),
                 style: "background-color: #EF292999"
             });
         } else {
-            const beforeReady = JSJoda.LocalDate.parse(job.startDate).isBefore(JSJoda.LocalDate.parse(job.readyDate));
-            const afterDue = JSJoda.LocalDate.parse(job.endDate).isAfter(JSJoda.LocalDate.parse(job.dueDate));
+            const beforeReady = JSJoda.LocalDate.parse(job.startDate).isBefore(JSJoda.LocalDate.parse(job.minStartDate));
+            const afterDue = JSJoda.LocalDate.parse(job.endDate).isAfter(JSJoda.LocalDate.parse(job.maxEndDate));
             const byCrewJobElement = $(`<div/>`)
                 .append($(`<h5 class="card-title mb-1"/>`).text(job.name))
                 .append($(`<p class="card-text ms-2 mb-0"/>`).text(`${job.durationInDays} workdays`));

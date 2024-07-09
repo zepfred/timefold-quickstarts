@@ -59,15 +59,15 @@ public class DemoDataGenerator {
             String jobTarget = jobTargetNames[i % jobAreaTargetLimit];
             // 1 day to 2 workweeks (1 workweek on average)
             int durationInDays = 1 + random.nextInt(10);
-            int readyDueBetweenWorkdays = durationInDays + 5 // at least 5 days of flexibility
+            int minMaxBetweenWorkdays = durationInDays + 5 // at least 5 days of flexibility
                     + random.nextInt(workdayTotal - (durationInDays + 5));
-            int readyWorkdayOffset = random.nextInt(workdayTotal - readyDueBetweenWorkdays + 1);
-            int readyIdealEndBetweenWorkdays = readyDueBetweenWorkdays - 1 - random.nextInt(4);
-            LocalDate readyDate = EndDateUpdatingVariableListener.calculateEndDate(fromDate, readyWorkdayOffset);
-            LocalDate dueDate = EndDateUpdatingVariableListener.calculateEndDate(readyDate, readyDueBetweenWorkdays);
-            LocalDate idealEndDate = EndDateUpdatingVariableListener.calculateEndDate(readyDate, readyIdealEndBetweenWorkdays);
+            int minWorkdayOffset = random.nextInt(workdayTotal - minMaxBetweenWorkdays + 1);
+            int minIdealEndBetweenWorkdays = minMaxBetweenWorkdays - 1 - random.nextInt(4);
+            LocalDate minStartDate = EndDateUpdatingVariableListener.calculateEndDate(fromDate, minWorkdayOffset);
+            LocalDate maxEndDate = EndDateUpdatingVariableListener.calculateEndDate(minStartDate, minMaxBetweenWorkdays);
+            LocalDate idealEndDate = EndDateUpdatingVariableListener.calculateEndDate(minStartDate, minIdealEndBetweenWorkdays);
             Set<String> tags = random.nextDouble() < 0.1 ? Set.of(jobArea, "Subway") : Set.of(jobArea);
-            jobs.add(new Job(Integer.toString(i), jobArea + " " + jobTarget, durationInDays, readyDate, dueDate, idealEndDate,
+            jobs.add(new Job(Integer.toString(i), jobArea + " " + jobTarget, durationInDays, minStartDate, maxEndDate, idealEndDate,
                     tags));
         }
         maintenanceSchedule.setJobs(jobs);

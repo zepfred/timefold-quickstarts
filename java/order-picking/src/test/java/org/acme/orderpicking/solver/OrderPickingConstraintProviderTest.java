@@ -111,8 +111,10 @@ class OrderPickingConstraintProviderTest {
 
     @Test
     void minimizeDistanceFromPreviousTrolleyStep() {
-        TrolleyStep currentTrolleyStep = mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_C, ROW_3), Shelving.Side.RIGHT, 1));
-        TrolleyStep previousTrolleyStep = mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_E, ROW_1), Shelving.Side.RIGHT, 3));
+        TrolleyStep currentTrolleyStep =
+                mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_C, ROW_3), Shelving.Side.RIGHT, 1));
+        TrolleyStep previousTrolleyStep =
+                mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_E, ROW_1), Shelving.Side.RIGHT, 3));
         currentTrolleyStep.setPreviousElement(previousTrolleyStep);
 
         Warehouse.calculateDistance(currentTrolleyStep.getLocation(), previousTrolleyStep.getLocation());
@@ -123,7 +125,8 @@ class OrderPickingConstraintProviderTest {
 
     @Test
     void minimizeDistanceFromLastTrolleyStepToPathOrigin() {
-        TrolleyStep lastTrolleyStep = mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_D, ROW_2), Shelving.Side.LEFT, 0));
+        TrolleyStep lastTrolleyStep =
+                mockTrolleyStep(new WarehouseLocation(newShelvingId(COL_D, ROW_2), Shelving.Side.LEFT, 0));
 
         TrolleyStep intermediateTrolleyStep1 = new TrolleyStep();
         TrolleyStep intermediateTrolleyStep2 = new TrolleyStep();
@@ -202,7 +205,7 @@ class OrderPickingConstraintProviderTest {
     }
 
     private static TrolleyStep mockTrolleyStep(OrderItem item) {
-        return new TrolleyStep(item);
+        return new TrolleyStep("", item);
     }
 
     private static TrolleyStep mockTrolleyStep(WarehouseLocation location) {
@@ -210,7 +213,7 @@ class OrderPickingConstraintProviderTest {
         Product product = new Product();
         product.setLocation(location);
         item.setProduct(product);
-        return new TrolleyStep(item);
+        return new TrolleyStep("1", item);
     }
 
     private static Trolley mockTrolley(int bucketCount, int bucketCapacity, TrolleyStep... steps) {

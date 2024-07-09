@@ -104,10 +104,10 @@ public class DemoDataGenerator {
             Duration duration = Duration.ofMinutes(jobDurationMinutesMinimum
                     + random.nextInt(jobDurationMinutesMaximum - jobDurationMinutesMinimum));
             int targetDayIndex = (i / lineCount) * averageCleaningAndJobDurationMinutes / (24 * 60);
-            LocalDateTime readyDateTime = START_DATE.plusDays(random.nextInt(Math.max(1, targetDayIndex - 2))).atTime(LocalTime.MIDNIGHT);
-            LocalDateTime idealEndDateTime = START_DATE.plusDays(targetDayIndex + random.nextInt(3)).atTime(16, 0);
-            LocalDateTime dueDateTime = idealEndDateTime.plusDays(1 + random.nextInt(3));
-            jobs.add(new Job(Integer.toString(i), name, product, duration, readyDateTime, idealEndDateTime, dueDateTime, 1, false));
+            LocalDateTime minStartTime = START_DATE.plusDays(random.nextInt(Math.max(1, targetDayIndex - 2))).atTime(LocalTime.MIDNIGHT);
+            LocalDateTime idealEndTime = START_DATE.plusDays(targetDayIndex + random.nextInt(3)).atTime(16, 0);
+            LocalDateTime maxEndTime = idealEndTime.plusDays(1 + random.nextInt(3));
+            jobs.add(new Job(Integer.toString(i), name, product, duration, minStartTime, idealEndTime, maxEndTime, 1, false));
         }
         jobs.sort(Comparator.comparing(Job::getName));
         solution.setJobs(jobs);

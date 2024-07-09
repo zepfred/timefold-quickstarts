@@ -3,12 +3,15 @@ package org.acme.projectjobschedule.domain;
 import java.util.List;
 import java.util.Objects;
 
+import ai.timefold.solver.core.api.domain.lookup.PlanningId;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = ExecutionMode.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ExecutionMode {
 
+    @PlanningId
     private String id;
     private Job job;
     private int duration; // In days

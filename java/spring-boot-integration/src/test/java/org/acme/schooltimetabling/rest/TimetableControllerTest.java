@@ -26,7 +26,7 @@ class TimetableControllerTest {
     String port;
 
     @Test
-    void testSolve() {
+    void solve() {
         WebTestClient client = WebTestClient.bindToServer()
                 .baseUrl("http://localhost:" + port)
                 .build();

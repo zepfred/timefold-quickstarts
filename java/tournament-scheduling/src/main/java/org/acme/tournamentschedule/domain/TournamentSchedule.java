@@ -7,7 +7,7 @@ import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.solution.ProblemFactCollectionProperty;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
-import ai.timefold.solver.core.api.score.buildin.hardmediumsoft.HardMediumSoftScore;
+import ai.timefold.solver.core.api.score.buildin.hardmediumsoftbigdecimal.HardMediumSoftBigDecimalScore;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
 @PlanningSolution
@@ -25,13 +25,13 @@ public class TournamentSchedule {
     private List<TeamAssignment> teamAssignments;
 
     @PlanningScore
-    private HardMediumSoftScore score;
+    private HardMediumSoftBigDecimalScore score;
     private SolverStatus solverStatus;
 
     public TournamentSchedule() {
     }
 
-    public TournamentSchedule(HardMediumSoftScore score, SolverStatus solverStatus) {
+    public TournamentSchedule(HardMediumSoftBigDecimalScore score, SolverStatus solverStatus) {
         this.score = score;
         this.solverStatus = solverStatus;
     }
@@ -68,11 +68,11 @@ public class TournamentSchedule {
         this.teamAssignments = teamAssignments;
     }
 
-    public HardMediumSoftScore getScore() {
+    public HardMediumSoftBigDecimalScore getScore() {
         return score;
     }
 
-    public void setScore(HardMediumSoftScore score) {
+    public void setScore(HardMediumSoftBigDecimalScore score) {
         this.score = score;
     }
 

@@ -10,12 +10,13 @@ import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = Vehicle.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @PlanningEntity
-public class Vehicle {
+public class Vehicle implements LocationAware {
 
     @PlanningId
     private String id;
@@ -79,6 +80,12 @@ public class Vehicle {
     // ************************************************************************
     // Complex methods
     // ************************************************************************
+
+    @JsonIgnore
+    @Override
+    public Location getLocation() {
+        return homeLocation;
+    }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public int getTotalDemand() {

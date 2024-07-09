@@ -104,15 +104,15 @@ function refreshSchedule() {
       byJobGroupDataSet.add({id : job.id, content: job.name});
       byJobItemDataSet.add({
         id: job.id + "_readyToIdealEnd", group: job.id,
-        start: job.readyDateTime,
-        end: job.idealEndDateTime,
+        start: job.minStartTime,
+        end: job.idealEndTime,
         type: "background",
         style: "background-color: #8AE23433"
       });
       byJobItemDataSet.add({
         id: job.id + "_idealEndToDue", group: job.id,
-        start: job.idealEndDateTime,
-        end: job.dueDateTime,
+        start: job.idealEndTime,
+        end: job.maxEndTime,
         type: "background",
         style: "background-color: #FCAF3E33"
       });
@@ -123,21 +123,21 @@ function refreshSchedule() {
         const unassignedJobElement = $(`<div class="card-body p-2"/>`)
           .append($(`<h5 class="card-title mb-1"/>`).text(job.name))
           .append($(`<p class="card-text ms-2 mb-0"/>`).text(`${Math.floor(durationMinutes / 60)} hours ${durationMinutes % 60} mins`))
-          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Ready: ${JSJoda.LocalDateTime.parse(job.readyDateTime).format(dateTimeFormat)}`))
-          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Ideal end: ${JSJoda.LocalDateTime.parse(job.idealEndDateTime).format(dateTimeFormat)}`))
-          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Due: ${JSJoda.LocalDateTime.parse(job.dueDateTime).format(dateTimeFormat)}`));
+          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Min: ${JSJoda.LocalDateTime.parse(job.minStartTime).format(dateTimeFormat)}`))
+          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Ideal: ${JSJoda.LocalDateTime.parse(job.idealEndTime).format(dateTimeFormat)}`))
+          .append($(`<p class="card-text ms-2 mb-0"/>`).text(`Max: ${JSJoda.LocalDateTime.parse(job.maxEndTime).format(dateTimeFormat)}`));
         const byJobJobElement = $(`<div/>`)
           .append($(`<h5 class="card-title mb-1"/>`).text(`Unassigned`));
         unassignedJobs.append($(`<div class="col"/>`).append($(`<div class="card"/>`).append(unassignedJobElement)));
         byJobItemDataSet.add({
           id : job.id, group: job.id,
           content: byJobJobElement.html(),
-          start: job.readyDateTime, end: JSJoda.LocalDateTime.parse(job.readyDateTime).plus(JSJoda.Duration.ofSeconds(job.duration)).toString(),
+          start: job.minStartTime, end: JSJoda.LocalDateTime.parse(job.minStartTime).plus(JSJoda.Duration.ofSeconds(job.duration)).toString(),
           style: "background-color: #EF292999"
         });
       } else {
-        const beforeReady = JSJoda.LocalDateTime.parse(job.startProductionDateTime).isBefore(JSJoda.LocalDateTime.parse(job.readyDateTime));
-        const afterDue = JSJoda.LocalDateTime.parse(job.endDateTime).isAfter(JSJoda.LocalDateTime.parse(job.dueDateTime));
+        const beforeReady = JSJoda.LocalDateTime.parse(job.startProductionDateTime).isBefore(JSJoda.LocalDateTime.parse(job.minStartTime));
+        const afterDue = JSJoda.LocalDateTime.parse(job.endDateTime).isAfter(JSJoda.LocalDateTime.parse(job.maxEndTime));
         const byLineJobElement = $(`<div/>`)
           .append($(`<p class="card-text"/>`).text(job.name));
         const byJobJobElement = $(`<div/>`)

@@ -479,7 +479,7 @@ function refreshRoutePlan() {
         renderTimelines(routePlan);
         initialized = true;
     }).fail(function (xhr, ajaxOptions, thrownError) {
-        showError("Getting timetable has failed.", xhr);
+        showError("Getting route plan has failed.", xhr);
         refreshSolvingButtons(false);
     });
 }

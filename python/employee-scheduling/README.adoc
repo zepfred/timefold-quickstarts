@@ -2,7 +2,7 @@
 
 Schedule shifts to employees, accounting for employee availability and shift skill requirements.
 
-image::./python-employee-scheduling-screenshot.png[]
+image::./employee-scheduling-screenshot.png[]
 
 * <<prerequisites,Prerequisites>>
 * <<run,Run the application>>

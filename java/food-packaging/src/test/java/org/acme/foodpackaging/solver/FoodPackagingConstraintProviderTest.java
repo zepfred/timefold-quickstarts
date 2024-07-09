@@ -48,7 +48,7 @@ class FoodPackagingConstraintProviderTest {
     // ************************************************************************
 
     @Test
-    void dueDateTime() {
+    void maxEndDateTime() {
         Job job1 = new Job("1", "job1", PRODUCT_A_SMALL, Duration.ofMinutes(6000), null, null, null, 1, false);
         Job job2 = new Job("2", "job2", PRODUCT_A_SMALL, Duration.ofMinutes(200), null, null, DAY_START_TIME.plusMinutes(200), 1, false,
                 DAY_START_TIME, DAY_START_TIME);
@@ -57,7 +57,7 @@ class FoodPackagingConstraintProviderTest {
         Line line = new Line("1", "line1", "operator A", DAY_START_TIME);
         addJobs(line, job1, job2, job3);
 
-        constraintVerifier.verifyThat(FoodPackagingConstraintProvider::dueDateTime)
+        constraintVerifier.verifyThat(FoodPackagingConstraintProvider::maxEndDateTime)
                 .given(job1, job2, job3)
                 .penalizesBy(50L);
     }
@@ -106,7 +106,7 @@ class FoodPackagingConstraintProviderTest {
     }
 
     @Test
-    void minimizeAndLoadBalanceMakeSpan() {
+    void minimizeMakespan() {
         Line line1 = new Line("1", "line1", null, DAY_START_TIME);
         Line line2 = new Line("2", "line2", null, DAY_START_TIME);
         Job job1 = new Job("1", "job1", PRODUCT_A_SMALL, Duration.ofMinutes(6000), null, null, null, 1, false);
@@ -119,7 +119,7 @@ class FoodPackagingConstraintProviderTest {
         addJobs(line1, job2);
         addJobs(line2, job3, job4);
 
-        constraintVerifier.verifyThat(FoodPackagingConstraintProvider::minimizeAndLoadBalanceMakeSpan)
+        constraintVerifier.verifyThat(FoodPackagingConstraintProvider::minimizeMakespan)
                 .given(line1, line2, job1, job2, job3, job4)
                 .penalizesBy(100L * 100L + 1250L * 1250L);
     }

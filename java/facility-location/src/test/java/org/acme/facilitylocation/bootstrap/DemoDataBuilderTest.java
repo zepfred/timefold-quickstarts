@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class DemoDataBuilderTest {
 
     @Test
-    void should_build_data() {
+    void shouldBuildData() {
         FacilityLocationProblem problem = DemoDataBuilder.builder()
                 .setCapacity(1000)
                 .setDemand(900)
@@ -34,7 +34,7 @@ class DemoDataBuilderTest {
     }
 
     @Test
-    void correct_builder_builds_ok() {
+    void correctBuilderBuildsOk() {
         assertNotNull(correctBuilder().build());
     }
 
@@ -45,7 +45,7 @@ class DemoDataBuilderTest {
     }
 
     @Test
-    void capacity_greater_than_zero() {
+    void capacityGreaterThanZero() {
         DemoDataBuilder builder = correctBuilder().setCapacity(0);
         assertThrows(IllegalStateException.class, builder::build);
         builder.setCapacity(-1);
@@ -53,7 +53,7 @@ class DemoDataBuilderTest {
     }
 
     @Test
-    void demand_greater_than_zero() {
+    void demandGreaterThanZero() {
         DemoDataBuilder builder = correctBuilder().setDemand(0);
         assertThrows(IllegalStateException.class, builder::build);
         builder.setDemand(-1);
@@ -61,7 +61,7 @@ class DemoDataBuilderTest {
     }
 
     @Test
-    void facility_count_greater_than_zero() {
+    void facilityCountGreaterThanZero() {
         DemoDataBuilder builder = correctBuilder().setFacilityCount(0);
         assertThrows(IllegalStateException.class, builder::build);
         builder.setFacilityCount(-1);

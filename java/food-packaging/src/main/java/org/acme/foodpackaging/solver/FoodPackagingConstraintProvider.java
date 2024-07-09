@@ -16,13 +16,12 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory factory) {
         return new Constraint[] {
                 // Hard constraints
-                dueDateTime(factory),
+                maxEndDateTime(factory),
                 // Medium constraints
                 idealEndDateTime(factory),
                 // Soft constraints
                 operatorCleaningConflict(factory),
-                minimizeAndLoadBalanceMakeSpan(factory)
-//                minimizeCleaningDuration(factory),
+                minimizeMakespan(factory)
         };
     }
 
@@ -30,12 +29,12 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
     // Hard constraints
     // ************************************************************************
 
-    protected Constraint dueDateTime(ConstraintFactory factory) {
+    protected Constraint maxEndDateTime(ConstraintFactory factory) {
         return factory.forEach(Job.class)
-                .filter(job -> job.getEndDateTime() != null && job.getDueDateTime().isBefore(job.getEndDateTime()))
+                .filter(job -> job.getEndDateTime() != null && job.getMaxEndTime().isBefore(job.getEndDateTime()))
                 .penalizeLong(HardMediumSoftLongScore.ONE_HARD,
-                        job -> Duration.between(job.getDueDateTime(), job.getEndDateTime()).toMinutes())
-                .asConstraint("Due date time");
+                        job -> Duration.between(job.getMaxEndTime(), job.getEndDateTime()).toMinutes())
+                .asConstraint("Max end date time");
     }
 
     // ************************************************************************
@@ -44,9 +43,9 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
 
     protected Constraint idealEndDateTime(ConstraintFactory factory) {
         return factory.forEach(Job.class)
-                .filter(job -> job.getEndDateTime() != null && job.getIdealEndDateTime().isBefore(job.getEndDateTime()))
+                .filter(job -> job.getEndDateTime() != null && job.getIdealEndTime().isBefore(job.getEndDateTime()))
                 .penalizeLong(HardMediumSoftLongScore.ONE_MEDIUM,
-                        job -> Duration.between(job.getIdealEndDateTime(), job.getEndDateTime()).toMinutes())
+                        job -> Duration.between(job.getIdealEndTime(), job.getEndDateTime()).toMinutes())
                 .asConstraint("Ideal end date time");
     }
 
@@ -71,14 +70,14 @@ public class FoodPackagingConstraintProvider implements ConstraintProvider {
                 .asConstraint("Operator cleaning conflict");
     }
 
-    protected Constraint minimizeAndLoadBalanceMakeSpan(ConstraintFactory factory) {
+    protected Constraint minimizeMakespan(ConstraintFactory factory) {
         return factory.forEach(Job.class)
                 .filter(job -> job.getLine() != null && job.getNextJob() == null)
                 .penalizeLong(HardMediumSoftLongScore.ONE_SOFT, job -> {
                     long minutes = Duration.between(job.getLine().getStartDateTime(), job.getEndDateTime()).toMinutes();
                     return minutes * minutes;
                 })
-                .asConstraint("Minimize and load balance make span");
+                .asConstraint("Minimize make span");
     }
 
     // TODO Currently dwarfed by minimizeAndLoadBalanceMakeSpan in the same score level, because that squares

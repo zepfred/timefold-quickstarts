@@ -4,14 +4,12 @@ on:
   push:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.py'
-      - '**/pyproject.toml'
+      - 'python/**/*'
       - '.github/**/*.yml'
   pull_request:
     branches: [stable, development, '*.x']
     paths:
-      - '**/*.py'
-      - '**/pyproject.toml'
+      - 'python/**/*'
       - '.github/**/*.yml'
 
 jobs:
@@ -102,7 +100,7 @@ jobs:
           cache: 'maven'
 
       - name: Python Setup
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{matrix.python-version}}
           cache: 'pip'

@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .domain import EmployeeSchedule
 from .demo_data import DemoData, generate_demo_data
-from .solver import solver_manager, solution_manager
+from .solver import solver_manager
 
 app = FastAPI(docs_url='/q/swagger-ui')
 data_sets: dict[str, EmployeeSchedule] = {}
@@ -16,7 +16,8 @@ async def demo_data_list() -> list[DemoData]:
 
 @app.get("/demo-data/{dataset_id}",  response_model_exclude_none=True)
 async def get_demo_data(dataset_id: str) -> EmployeeSchedule:
-    return generate_demo_data()
+    demo_data = getattr(DemoData, dataset_id)
+    return generate_demo_data(demo_data)
 
 
 @app.get("/schedules/{problem_id}",  response_model_exclude_none=True)
