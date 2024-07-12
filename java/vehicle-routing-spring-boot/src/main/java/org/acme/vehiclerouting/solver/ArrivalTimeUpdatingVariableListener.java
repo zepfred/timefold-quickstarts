@@ -6,15 +6,15 @@ import java.util.Objects;
 import ai.timefold.solver.core.api.domain.variable.VariableListener;
 import ai.timefold.solver.core.api.score.director.ScoreDirector;
 
-import org.acme.vehiclerouting.domain.Visit;
 import org.acme.vehiclerouting.domain.VehicleRoutePlan;
+import org.acme.vehiclerouting.domain.Visit;
 
 public class ArrivalTimeUpdatingVariableListener implements VariableListener<VehicleRoutePlan, Visit> {
 
     private static final String ARRIVAL_TIME_FIELD = "arrivalTime";
 
     public ArrivalTimeUpdatingVariableListener() {
-
+        // Make Spring happy
     }
 
     @Override
