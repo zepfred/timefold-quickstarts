@@ -54,9 +54,10 @@ public class VehicleRoutePlanResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(VehicleRoutePlanResource.class);
     private static final int MAX_RECOMMENDED_FIT_LIST_SIZE = 5;
 
-    private final SolverManager<VehicleRoutePlan, String> solverManager;
 
+    private final SolverManager<VehicleRoutePlan, String> solverManager;
     private final SolutionManager<VehicleRoutePlan, HardSoftLongScore> solutionManager;
+//    private final PlannerBenchmarkFactory benchmarkFactory;
 
     // TODO: Without any "time to live", the map may eventually grow out of memory.
     private final ConcurrentMap<String, Job> jobIdToJob = new ConcurrentHashMap<>();
@@ -105,6 +106,7 @@ public class VehicleRoutePlanResource {
                     LOGGER.error("Failed solving jobId ({}).", jobId, exception);
                 })
                 .run();
+//        benchmarkFactory.buildPlannerBenchmark(problem).benchmark();
         return jobId;
     }
 

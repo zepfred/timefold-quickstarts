@@ -154,6 +154,9 @@ This takes a few minutes:
 [source,shell]
 ----
 $ mvn package -Dnative
+$ mvn package -Dinstrumented -Dquarkus.native.additional-build-args=-H:+UnlockExperimentalVMOptions,--pgo-instrument
+$ mvn package -Doptimized -Dquarkus.native.additional-build-args=-H:+UnlockExperimentalVMOptions,--pgo=/home/fred/Projects/timefold/timefold-quickstarts/java/vehicle-routing/default.iprof
+$ mvn package -Dreport -Dquarkus.native.additional-build-args=-H:+UnlockExperimentalVMOptions,--pgo=/home/fred/Projects/timefold/timefold-quickstarts/java/vehicle-routing/default.iprof,-H:+BuildReport,-H:+BuildReportSamplerFlamegraph
 ----
 
 . Run the native executable:

@@ -1,0 +1,20 @@
+<plannerBenchmark xmlns="https://timefold.ai/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://timefold.ai/xsd/benchmark https://timefold.ai/xsd/benchmark/benchmark.xsd">
+    <warmUpSecondsSpentLimit>60</warmUpSecondsSpentLimit>
+    <inheritedSolverBenchmark>
+        <problemBenchmarks>
+            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+    <solverBenchmark>
+        <name>solver</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <termination>
+                    <stepCountLimit>1000</stepCountLimit>
+                </termination>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+</plannerBenchmark>
