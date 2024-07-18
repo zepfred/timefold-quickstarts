@@ -1,17 +1,16 @@
-from timefold.solver.score import HardSoftScore
-from typing import Annotated, Any
-from pydantic import BaseModel, ConfigDict, Field, PlainSerializer, BeforeValidator, ValidationInfo
+from timefold.solver.score import HardSoftDecimalScore
+from typing import Any
+from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator
 from pydantic.alias_generators import to_camel
 
-ScoreSerializer = PlainSerializer(lambda score: str(score) if score is not None else None,
-                                  return_type=str | None)
+ScoreSerializer = PlainSerializer(lambda score: str(score) if score is not None else None, return_type=str | None)
 
 
-def validate_score(v: Any, info: ValidationInfo) -> Any:
-    if isinstance(v, HardSoftScore) or v is None:
+def validate_score(v: Any) -> Any:
+    if isinstance(v, HardSoftDecimalScore) or v is None:
         return v
     if isinstance(v, str):
-        return HardSoftScore.parse(v)
+        return HardSoftDecimalScore.parse(v)
     raise ValueError('"score" should be a string')
 
 

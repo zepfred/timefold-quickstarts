@@ -1,7 +1,7 @@
 from timefold.solver import SolverStatus
 from timefold.solver.domain import *
-from timefold.solver.score import HardSoftScore
-from datetime import datetime, date, timedelta
+from timefold.solver.score import HardSoftDecimalScore
+from datetime import datetime, date
 from typing import Annotated
 from pydantic import Field
 
@@ -32,6 +32,6 @@ class Shift(JsonDomainBase):
 class EmployeeSchedule(JsonDomainBase):
     employees: Annotated[list[Employee], ProblemFactCollectionProperty, ValueRangeProvider]
     shifts: Annotated[list[Shift], PlanningEntityCollectionProperty]
-    score: Annotated[HardSoftScore | None,
+    score: Annotated[HardSoftDecimalScore | None,
                      PlanningScore, ScoreSerializer, ScoreValidator, Field(default=None)]
     solver_status: Annotated[SolverStatus | None, Field(default=None)]

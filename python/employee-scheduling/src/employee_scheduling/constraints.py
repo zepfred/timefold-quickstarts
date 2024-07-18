@@ -1,5 +1,5 @@
-from timefold.solver.score import (constraint_provider, ConstraintFactory, Joiners, HardSoftScore)
-from datetime import datetime, time, timedelta, date
+from timefold.solver.score import (constraint_provider, ConstraintFactory, Joiners, HardSoftDecimalScore, ConstraintCollectors)
+from datetime import datetime, date
 
 from .domain import Employee, Shift
 
@@ -40,13 +40,14 @@ def define_constraints(constraint_factory: ConstraintFactory):
         # Soft constraints
         undesired_day_for_employee(constraint_factory),
         desired_day_for_employee(constraint_factory),
+        balance_employee_shift_assignments(constraint_factory)
     ]
 
 
 def required_skill(constraint_factory: ConstraintFactory):
     return (constraint_factory.for_each(Shift)
             .filter(lambda shift: shift.required_skill not in shift.employee.skills)
-            .penalize(HardSoftScore.ONE_HARD)
+            .penalize(HardSoftDecimalScore.ONE_HARD)
             .as_constraint("Missing required skill")
             )
 
@@ -56,7 +57,7 @@ def no_overlapping_shifts(constraint_factory: ConstraintFactory):
             .for_each_unique_pair(Shift,
                                   Joiners.equal(lambda shift: shift.employee.name),
                                   Joiners.overlapping(lambda shift: shift.start, lambda shift: shift.end))
-            .penalize(HardSoftScore.ONE_HARD, get_minute_overlap)
+            .penalize(HardSoftDecimalScore.ONE_HARD, get_minute_overlap)
             .as_constraint("Overlapping shift")
             )
 
@@ -70,7 +71,7 @@ def at_least_10_hours_between_two_shifts(constraint_factory: ConstraintFactory):
                   )
             .filter(lambda first_shift, second_shift:
                     (second_shift.start - first_shift.end).total_seconds() // (60 * 60) < 10)
-            .penalize(HardSoftScore.ONE_HARD,
+            .penalize(HardSoftDecimalScore.ONE_HARD,
                       lambda first_shift, second_shift:
                       600 - ((second_shift.start - first_shift.end).total_seconds() // 60))
             .as_constraint("At least 10 hours between 2 shifts")
@@ -82,7 +83,7 @@ def one_shift_per_day(constraint_factory: ConstraintFactory):
             .for_each_unique_pair(Shift,
                                   Joiners.equal(lambda shift: shift.employee.name),
                                   Joiners.equal(lambda shift: shift.start.date()))
-            .penalize(HardSoftScore.ONE_HARD)
+            .penalize(HardSoftDecimalScore.ONE_HARD)
             .as_constraint("Max one shift per day")
             )
 
@@ -92,7 +93,7 @@ def unavailable_employee(constraint_factory: ConstraintFactory):
             .join(Employee, Joiners.equal(lambda shift: shift.employee, lambda employee: employee))
             .flatten_last(lambda employee: employee.unavailable_dates)
             .filter(lambda shift, unavailable_date: is_overlapping_with_date(shift, unavailable_date))
-            .penalize(HardSoftScore.ONE_HARD,
+            .penalize(HardSoftDecimalScore.ONE_HARD,
                       lambda shift, unavailable_date: get_shift_overlapping_duration_in_minutes(shift,
                                                                                                 unavailable_date))
             .as_constraint("Unavailable employee")
@@ -104,7 +105,7 @@ def undesired_day_for_employee(constraint_factory: ConstraintFactory):
             .join(Employee, Joiners.equal(lambda shift: shift.employee, lambda employee: employee))
             .flatten_last(lambda employee: employee.undesired_dates)
             .filter(lambda shift, undesired_date: is_overlapping_with_date(shift, undesired_date))
-            .penalize(HardSoftScore.ONE_SOFT,
+            .penalize(HardSoftDecimalScore.ONE_SOFT,
                       lambda shift, undesired_date: get_shift_overlapping_duration_in_minutes(shift, undesired_date))
             .as_constraint("Undesired day for employee")
             )
@@ -115,7 +116,19 @@ def desired_day_for_employee(constraint_factory: ConstraintFactory):
             .join(Employee, Joiners.equal(lambda shift: shift.employee, lambda employee: employee))
             .flatten_last(lambda employee: employee.desired_dates)
             .filter(lambda shift, desired_date: is_overlapping_with_date(shift, desired_date))
-            .reward(HardSoftScore.ONE_SOFT,
+            .reward(HardSoftDecimalScore.ONE_SOFT,
                     lambda shift, desired_date: get_shift_overlapping_duration_in_minutes(shift, desired_date))
             .as_constraint("Desired day for employee")
             )
+
+
+def balance_employee_shift_assignments(constraint_factory: ConstraintFactory):
+    return (constraint_factory.for_each(Shift)
+            .group_by(lambda shift: shift.employee, ConstraintCollectors.count())
+            .complement(Employee, lambda e: 0)  # Include all employees which are not assigned to any shift.
+            .group_by(ConstraintCollectors.load_balance(lambda employee, shift_count: employee,
+                                                        lambda employee, shift_count: shift_count))
+            .penalize_decimal(HardSoftDecimalScore.ONE_SOFT, lambda load_balance: load_balance.unfairness())
+            .as_constraint("Balance employee shift assignments")
+            )
+
