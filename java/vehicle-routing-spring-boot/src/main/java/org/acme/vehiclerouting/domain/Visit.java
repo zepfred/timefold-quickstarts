@@ -6,13 +6,9 @@ import java.time.temporal.ChronoUnit;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
-import ai.timefold.solver.core.api.domain.variable.CascadeUpdateElementShadowVariable;
+import ai.timefold.solver.core.api.domain.variable.CascadingUpdateListener;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.NextElementShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.ShadowVariable;
-
-import org.acme.vehiclerouting.solver.ArrivalTimeUpdatingVariableListener;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -39,13 +35,17 @@ public class Visit implements LocationAware {
     @JsonIdentityReference(alwaysAsId = true)
     @PreviousElementShadowVariable(sourceVariableName = "visits")
     private Visit previousVisit;
-    @JsonIdentityReference(alwaysAsId = true)
-    @NextElementShadowVariable(sourceVariableName = "visits")
-    private Visit nextVisit;
-//    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
+//    @JsonIdentityReference(alwaysAsId = true)
+//    @NextElementShadowVariable(sourceVariableName = "visits")
+//    private Visit nextVisit;
+    //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
 //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
-    @CascadeUpdateElementShadowVariable(sourceMethodName = "updateArrivalTime")
+    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
+    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
+    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
+    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
+    private LocalDateTime arrivalTime2;
 
     public Visit() {
     }
@@ -118,14 +118,14 @@ public class Visit implements LocationAware {
         this.previousVisit = previousVisit;
     }
 
-    public Visit getNextVisit() {
-        return nextVisit;
-    }
-
-    public void setNextVisit(Visit nextVisit) {
-        this.nextVisit = nextVisit;
-    }
-
+//    public Visit getNextVisit() {
+//        return nextVisit;
+//    }
+//
+//    public void setNextVisit(Visit nextVisit) {
+//        this.nextVisit = nextVisit;
+//    }
+//
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
@@ -134,18 +134,27 @@ public class Visit implements LocationAware {
         this.arrivalTime = arrivalTime;
     }
 
-    public void updateArrivalTime() {
+    public LocalDateTime getArrivalTime2() {
+        return arrivalTime2;
+    }
+
+    public void setArrivalTime2(LocalDateTime arrivalTime2) {
+        this.arrivalTime2 = arrivalTime2;
+    }
+
+    // ************************************************************************
+    // Complex methods
+    // ************************************************************************
+
+    private void updateArrivalTime() {
         if (previousVisit == null && vehicle == null) {
             arrivalTime = null;
             return;
         }
         LocalDateTime departureTime = previousVisit == null ? vehicle.getDepartureTime() : previousVisit.getDepartureTime();
         arrivalTime = departureTime != null ? departureTime.plusSeconds(getDrivingTimeSecondsFromPreviousStandstill()) : null;
+        arrivalTime2 = arrivalTime;
     }
-
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public LocalDateTime getDepartureTime() {
