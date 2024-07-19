@@ -18,7 +18,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import org.acme.meetingschedule.domain.Meeting;
 import org.acme.meetingschedule.domain.MeetingAssignment;
-import org.acme.meetingschedule.domain.MeetingConstraintConfiguration;
 import org.acme.meetingschedule.domain.MeetingSchedule;
 import org.acme.meetingschedule.domain.Person;
 import org.acme.meetingschedule.domain.Room;
@@ -37,7 +36,6 @@ public class DemoDataGenerator {
 
     public MeetingSchedule generateDemoData() {
         MeetingSchedule schedule = new MeetingSchedule();
-        schedule.setConstraintConfiguration(new MeetingConstraintConfiguration());
         // People
         int countPeople = 20;
         List<Person> people = generatePeople(countPeople);
@@ -204,7 +202,7 @@ public class DemoDataGenerator {
             values.stream()
                     .filter(filter)
                     .skip(size > 0 ? random.nextInt(size) : 0).findFirst()
-                    .ifPresent(consumer::accept);
+                    .ifPresent(consumer);
             size--;
             if (size < 0) {
                 break;

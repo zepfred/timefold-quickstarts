@@ -14,7 +14,7 @@ import java.util.Set;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import org.acme.conferencescheduling.domain.ConferenceConstraintConfiguration;
+import org.acme.conferencescheduling.domain.ConferenceConstraintProperties;
 import org.acme.conferencescheduling.domain.ConferenceSchedule;
 import org.acme.conferencescheduling.domain.Room;
 import org.acme.conferencescheduling.domain.Speaker;
@@ -50,7 +50,7 @@ public class DemoDataGenerator {
         Set<Speaker> speakers = generateSpeakers();
         ConferenceSchedule schedule = new ConferenceSchedule("Conference", TALK_TYPES, generateTimeslots(), generateRooms(),
                 speakers, generateTalks(speakers));
-        schedule.setConstraintConfiguration(new ConferenceConstraintConfiguration());
+        schedule.setConstraintProperties(new ConferenceConstraintProperties());
         return schedule;
     }
 

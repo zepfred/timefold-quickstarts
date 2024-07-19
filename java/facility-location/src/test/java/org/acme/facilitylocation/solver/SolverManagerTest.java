@@ -36,16 +36,9 @@ class SolverManagerTest {
         FacilityLocationProblem solution = solverManager.solveBuilder()
                 .withProblemId(0L)
                 .withProblemFinder(id -> problem)
-                .withFinalBestSolutionConsumer(SolverManagerTest::printSolution)
                 .run()
                 .getFinalBestSolution();
         assertThat(solution.getScore().isFeasible()).isTrue();
     }
 
-    static void printSolution(FacilityLocationProblem solution) {
-        solution.getFacilities().forEach(facility -> System.out.printf("$%4d (%3d/%3d)%n",
-                facility.getSetupCost(),
-                facility.getUsedCapacity(),
-                facility.getCapacity()));
-    }
 }

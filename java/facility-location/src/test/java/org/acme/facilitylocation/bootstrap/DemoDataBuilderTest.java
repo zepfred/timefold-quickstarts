@@ -24,12 +24,10 @@ class DemoDataBuilderTest {
 
         assertEquals(10, problem.getFacilities().size());
         // Show toString().
-        problem.getFacilities().forEach(System.out::println);
         problem.getFacilities().forEach(facility -> assertEquals(100, facility.getCapacity()));
 
         assertEquals(150, problem.getConsumers().size());
         // Show toString().
-        problem.getConsumers().stream().limit(10).forEach(System.out::println);
         problem.getConsumers().forEach(consumer -> assertEquals(6, consumer.getDemand()));
     }
 
