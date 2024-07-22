@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
-import ai.timefold.solver.core.api.domain.variable.CascadingUpdateListener;
+import ai.timefold.solver.core.api.domain.variable.CascadingUpdateShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
 
@@ -40,11 +40,11 @@ public class Visit implements LocationAware {
 //    private Visit nextVisit;
     //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
 //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
-    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
-    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
-    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
-    @CascadingUpdateListener(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime2;
 
     public Visit() {

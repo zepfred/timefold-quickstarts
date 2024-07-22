@@ -44,7 +44,7 @@ public class ArrivalTimeUpdatingVariableListener implements VariableListener<Veh
             nextVisit.setArrivalTime(arrivalTime);
             scoreDirector.afterVariableChanged(nextVisit, ARRIVAL_TIME_FIELD);
             departureTime = nextVisit.getDepartureTime();
-            nextVisit = nextVisit.getNextVisit();
+//            nextVisit = nextVisit.getNextVisit();
             arrivalTime = calculateArrivalTime(nextVisit, departureTime);
         }
     }
