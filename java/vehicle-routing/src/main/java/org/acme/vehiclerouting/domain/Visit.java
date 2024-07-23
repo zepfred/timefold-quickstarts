@@ -36,16 +36,16 @@ public class Visit implements LocationAware {
     @JsonIdentityReference(alwaysAsId = true)
     @PreviousElementShadowVariable(sourceVariableName = "visits")
     private Visit previousVisit;
-    @JsonIdentityReference(alwaysAsId = true)
-    @NextElementShadowVariable(sourceVariableName = "visits")
+//    @JsonIdentityReference(alwaysAsId = true)
+//    @NextElementShadowVariable(sourceVariableName = "visits")
     private Visit nextVisit;
     //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "vehicle")
 //    @ShadowVariable(variableListenerClass = ArrivalTimeUpdatingVariableListener.class, sourceVariableName = "previousVisit")
     @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "vehicle")
     @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime;
-    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime2", sourceVariableName = "vehicle")
-    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime2", sourceVariableName = "previousVisit")
+//    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime2", sourceVariableName = "vehicle")
+//    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime2", sourceVariableName = "previousVisit")
     private LocalDateTime arrivalTime2;
 
     public Visit() {
@@ -135,14 +135,13 @@ public class Visit implements LocationAware {
         this.arrivalTime = arrivalTime;
     }
 
-    private boolean updateArrivalTime() {
+    private void updateArrivalTime() {
         if (previousVisit == null && vehicle == null) {
             arrivalTime = null;
-            return false;
+            return;
         }
         LocalDateTime departureTime = previousVisit == null ? vehicle.getDepartureTime() : previousVisit.getDepartureTime();
         arrivalTime = departureTime != null ? departureTime.plusSeconds(getDrivingTimeSecondsFromPreviousStandstill()) : null;
-        return true;
     }
 
     public void updateArrivalTime2() {
