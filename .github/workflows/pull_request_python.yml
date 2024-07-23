@@ -46,14 +46,6 @@ jobs:
           ref: main
           path: ./timefold-solver
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-      - name: Prevent stale fork of timefold-solver # Solver can't be stale if development/stable branch requested.
-        if: ${{ steps.checkout-solver-pr.outcome == 'success' }}
-        env:
-          BLESSED_REPO: "timefold-solver"
-          BLESSED_BRANCH: ${{ endsWith(github.head_ref, '.x') && github.head_ref || 'main' }}
-        shell: bash
-        working-directory: ./timefold-solver
-        run: .github/scripts/prevent_stale_fork.sh
 
       # Clone timefold-quickstarts
       # No need to check for stale repo, as Github merges the main repo into the fork automatically.
