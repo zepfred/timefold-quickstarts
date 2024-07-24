@@ -1,5 +1,6 @@
 from timefold.solver.score import ConstraintJustification
 from dataclasses import dataclass, field
+from typing import Annotated
 
 from .json_serialization import *
 
@@ -41,3 +42,14 @@ class MinimizeTravelTimeJustification(ConstraintJustification):
         self.description = (f"Vehicle '{self.vehicle_name}' total travel time is "
                             f"{self.total_driving_time_seconds // (60 * 60)} hours "
                             f"{round(self.total_driving_time_seconds / 60)} minutes.")
+
+
+@dataclass
+class ServiceFinishedAfterMaxEndTimeJustification(ConstraintJustification):
+    visit_id: str
+    service_finished_delay_in_minutes: int
+    description: str = field(init=False)
+
+    def __post_init__(self):
+        self.description = (f"Visit '{self.visit_id}' serviced with a "
+                            f"{self.service_finished_delay_in_minutes}-minute delay.")

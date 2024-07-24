@@ -1,7 +1,8 @@
-from timefold.solver.score import HardSoftScore, ScoreDirector
+from timefold.solver.score import HardSoftScore
 
-from typing import Annotated, Optional, Any
-from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator, Field, ValidationInfo, computed_field
+from typing import Any
+from datetime import timedelta
+from pydantic import BaseModel, ConfigDict, PlainSerializer, BeforeValidator, ValidationInfo
 from pydantic.alias_generators import to_camel
 
 
@@ -51,6 +52,7 @@ LocationSerializer = PlainSerializer(lambda location: [
 ScoreSerializer = PlainSerializer(lambda score: str(score), return_type=str)
 IdSerializer = PlainSerializer(lambda item: item.id if item is not None else None, return_type=str | None)
 IdListSerializer = PlainSerializer(lambda items: [item.id for item in items], return_type=list)
+DurationSerializer = PlainSerializer(lambda duration: duration // timedelta(seconds=1), return_type=int)
 
 VisitListValidator = make_id_list_item_validator('visits')
 VisitValidator = make_id_item_validator('visits')
