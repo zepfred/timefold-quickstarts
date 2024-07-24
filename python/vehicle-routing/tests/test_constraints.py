@@ -81,7 +81,7 @@ def test_service_finished_after_max_end_time_penalized():
     # So (5.5 + 1) - 5 ~= 1.5 hours penalty, or about 90 minutes
     (constraint_verifier.verify_that(service_finished_after_max_end_time)
      .given(vehicleA, visit1)
-     .penalizes_by(93))
+     .penalizes_by(94))
 
 
 def test_total_driving_time():

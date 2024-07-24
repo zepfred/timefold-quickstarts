@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
-from typing import Annotated
 
 from .domain import *
 from .score_analysis import *

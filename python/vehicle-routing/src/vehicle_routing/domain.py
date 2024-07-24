@@ -1,9 +1,9 @@
 from timefold.solver import SolverStatus
-from timefold.solver.score import HardSoftScore, ScoreDirector
+from timefold.solver.score import HardSoftScore
 from timefold.solver.domain import *
 
 from datetime import datetime, timedelta
-from typing import Annotated, Optional, Any
+from typing import Annotated, Optional
 from pydantic import Field, computed_field, BeforeValidator
 
 from .json_serialization import *
@@ -90,21 +90,23 @@ class Visit(JsonDomainBase):
     def service_finished_delay_in_minutes(self) -> int:
         if self.arrival_time is None:
             return 0
-        return (self.calculate_departure_time() - self.max_end_time) // timedelta(minutes=1)
+        # Floor division always rounds down, so divide by a negative duration and negate the result
+        # to round up
+        # ex: 30 seconds / -1 minute = -0.5,
+        # so 30 seconds // -1 minute = -1,
+        # and negating that gives 1
+        return -((self.calculate_departure_time() - self.max_end_time) // timedelta(minutes=-1))
 
-    def driving_time_seconds_from_previous_standstill(self) -> int:
+    @computed_field
+    @property
+    def driving_time_seconds_from_previous_standstill(self) -> Optional[int]:
         if self.vehicle is None:
-            raise ValueError("This method must not be called when the shadow variables are not initialized yet.")
+            return None
 
         if self.previous_visit is None:
             return self.vehicle.home_location.driving_time_to(self.location)
         else:
             return self.previous_visit.location.driving_time_to(self.location)
-
-    def driving_time_seconds_from_previous_standstill_or_none(self) -> Optional[int]:
-        if self.vehicle is None:
-            return None
-        return self.driving_time_seconds_from_previous_standstill()
 
     def __str__(self):
         return self.id
@@ -122,6 +124,14 @@ class Vehicle(JsonDomainBase):
     visits: Annotated[list[Visit],
                       PlanningListVariable,
                       IdListSerializer, VisitListValidator, Field(default_factory=list)]
+
+    @computed_field
+    @property
+    def arrival_time(self) -> datetime:
+        if len(self.visits) == 0:
+            return self.departure_time
+        return (self.visits[-1].departure_time +
+                timedelta(seconds=self.visits[-1].location.driving_time_to(self.home_location)))
 
     @computed_field
     @property
