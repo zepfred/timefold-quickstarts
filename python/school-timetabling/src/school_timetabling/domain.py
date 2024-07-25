@@ -5,8 +5,6 @@ from timefold.solver.domain import (planning_entity, planning_solution, Planning
                                     PlanningScore)
 from timefold.solver.score import HardSoftScore
 from datetime import time
-from pydantic import BaseModel, ConfigDict, Field, PlainSerializer, BeforeValidator, PlainValidator, ValidationInfo
-from typing import Annotated, Any
 
 from .json_serialization import *
 

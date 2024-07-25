@@ -92,37 +92,5 @@ function visualizeConstraintAnalysis(analysisTBody, constraintIndex, constraintA
         .append($(`<td/>`).text(recommendation ? constraintAnalysis.score : constraintAnalysis.implicitScore));
 
     analysisTBody.append(row);
-
-    if (constraintAnalysis.matches.length > 0) {
-        visualizeConstraintMatches(analysisTBody, row, constraintIndex, constraintAnalysis.matches, recommendation, recommendationIndex)
-    } else {
-        row.append($(`<td/>`));
-    }
-}
-
-function visualizeConstraintMatches(analysisTBody, row, constraintIndex, matches, recommendation = false, recommendationIndex = null) {
-    let matchesRow = $(`<tr/>`).addClass("collapse").attr("id", recommendation ? "row" + constraintIndex + "Collapse" + recommendationIndex : "row" + constraintIndex + "Collapse");
-    let matchesListGroup = $(`<ul/>`).addClass('list-group').addClass('list-group-flush').css({textAlign: 'left'});
-
-    $.each(matches, function (index2, match) {
-        matchesListGroup.append($(`<li/>`).addClass('list-group-item').addClass('list-group-item-light').text(match.justification.description));
-    });
-
-    matchesRow.append($(`<td/>`));
-    matchesRow.append($(`<td/>`).attr('colspan', '6').append(matchesListGroup));
-    analysisTBody.append(matchesRow);
-
-    if (recommendation) {
-        row.append($(`<td/>`).append($(`<a/>`).attr("data-toggle", "collapse").attr('id', "row" + constraintIndex + "Button" + recommendationIndex).attr('href', "#row" + constraintIndex + "Collapse").append($(`<span/>`).addClass('fas').addClass('fa-chevron-down'))));
-    } else {
-        row.append($(`<td/>`).append($(`<a/>`).attr("data-toggle", "collapse").attr('href', "#row" + constraintIndex + "Collapse").append($(`<span/>`).addClass('fas').addClass('fa-chevron-down')).click(function (e) {
-            matchesRow.collapse('toggle');
-            let target = $(e.target);
-            if (target.hasClass('fa-chevron-down')) {
-                target.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            } else {
-                target.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            }
-        })));
-    }
+    row.append($(`<td/>`));
 }
