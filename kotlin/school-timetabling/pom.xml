@@ -184,17 +184,25 @@
             <artifactId>kotlin-maven-allopen</artifactId>
             <version>${version.kotlin}</version>
           </dependency>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-noarg</artifactId>
+            <version>${version.kotlin}</version>
+          </dependency>
         </dependencies>
         <configuration>
           <javaParameters>true</javaParameters>
           <jvmTarget>17</jvmTarget>
           <compilerPlugins>
             <plugin>all-open</plugin>
+            <plugin>no-arg</plugin>
           </compilerPlugins>
           <pluginOptions>
             <option>all-open:annotation=jakarta.ws.rs.Path</option>
             <option>all-open:annotation=jakarta.enterprise.context.ApplicationScoped</option>
             <option>all-open:annotation=io.quarkus.test.junit.QuarkusTest</option>
+            <option>no-arg:annotation=ai.timefold.solver.core.api.domain.solution.PlanningSolution</option>
+            <option>no-arg:annotation=ai.timefold.solver.core.api.domain.entity.PlanningEntity</option>
           </pluginOptions>
         </configuration>
       </plugin>
