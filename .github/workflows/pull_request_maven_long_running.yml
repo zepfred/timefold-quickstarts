@@ -1,8 +1,8 @@
 name: Maven Long-Running
 
 on:
-  # Enables the workflow to run on PRs from forks;
-  # token sharing is safe here, because enterprise is a private repo and therefore fully under our control.
+  # Enables the workflow to run on PRs from forks.
+  # CI will only run for trusted users, to prevent stealing of secrets.
   pull_request_target:
     branches: [stable, development, '*.x']
     types:
@@ -16,7 +16,38 @@ on:
       - '.github/**/*.yml'
 
 jobs:
+  # Check if the user is a member of the organization; if so, allow the PR to sail through.
+  known_user:
+    runs-on: ubuntu-latest
+    outputs:
+      is_member_of_org: ${{ steps.auth_check.outputs.authorized }}
+    steps:
+      - id: auth_check
+        env:
+          GH_TOKEN: ${{ secrets.JRELEASER_GITHUB_TOKEN }}  # Release account is a Solver Gatekeeper.
+        shell: bash
+        run: |
+          ORG_MEMBERSHIP=`curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/orgs/TimefoldAI/memberships/${{ github.actor }}" | jq -r '.state == "active"'`
+          echo "authorized=$ORG_MEMBERSHIP" >> "$GITHUB_OUTPUT"
+      - id: validation
+        shell: bash
+        run: |
+          echo "Authorized user: ${{ steps.auth_check.outputs.authorized }}"
+  # If the user is not a member, require a member to approve the PR.
+  approval_required:
+    needs: known_user
+    environment:
+      ${{
+      github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name != github.repository &&
+      needs.known_user.outputs.is_member_of_org != 'true' &&
+      'external' || 'internal'
+      }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: true
   build-quarkus:
+    needs: approval_required
     concurrency:
       group: pull_request_long_running-${{ github.event_name }}-${{ github.head_ref }}-${{ matrix.module }}-${{ matrix.java-version }}
       cancel-in-progress: true
@@ -82,6 +113,7 @@ jobs:
         run: mvn -B -Dnative -Pnative verify
 
   build-enterprise-quarkus:
+    needs: approval_required
     concurrency:
       group: pull_request_enterprise_long_running-${{ github.event_name }}-${{ github.head_ref }}-${{ matrix.module }}-${{ matrix.java-version }}
       cancel-in-progress: true
@@ -162,6 +194,7 @@ jobs:
         run: mvn -B -Dnative -Denterprise -Pnative verify
 
   build-spring-boot:
+    needs: approval_required
     concurrency:
       group: pull_request_long_running-${{ github.event_name }}-${{ github.head_ref }}-${{ matrix.module }}-${{ matrix.java-version }}
       cancel-in-progress: true
