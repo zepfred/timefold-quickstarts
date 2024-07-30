@@ -124,9 +124,6 @@ class VehicleRoutingConstraintProviderTest {
             if (i > 0) {
                 visit.setPreviousVisit(visits[i - 1]);
             }
-            if (i < visits.length - 1) {
-                visit.setNextVisit(visits[i + 1]);
-            }
         }
     }
 }

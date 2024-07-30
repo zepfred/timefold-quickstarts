@@ -2,8 +2,9 @@ package org.acme.taskassigning.domain;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
+import ai.timefold.solver.core.api.domain.variable.CascadingUpdateShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.ShadowVariable;
+import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,9 +26,11 @@ public class Task {
     @JsonIgnore
     @InverseRelationShadowVariable(sourceVariableName = "tasks")
     private Employee employee;
-
-    @ShadowVariable(variableListenerClass = StartTimeUpdatingVariableListener.class,
-            sourceEntityClass = Employee.class, sourceVariableName = "tasks")
+    @JsonIgnore
+    @PreviousElementShadowVariable(sourceVariableName = "tasks")
+    private Task previousTask;
+    @JsonIgnore
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartTime", sourceVariableNames = {"employee", "previousTask"})
     private Integer startTime; // In minutes
 
     public Task() {
@@ -108,6 +111,14 @@ public class Task {
         this.employee = employee;
     }
 
+    public Task getPreviousTask() {
+        return previousTask;
+    }
+
+    public void setPreviousTask(Task previousTask) {
+        this.previousTask = previousTask;
+    }
+
     public Integer getStartTime() {
         return startTime;
     }
@@ -119,6 +130,19 @@ public class Task {
     // ************************************************************************
     // Complex methods
     // ************************************************************************
+
+    @SuppressWarnings("unused")
+    private void updateStartTime() {
+        if (employee == null) {
+            startTime = null;
+            return;
+        }
+        var previousEndTime = previousTask == null ? Integer.valueOf(0) : previousTask.getEndTime();
+        if (previousEndTime == null) {
+            return;
+        }
+        startTime = Math.max(getMinStartTime(), previousEndTime);
+    }
 
     @JsonIgnore
     public int getMissingSkillCount() {

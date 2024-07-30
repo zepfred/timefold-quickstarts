@@ -3,16 +3,16 @@ package org.acme.foodpackaging.domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.acme.foodpackaging.domain.solver.StartDateTimeUpdatingVariableListener;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.entity.PlanningPin;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
+import ai.timefold.solver.core.api.domain.variable.CascadingUpdateShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.NextElementShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PiggybackShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.ShadowVariable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @PlanningEntity
 public class Job {
@@ -26,7 +26,9 @@ public class Job {
     private LocalDateTime minStartTime;
     private LocalDateTime idealEndTime;
     private LocalDateTime maxEndTime;
-    /** Higher priority is a higher number. */
+    /**
+     * Higher priority is a higher number.
+     */
     private int priority;
     @PlanningPin
     private boolean pinned;
@@ -40,9 +42,10 @@ public class Job {
     @NextElementShadowVariable(sourceVariableName = "jobs")
     private Job nextJob;
 
-    /** Start is after cleanup. */
-    @ShadowVariable(variableListenerClass = StartDateTimeUpdatingVariableListener.class, sourceVariableName = "line")
-    @ShadowVariable(variableListenerClass = StartDateTimeUpdatingVariableListener.class, sourceVariableName = "previousJob")
+    /**
+     * Start is after cleanup.
+     */
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime", sourceVariableNames = {"line", "previousJob"})
     private LocalDateTime startCleaningDateTime;
 
     @PiggybackShadowVariable(shadowVariableName = "startCleaningDateTime")
@@ -167,6 +170,36 @@ public class Job {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    // ************************************************************************
+    // Complex methods
+    // ************************************************************************
+
+    @SuppressWarnings("unused")
+    private void updateStartCleaningDateTime() {
+        if (getLine() == null) {
+            if (getStartCleaningDateTime() != null) {
+                setStartCleaningDateTime(null);
+                setStartProductionDateTime(null);
+                setEndDateTime(null);
+            }
+            return;
+        }
+        Job previous = getPreviousJob();
+        LocalDateTime startCleaning;
+        LocalDateTime startProduction;
+        if (previous == null) {
+            startCleaning = line.getStartDateTime();
+            startProduction = line.getStartDateTime();
+        } else {
+            startCleaning = previous.getEndDateTime();
+            startProduction = startCleaning == null ? null : startCleaning.plus(getProduct().getCleanupDuration(previous.getProduct()));
+        }
+        setStartCleaningDateTime(startCleaning);
+        setStartProductionDateTime(startProduction);
+        var endTime = startProduction == null ? null : startProduction.plus(getDuration());
+        setEndDateTime(endTime);
     }
 
 }
