@@ -7,6 +7,7 @@ import java.util.List;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
+import ai.timefold.solver.core.impl.domain.variable.listener.support.AbstractEventTransactionSupport;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(scope = Vehicle.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @PlanningEntity
-public class Vehicle implements LocationAware {
+public class Vehicle extends AbstractEventTransactionSupport implements LocationAware {
 
     @PlanningId
     private String id;
@@ -129,4 +130,16 @@ public class Vehicle implements LocationAware {
         return id;
     }
 
+    @Override
+    public void _internal_Timefold_Event_Support_executeTargetMethod(String targetMethod) {
+        // Do nothing
+    }
+
+    @Override
+    public Object _internal_Timefold_Event_Support_getFieldValue(String fieldName) {
+        if (fieldName.equals("visits")) {
+            return visits;
+        }
+        throw new IllegalStateException("The field %s cannot be found.".formatted(fieldName));
+    }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
+import ai.timefold.solver.core.impl.domain.variable.listener.support.AbstractEventTransactionSupport;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @PlanningEntity
 @JsonIdentityInfo(scope = Employee.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Employee {
+public class Employee extends AbstractEventTransactionSupport {
 
     @PlanningId
     private String id;
@@ -108,6 +109,19 @@ public class Employee {
     @JsonIgnore
     public Integer getEndTime() {
         return tasks.isEmpty() ? 0 : tasks.get(tasks.size() - 1).getEndTime();
+    }
+
+    @Override
+    public void _internal_Timefold_Event_Support_executeTargetMethod(String targetMethod) {
+        // Do nothing
+    }
+
+    @Override
+    public Object _internal_Timefold_Event_Support_getFieldValue(String fieldName) {
+        if (fieldName.equals("tasks")) {
+            return tasks;
+        }
+        throw new IllegalStateException("The field %s cannot be found.".formatted(fieldName));
     }
 
     @Override

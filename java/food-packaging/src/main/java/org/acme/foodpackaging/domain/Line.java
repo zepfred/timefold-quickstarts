@@ -4,13 +4,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.timefold.solver.core.api.domain.lookup.PlanningId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
+import ai.timefold.solver.core.impl.domain.variable.listener.support.AbstractEventTransactionSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @PlanningEntity
-public class Line {
+public class Line extends AbstractEventTransactionSupport {
 
     @PlanningId
     private String id;
@@ -63,4 +65,16 @@ public class Line {
         return jobs;
     }
 
+    @Override
+    public void _internal_Timefold_Event_Support_executeTargetMethod(String targetMethod) {
+        // Do nothing
+    }
+
+    @Override
+    public Object _internal_Timefold_Event_Support_getFieldValue(String fieldName) {
+        if (fieldName.equals("jobs")) {
+            return jobs;
+        }
+        throw new IllegalStateException("The field %s cannot be found.".formatted(fieldName));
+    }
 }

@@ -197,4 +197,20 @@ public class Visit extends AbstractEventTransactionSupport implements LocationAw
         return id;
     }
 
+    @Override
+    public void _internal_Timefold_Event_Support_executeTargetMethod(String targetMethod) {
+        if (targetMethod.equals("updateArrivalTime")) {
+            updateArrivalTime();
+            return;
+        }
+        throw new IllegalStateException("The method %s cannot be found.".formatted(targetMethod));
+    }
+
+    @Override
+    public Object _internal_Timefold_Event_Support_getFieldValue(String fieldName) {
+        if (fieldName.equals("arrivalTime")) {
+            return arrivalTime;
+        }
+        throw new IllegalStateException("The field %s cannot be found.".formatted(fieldName));
+    }
 }

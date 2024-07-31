@@ -184,6 +184,23 @@ public class Task extends AbstractEventTransactionSupport {
     }
 
     @Override
+    public void _internal_Timefold_Event_Support_executeTargetMethod(String targetMethod) {
+        if (targetMethod.equals("updateStartTime")) {
+            updateStartTime();
+            return;
+        }
+        throw new IllegalStateException("The method %s cannot be found.".formatted(targetMethod));
+    }
+
+    @Override
+    public Object _internal_Timefold_Event_Support_getFieldValue(String fieldName) {
+        return switch (fieldName) {
+            case "startTime" -> startTime;
+            default -> throw new IllegalStateException("The field %s cannot be found.".formatted(fieldName));
+        };
+    }
+
+    @Override
     public String toString() {
         return getCode();
     }
