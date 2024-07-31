@@ -11,11 +11,12 @@ import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable
 import ai.timefold.solver.core.api.domain.variable.NextElementShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PiggybackShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
+import ai.timefold.solver.core.impl.domain.variable.listener.support.AbstractEventTransactionSupport;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @PlanningEntity
-public class Job {
+public class Job extends AbstractEventTransactionSupport {
 
     @PlanningId
     private String id;
