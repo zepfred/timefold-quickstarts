@@ -38,20 +38,19 @@ public class Job {
     @JsonIgnore
     @PreviousElementShadowVariable(sourceVariableName = "jobs")
     private Job previousJob;
-    @JsonIgnore
     @NextElementShadowVariable(sourceVariableName = "jobs")
     private Job nextJob;
 
     /**
      * Start is after cleanup.
      */
-    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime", sourceVariableNames = {"line", "previousJob"})
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime startCleaningDateTime;
 
-    @PiggybackShadowVariable(shadowVariableName = "startCleaningDateTime")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime startProductionDateTime;
 
-    @PiggybackShadowVariable(shadowVariableName = "startCleaningDateTime")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime endDateTime;
 
     // No-arg constructor required for Timefold

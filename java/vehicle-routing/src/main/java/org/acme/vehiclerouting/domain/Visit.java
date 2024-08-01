@@ -35,7 +35,7 @@ public class Visit implements LocationAware {
     @JsonIdentityReference(alwaysAsId = true)
     @PreviousElementShadowVariable(sourceVariableName = "visits")
     private Visit previousVisit;
-    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime", sourceVariableNames = {"vehicle", "previousVisit"})
+    @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime")
     private LocalDateTime arrivalTime;
 
     public Visit() {
