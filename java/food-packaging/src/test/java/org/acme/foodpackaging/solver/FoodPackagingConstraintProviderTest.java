@@ -146,9 +146,9 @@ class FoodPackagingConstraintProviderTest {
             Job job = jobs[i];
             job.setLine(line);
             line.getJobs().add(job);
-            if (i > 0) {
-                job.setPreviousJob(jobs[i - 1]);
-            }
+//            if (i > 0) {
+//                job.setPreviousJob(jobs[i - 1]);
+//            }
             if (i < jobs.length - 1) {
                 job.setNextJob(jobs[i + 1]);
             }

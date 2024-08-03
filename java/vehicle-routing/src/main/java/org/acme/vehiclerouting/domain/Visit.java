@@ -8,7 +8,7 @@ import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.CascadingUpdateShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
+import ai.timefold.solver.core.impl.domain.variable.cascade.CascadingUpdateVariableInformation;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -32,9 +32,6 @@ public class Visit implements LocationAware {
     @JsonIdentityReference(alwaysAsId = true)
     @InverseRelationShadowVariable(sourceVariableName = "visits")
     private Vehicle vehicle;
-    @JsonIdentityReference(alwaysAsId = true)
-    @PreviousElementShadowVariable(sourceVariableName = "visits")
-    private Visit previousVisit;
     @CascadingUpdateShadowVariable(targetMethodName = "updateArrivalTime")
     private LocalDateTime arrivalTime;
 
@@ -101,14 +98,6 @@ public class Visit implements LocationAware {
         this.vehicle = vehicle;
     }
 
-    public Visit getPreviousVisit() {
-        return previousVisit;
-    }
-
-    public void setPreviousVisit(Visit previousVisit) {
-        this.previousVisit = previousVisit;
-    }
-
     public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
@@ -122,13 +111,13 @@ public class Visit implements LocationAware {
     // ************************************************************************
 
     @SuppressWarnings("unused")
-    private void updateArrivalTime() {
-        if (previousVisit == null && vehicle == null) {
+    private void updateArrivalTime(CascadingUpdateVariableInformation<Vehicle, Visit> parameter) {
+        if (parameter.previous() == null && vehicle == null) {
             arrivalTime = null;
             return;
         }
-        LocalDateTime departureTime = previousVisit == null ? vehicle.getDepartureTime() : previousVisit.getDepartureTime();
-        arrivalTime = departureTime != null ? departureTime.plusSeconds(getDrivingTimeSecondsFromPreviousStandstill()) : null;
+        LocalDateTime departureTime = parameter.previous() == null ? vehicle.getDepartureTime() : parameter.previous().getDepartureTime();
+        arrivalTime = departureTime != null ? departureTime.plusSeconds(getDrivingTimeSecondsFromPreviousStandstill(parameter.previous())) : null;
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -171,7 +160,7 @@ public class Visit implements LocationAware {
     }
 
     @JsonIgnore
-    public long getDrivingTimeSecondsFromPreviousStandstill() {
+    public long getDrivingTimeSecondsFromPreviousStandstill(Visit previousVisit) {
         if (vehicle == null) {
             throw new IllegalStateException(
                     "This method must not be called when the shadow variables are not initialized yet.");
@@ -184,11 +173,11 @@ public class Visit implements LocationAware {
 
     // Required by the web UI even before the solution has been initialized.
     @JsonProperty(value = "drivingTimeSecondsFromPreviousStandstill", access = JsonProperty.Access.READ_ONLY)
-    public Long getDrivingTimeSecondsFromPreviousStandstillOrNull() {
+    public Long getDrivingTimeSecondsFromPreviousStandstillOrNull(Visit previousVisit) {
         if (vehicle == null) {
             return null;
         }
-        return getDrivingTimeSecondsFromPreviousStandstill();
+        return getDrivingTimeSecondsFromPreviousStandstill(previousVisit);
     }
 
     @Override

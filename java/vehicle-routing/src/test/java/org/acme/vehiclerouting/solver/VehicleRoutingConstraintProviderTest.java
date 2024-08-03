@@ -121,9 +121,6 @@ class VehicleRoutingConstraintProviderTest {
         for (int i = 0; i < visits.length; i++) {
             Visit visit = visits[i];
             visit.setVehicle(vehicle);
-            if (i > 0) {
-                visit.setPreviousVisit(visits[i - 1]);
-            }
         }
     }
 }
