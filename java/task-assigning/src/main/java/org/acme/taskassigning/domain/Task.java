@@ -30,7 +30,7 @@ public class Task {
     @PreviousElementShadowVariable(sourceVariableName = "tasks")
     private Task previousTask;
     @JsonIgnore
-    @CascadingUpdateShadowVariable(targetMethodName = "updateStartTime", sourceVariableNames = {"employee", "previousTask"})
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartTime")
     private Integer startTime; // In minutes
 
     public Task() {
@@ -135,13 +135,12 @@ public class Task {
     private void updateStartTime() {
         if (employee == null) {
             startTime = null;
-            return;
+        } else if (previousTask == null) {
+            startTime = minStartTime;
+        } else {
+            var previousEndTime = previousTask.getEndTime();
+            startTime = Math.max(previousEndTime, minStartTime);
         }
-        var previousEndTime = previousTask == null ? Integer.valueOf(0) : previousTask.getEndTime();
-        if (previousEndTime == null) {
-            return;
-        }
-        startTime = Math.max(getMinStartTime(), previousEndTime);
     }
 
     @JsonIgnore

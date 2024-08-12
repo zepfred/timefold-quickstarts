@@ -98,11 +98,7 @@ public class Employee {
      */
     @JsonIgnore
     public Affinity getAffinity(Customer customer) {
-        Affinity affinity = customerToAffinity.get(customer);
-        if (affinity == null) {
-            affinity = Affinity.NONE;
-        }
-        return affinity;
+        return customerToAffinity.getOrDefault(customer, Affinity.NONE);
     }
 
     @JsonIgnore

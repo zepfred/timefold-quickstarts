@@ -9,7 +9,6 @@ import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.CascadingUpdateShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.NextElementShadowVariable;
-import ai.timefold.solver.core.api.domain.variable.PiggybackShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PreviousElementShadowVariable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,13 +44,11 @@ public class Job {
     /**
      * Start is after cleanup.
      */
-    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime", sourceVariableNames = {"line", "previousJob"})
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime startCleaningDateTime;
-
-    @PiggybackShadowVariable(shadowVariableName = "startCleaningDateTime")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime startProductionDateTime;
-
-    @PiggybackShadowVariable(shadowVariableName = "startCleaningDateTime")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateStartCleaningDateTime")
     private LocalDateTime endDateTime;
 
     // No-arg constructor required for Timefold

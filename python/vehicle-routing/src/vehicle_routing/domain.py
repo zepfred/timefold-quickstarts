@@ -50,10 +50,7 @@ class Visit(JsonDomainBase):
                           IdSerializer, VisitValidator, Field(default=None)]
     arrival_time: Annotated[
         Optional[datetime],
-        CascadingUpdateShadowVariable(source_variable_name='previous_visit',
-                                      target_method_name='update_arrival_time'),
-        CascadingUpdateShadowVariable(source_variable_name='vehicle',
-                                      target_method_name='update_arrival_time'),
+        CascadingUpdateShadowVariable(target_method_name='update_arrival_time'),
         Field(default=None)]
 
     def update_arrival_time(self):
