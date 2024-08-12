@@ -69,8 +69,10 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
-          path: './timefold-quickstarts'
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
@@ -125,8 +127,10 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
-          path: './timefold-quickstarts'
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
@@ -203,8 +207,10 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
-          path: './timefold-quickstarts'
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
