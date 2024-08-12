@@ -69,6 +69,7 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           path: './timefold-quickstarts'
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
@@ -124,6 +125,7 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           path: './timefold-quickstarts'
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
@@ -201,6 +203,7 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           path: './timefold-quickstarts'
 
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
