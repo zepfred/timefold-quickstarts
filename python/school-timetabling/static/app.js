@@ -287,32 +287,7 @@ function analyze() {
           .append($(`<td/>`).text(constraintAnalysis.implicitScore));
 
         analysisTBody.append(row);
-
-        if (constraintAnalysis.matches.length > 0) {
-          let matchesRow = $(`<tr/>`).addClass("collapse").attr("id", "row" + index + "Collapse");
-          let matchesListGroup = $(`<ul/>`).addClass('list-group').addClass('list-group-flush').css({textAlign: 'left'});
-
-          $.each(constraintAnalysis.matches, (index2, match) => {
-            matchesListGroup.append($(`<li/>`).addClass('list-group-item').addClass('list-group-item-light').text(match.justification.description));
-          });
-
-          matchesRow.append($(`<td/>`));
-          matchesRow.append($(`<td/>`).attr('colspan', '6').append(matchesListGroup));
-          analysisTBody.append(matchesRow);
-
-          row.append($(`<td/>`).append($(`<a/>`).attr("data-toggle", "collapse").attr('href', "#row" + index + "Collapse").append($(`<span/>`).addClass('fas').addClass('fa-chevron-down')).click(e => {
-            matchesRow.collapse('toggle');
-            let target = $(e.target);
-            if (target.hasClass('fa-chevron-down')) {
-              target.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            } else {
-              target.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            }
-          })));
-        } else {
-          row.append($(`<td/>`));
-        }
-
+        row.append($(`<td/>`));
       });
       analysisTable.append(analysisTBody);
       scoreAnalysisModalContent.append(analysisTable);

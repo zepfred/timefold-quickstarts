@@ -1,4 +1,4 @@
-from timefold.solver import SolverManager, SolverFactory, SolutionManager
+from timefold.solver import SolverManager, SolutionManager
 from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig,
                                     TerminationConfig, Duration)
 

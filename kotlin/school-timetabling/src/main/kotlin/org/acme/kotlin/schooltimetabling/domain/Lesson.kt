@@ -22,9 +22,6 @@ data class Lesson (
     @PlanningVariable
     var room: Room? = null
 
-    // No-arg constructor required for Timefold
-    constructor() : this("0", "", "", "")
-
     constructor(id: String, subject: String, teacher: String, studentGroup: String, timeslot: Timeslot?, room: Room?)
             : this(id, subject, teacher, studentGroup) {
         this.timeslot = timeslot

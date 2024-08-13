@@ -3,7 +3,6 @@ from timefold.solver.score import (constraint_provider, HardSoftScore, Joiners,
 from datetime import time
 
 from .domain import *
-from .score_analysis import *
 
 
 @constraint_provider
@@ -31,10 +30,6 @@ def room_conflict(constraint_factory: ConstraintFactory) -> Constraint:
                                   Joiners.equal(lambda lesson: lesson.room))
             # ... and penalize each pair with a hard weight.
             .penalize(HardSoftScore.ONE_HARD)
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          RoomConflictJustification(room=lesson_a.room.name,
-                                                    lesson_a=lesson_a,
-                                                    lesson_b=lesson_b))
             .as_constraint("Room conflict"))
 
 
@@ -45,10 +40,6 @@ def teacher_conflict(constraint_factory: ConstraintFactory) -> Constraint:
                                   Joiners.equal(lambda lesson: lesson.timeslot),
                                   Joiners.equal(lambda lesson: lesson.teacher))
             .penalize(HardSoftScore.ONE_HARD)
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          TeacherConflictJustification(teacher=lesson_a.teacher,
-                                                       lesson_a=lesson_a,
-                                                       lesson_b=lesson_b))
             .as_constraint("Teacher conflict"))
 
 
@@ -59,10 +50,6 @@ def student_group_conflict(constraint_factory: ConstraintFactory) -> Constraint:
                                   Joiners.equal(lambda lesson: lesson.timeslot),
                                   Joiners.equal(lambda lesson: lesson.student_group))
             .penalize(HardSoftScore.ONE_HARD)
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          StudentGroupConflictJustification(student_group=lesson_a.student_group,
-                                                            lesson_a=lesson_a,
-                                                            lesson_b=lesson_b))
             .as_constraint("Student group conflict"))
 
 
@@ -73,10 +60,6 @@ def teacher_room_stability(constraint_factory: ConstraintFactory) -> Constraint:
                                   Joiners.equal(lambda lesson: lesson.teacher))
             .filter(lambda lesson1, lesson2: lesson1.room != lesson2.room)
             .penalize(HardSoftScore.ONE_SOFT)
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          TeacherRoomStabilityJustification(teacher=lesson_a.teacher,
-                                                            lesson_a=lesson_a,
-                                                            lesson_b=lesson_b))
             .as_constraint("Teacher room stability"))
 
 
@@ -97,10 +80,6 @@ def teacher_time_efficiency(constraint_factory: ConstraintFactory) -> Constraint
                   Joiners.equal(lambda lesson: lesson.timeslot.day_of_week))
             .filter(is_between)
             .reward(HardSoftScore.ONE_SOFT)
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          TeacherTimeEfficiencyJustification(teacher=lesson_a.teacher,
-                                                             lesson_a=lesson_a,
-                                                             lesson_b=lesson_b))
             .as_constraint("Teacher time efficiency"))
 
 
@@ -113,8 +92,4 @@ def student_group_subject_variety(constraint_factory: ConstraintFactory) -> Cons
                   Joiners.equal(lambda lesson: lesson.timeslot.day_of_week))
             .filter(is_between))
             .penalize(HardSoftScore.ONE_SOFT))
-            .justify_with(lambda lesson_a, lesson_b, score:
-                          StudentGroupSubjectVarietyJustification(student_group=lesson_a.student_group,
-                                                                  lesson_a=lesson_a,
-                                                                  lesson_b=lesson_b))
             .as_constraint("Student group subject variety"))

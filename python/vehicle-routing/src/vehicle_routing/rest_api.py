@@ -1,10 +1,8 @@
 from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
-from typing import Annotated
 
 from .domain import *
 from .score_analysis import *
-from .constraints import define_constraints
 from .demo_data import DemoData, generate_demo_data
 from .solver import solver_manager, solution_manager
 

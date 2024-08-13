@@ -3,7 +3,6 @@ package org.acme.meetingschedule.domain;
 import java.util.List;
 import java.util.stream.Stream;
 
-import ai.timefold.solver.core.api.domain.constraintweight.ConstraintConfigurationProvider;
 import ai.timefold.solver.core.api.domain.solution.PlanningEntityCollectionProperty;
 import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
@@ -18,9 +17,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @PlanningSolution
 public class MeetingSchedule {
-
-    @ConstraintConfigurationProvider
-    private MeetingConstraintConfiguration constraintConfiguration;
 
     @ProblemFactCollectionProperty
     private List<Person> people;
@@ -49,14 +45,12 @@ public class MeetingSchedule {
     @JsonCreator
     public MeetingSchedule(@JsonProperty("people") List<Person> people, @JsonProperty("timeGrains") List<TimeGrain> timeGrains,
             @JsonProperty("rooms") List<Room> rooms, @JsonProperty("meetings") List<Meeting> meetings,
-            @JsonProperty("meetingAssignments") List<MeetingAssignment> meetingAssignments,
-            @JsonProperty("constraintConfiguration") MeetingConstraintConfiguration constraintConfiguration) {
+            @JsonProperty("meetingAssignments") List<MeetingAssignment> meetingAssignments) {
         this.people = people;
         this.timeGrains = timeGrains;
         this.rooms = rooms;
         this.meetings = meetings;
         this.meetingAssignments = meetingAssignments;
-        this.constraintConfiguration = constraintConfiguration;
         this.attendances = Stream.concat(
                 this.meetings.stream().flatMap(m -> m.getRequiredAttendances().stream()),
                 this.meetings.stream().flatMap(m -> m.getPreferredAttendances().stream()))
@@ -66,14 +60,6 @@ public class MeetingSchedule {
     public MeetingSchedule(HardMediumSoftScore score, SolverStatus solverStatus) {
         this.score = score;
         this.solverStatus = solverStatus;
-    }
-
-    public MeetingConstraintConfiguration getConstraintConfiguration() {
-        return constraintConfiguration;
-    }
-
-    public void setConstraintConfiguration(MeetingConstraintConfiguration constraintConfiguration) {
-        this.constraintConfiguration = constraintConfiguration;
     }
 
     public List<Meeting> getMeetings() {

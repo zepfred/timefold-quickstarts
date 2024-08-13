@@ -1,7 +1,9 @@
 from timefold.solver.test import ConstraintVerifier
 
-from employee_scheduling.constraints import *
 from employee_scheduling.domain import *
+from employee_scheduling.constraints import *
+
+from datetime import date, datetime, time, timedelta
 
 DAY_1 = date(2021, 2, 1)
 DAY_3 = date(2021, 2, 3)
@@ -191,3 +193,25 @@ def test_desired_day_for_employee():
      .given(employee1, employee2,
             Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
      .rewards(0))
+
+def test_balance_employee_shift_assignments():
+    employee1 = Employee(name="Amy", desired_dates={DAY_1, DAY_3})
+    employee2 = Employee(name="Beth")
+
+    # No employees have shifts assigned; the schedule is perfectly balanced.
+    (constraint_verifier.verify_that(balance_employee_shift_assignments)
+     .given(employee1, employee2)
+     .penalizes_by(0))
+
+    # Only one employee has shifts assigned; the schedule is less balanced.
+    (constraint_verifier.verify_that(balance_employee_shift_assignments)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1))
+     .penalizes_by_more_than(0))
+
+    # Every employee has a shift assigned; the schedule is once again perfectly balanced.
+    (constraint_verifier.verify_that(balance_employee_shift_assignments)
+     .given(employee1, employee2,
+            Shift(id="1", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee1),
+            Shift(id="2", start=DAY_START_TIME, end=DAY_END_TIME, location="Location", required_skill="Skill", employee=employee2))
+     .penalizes_by(0))

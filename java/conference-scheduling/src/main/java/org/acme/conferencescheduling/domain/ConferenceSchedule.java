@@ -2,11 +2,11 @@ package org.acme.conferencescheduling.domain;
 
 import java.util.Set;
 
-import ai.timefold.solver.core.api.domain.constraintweight.ConstraintConfigurationProvider;
 import ai.timefold.solver.core.api.domain.solution.PlanningEntityCollectionProperty;
 import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.solution.ProblemFactCollectionProperty;
+import ai.timefold.solver.core.api.domain.solution.ProblemFactProperty;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
@@ -15,8 +15,8 @@ public class ConferenceSchedule {
 
     private String name;
 
-    @ConstraintConfigurationProvider
-    private ConferenceConstraintConfiguration constraintConfiguration;
+    @ProblemFactProperty
+    private ConferenceConstraintProperties constraintProperties;
 
     @ProblemFactCollectionProperty
     private Set<TalkType> talkTypes;
@@ -70,12 +70,12 @@ public class ConferenceSchedule {
         this.name = name;
     }
 
-    public ConferenceConstraintConfiguration getConstraintConfiguration() {
-        return constraintConfiguration;
+    public ConferenceConstraintProperties getConstraintProperties() {
+        return constraintProperties;
     }
 
-    public void setConstraintConfiguration(ConferenceConstraintConfiguration constraintConfiguration) {
-        this.constraintConfiguration = constraintConfiguration;
+    public void setConstraintProperties(ConferenceConstraintProperties constraintProperties) {
+        this.constraintProperties = constraintProperties;
     }
 
     public Set<TalkType> getTalkTypes() {

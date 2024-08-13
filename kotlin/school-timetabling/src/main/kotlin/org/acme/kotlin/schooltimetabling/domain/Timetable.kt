@@ -24,9 +24,6 @@ data class Timetable (
     // Ignored by Timefold, used by the UI to display solve or stop solving button
     var solverStatus: SolverStatus? = null) {
 
-    // No-arg constructor required for Timefold
-    constructor() : this("", emptyList(), emptyList(), emptyList())
-
     constructor(name: String, score: HardSoftScore?, solverStatus: SolverStatus)
             : this(name, emptyList(), emptyList(), emptyList(), score, solverStatus)
 

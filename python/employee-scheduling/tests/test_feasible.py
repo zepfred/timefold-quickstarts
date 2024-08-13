@@ -1,3 +1,7 @@
+from timefold.solver import SolverFactory
+from timefold.solver.config import (SolverConfig, ScoreDirectorFactoryConfig, TerminationConfig, Duration,
+                                    TerminationCompositionStyle)
+
 from employee_scheduling.rest_api import app
 from employee_scheduling.domain import *
 

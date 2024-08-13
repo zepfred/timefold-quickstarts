@@ -4,7 +4,6 @@ from typing import Annotated
 
 from .domain import *
 from .score_analysis import *
-from .constraints import define_constraints
 from .demo_data import DemoData, generate_demo_data
 from .solver import solver_manager, solution_manager
 
@@ -56,7 +55,8 @@ async def setup_context(request: Request) -> Timetable:
                                             room['id']: Room.model_validate(room) for room in json.get('rooms', [])
                                         },
                                         'timeslots': {
-                                            timeslot['id']: Timeslot.model_validate(timeslot) for timeslot in json.get('timeslots', [])
+                                            timeslot['id']: Timeslot.model_validate(timeslot) for
+                                            timeslot in json.get('timeslots', [])
                                         },
                                     })
 
