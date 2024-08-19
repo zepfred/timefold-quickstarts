@@ -69,6 +69,7 @@ jobs:
       - name: Checkout timefold-quickstarts (PR)
         id: checkout-quickstarts-pr
         uses: actions/checkout@v4
+        continue-on-error: true
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
@@ -135,6 +136,7 @@ jobs:
       - name: Checkout timefold-quickstarts (PR)
         id: checkout-quickstarts-pr
         uses: actions/checkout@v4
+        continue-on-error: true
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
@@ -223,6 +225,7 @@ jobs:
       - name: Checkout timefold-quickstarts (PR)
         id: checkout-quickstarts-pr
         uses: actions/checkout@v4
+        continue-on-error: true
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
