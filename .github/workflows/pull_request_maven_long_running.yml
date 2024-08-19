@@ -66,14 +66,22 @@ jobs:
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
-      - name: Checkout timefold-quickstarts
+      - name: Checkout timefold-quickstarts (PR)
+        id: checkout-quickstarts-pr
         uses: actions/checkout@v4
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+      - name: Checkout timefold-quickstarts
+        if: steps.checkout-quickstarts-pr.outcome != 'success'
+        uses: actions/checkout@v4
+        with:
+          repository: TimefoldAI/timefold-quickstarts
+          ref: ${{ github.head_ref }}
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4
@@ -124,14 +132,22 @@ jobs:
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
-      - name: Checkout timefold-quickstarts
+      - name: Checkout timefold-quickstarts (PR)
+        id: checkout-quickstarts-pr
         uses: actions/checkout@v4
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+      - name: Checkout timefold-quickstarts
+        if: steps.checkout-quickstarts-pr.outcome != 'success'
+        uses: actions/checkout@v4
+        with:
+          repository: TimefoldAI/timefold-quickstarts
+          ref: ${{ github.head_ref }}
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4
@@ -204,14 +220,22 @@ jobs:
         java-version: [ 17 ] # Only the first supported LTS; already too many jobs here.
     timeout-minutes: 120
     steps:
-      - name: Checkout timefold-quickstarts
+      - name: Checkout timefold-quickstarts (PR)
+        id: checkout-quickstarts-pr
         uses: actions/checkout@v4
         with:
           repository: ${{ github.actor }}/timefold-quickstarts
           ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+      - name: Checkout timefold-quickstarts
+        if: steps.checkout-quickstarts-pr.outcome != 'success'
+        uses: actions/checkout@v4
+        with:
+          repository: TimefoldAI/timefold-quickstarts
+          ref: ${{ github.head_ref }}
+          path: ./timefold-quickstarts
+          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4
