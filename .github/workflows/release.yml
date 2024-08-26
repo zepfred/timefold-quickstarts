@@ -107,5 +107,5 @@ jobs:
           git merge --squash $RELEASE_BRANCH_NAME
           git commit -m "build: release version ${{ github.event.inputs.javaVersion }}"
           git push origin $RELEASE_BRANCH_NAME-bump
-          git branch -d $RELEASE_BRANCH_NAME
+          git branch -D $RELEASE_BRANCH_NAME
           gh pr create --reviewer triceo --base ${{ github.event.inputs.stableBranch }} --head $RELEASE_BRANCH_NAME-bump --title "build: release version ${{ github.event.inputs.javaVersion }}" --body-file .github/workflows/release-pr-body.md
