@@ -96,7 +96,7 @@ demo_data_to_parameters: dict[DemoData, DemoDataParameters] = {
 }
 
 
-FIRST_NAMES = ("Amy", "Beth", "Chad", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay")
+FIRST_NAMES = ("Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay")
 LAST_NAMES = ("Cole", "Fox", "Green", "Jones", "King", "Li", "Poe", "Rye", "Smith", "Watt")
 SHIFT_LENGTH = timedelta(hours=8)
 MORNING_SHIFT_START_TIME = time(hour=6, minute=0)

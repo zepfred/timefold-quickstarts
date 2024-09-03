@@ -35,7 +35,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("demo-data")
 public class VehicleRouteDemoResource {
 
-    private static final String[] FIRST_NAMES = { "Amy", "Beth", "Chad", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay" };
+    private static final String[] FIRST_NAMES = { "Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay" };
     private static final String[] LAST_NAMES = { "Cole", "Fox", "Green", "Jones", "King", "Li", "Poe", "Rye", "Smith", "Watt" };
     private static final int[] SERVICE_DURATION_MINUTES = { 10, 20, 30, 40 };
     private static final LocalTime MORNING_WINDOW_START = LocalTime.of(8, 0);
