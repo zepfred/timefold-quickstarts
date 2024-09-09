@@ -9,7 +9,7 @@
         <problemBenchmarks>
             <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
             <problemStatisticType>MOVE_COUNT_PER_STEP</problemStatisticType>
-            <problemStatisticType>MOVE_CALCULATION_SPEED</problemStatisticType>
+            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>
         </problemBenchmarks>
     </inheritedSolverBenchmark>
 
