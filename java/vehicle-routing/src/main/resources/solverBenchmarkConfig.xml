@@ -3,31 +3,32 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>10</secondsSpentLimit>
+                <secondsSpentLimit>30</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
             <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
             <problemStatisticType>MOVE_COUNT_PER_STEP</problemStatisticType>
-            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>
+<!--            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>-->
         </problemBenchmarks>
     </inheritedSolverBenchmark>
 
     <solverBenchmark>
-        <name>Tabu Search</name>
+        <name>Late Acceptance</name>
         <solver>
             <constructionHeuristic/>
             <localSearch>
-                <localSearchType>TABU_SEARCH</localSearchType>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
                 <unionMoveSelector>
                     <listChangeMoveSelector/>
                     <listSwapMoveSelector/>
+                    <listRuinRecreateMoveSelector/>
                 </unionMoveSelector>
             </localSearch>
         </solver>
     </solverBenchmark>
     <solverBenchmark>
-        <name>Tabu Search - Ruin and Recreate</name>
+        <name>Tabu Search</name>
         <solver>
             <constructionHeuristic/>
             <localSearch>

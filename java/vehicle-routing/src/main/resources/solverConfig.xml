@@ -3,10 +3,14 @@
         xsi:schemaLocation="https://timefold.ai/xsd/solver https://timefold.ai/xsd/solver/solver.xsd">
     <constructionHeuristic/>
     <localSearch>
+<!--        <localSearchType>TABU_SEARCH</localSearchType>-->
         <unionMoveSelector>
             <listChangeMoveSelector/>
             <listSwapMoveSelector/>
-            <listRuinRecreateMoveSelector/>
+<!--            <listRuinRecreateMoveSelector/>-->
         </unionMoveSelector>
+        <acceptor>
+            <lateAcceptanceSize>400</lateAcceptanceSize>
+        </acceptor>
     </localSearch>
 </solver>
