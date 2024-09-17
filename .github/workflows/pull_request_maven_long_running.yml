@@ -69,11 +69,8 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.actor }}/timefold-quickstarts
-          ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
-          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+          ref: ${{ github.event.pull_request.head.sha }} # The GHA event will pull the main branch by default, and we must specify the PR reference version
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4
@@ -127,11 +124,8 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.actor }}/timefold-quickstarts
-          ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
-          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+          ref: ${{ github.event.pull_request.head.sha }} # The GHA event will pull the main branch by default, and we must specify the PR reference version
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4
@@ -207,11 +201,8 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.actor }}/timefold-quickstarts
-          ref: ${{ github.head_ref }}
           path: ./timefold-quickstarts
-          fetch-depth: 0 # Otherwise merge will fail on account of not having history.
-
+          ref: ${{ github.event.pull_request.head.sha }} # The GHA event will pull the main branch by default, and we must specify the PR reference version
       - name: Checkout timefold-solver (PR) # Checkout the PR branch first, if it exists
         id: checkout-solver
         uses: actions/checkout@v4

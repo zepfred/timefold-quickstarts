@@ -95,7 +95,7 @@ public class DemoDataGenerator {
         return buildSet(List.of(
                 new Speaker("1", "Amy Cole"),
                 new Speaker("2", "Beth Fox"),
-                new Speaker("3", "Chad Green"),
+                new Speaker("3", "Carl Green"),
                 new Speaker("4", "Dan Jones"),
                 new Speaker("5", "Elsa King"),
                 new Speaker("6", "Flo Li"),
@@ -113,7 +113,7 @@ public class DemoDataGenerator {
                 getSpeakers(speakers, "Amy Cole", "Beth Fox"), Set.of(getRandomTheme()), Set.of(getRandomSector()),
                 Set.of(getRandomAudience()), 2, Set.of(getRandomContent()), "en", 551, 1));
         talks.add(new Talk("S02", "Talk Two", getTalkType(LAB_TALK_TAG),
-                getSpeakers(speakers, "Chad Green"), Set.of(getRandomTheme()), Set.of(getRandomSector()),
+                getSpeakers(speakers, "Carl Green"), Set.of(getRandomTheme()), Set.of(getRandomSector()),
                 Set.of(getRandomAudience()), 3, Set.of(getRandomContent()), "en", 528, 0));
         talks.stream().filter(t -> t.getCode().equals("S01")).findFirst()
                 .ifPresent(t -> t.setUndesiredRoomTags(Set.of(RECORDED_TAG)));
@@ -143,7 +143,7 @@ public class DemoDataGenerator {
                 Set.of(getRandomSector()),
                 Set.of(getRandomAudience()), 3, Set.of(getRandomContent()), "en", 619, 0));
         talks.add(new Talk("S10", "Talk Ten", getTalkType(BREAKOUT_TALK_TAG),
-                getSpeakers(speakers, "Beth Fox", "Chad Green"), Set.of(getRandomTheme()),
+                getSpeakers(speakers, "Beth Fox", "Carl Green"), Set.of(getRandomTheme()),
                 Set.of(getRandomSector()),
                 Set.of(getRandomAudience()), 3, Set.of(getRandomContent()), "en", 603, 1));
         talks.add(new Talk("S11", "Talk Eleven", getTalkType(BREAKOUT_TALK_TAG),

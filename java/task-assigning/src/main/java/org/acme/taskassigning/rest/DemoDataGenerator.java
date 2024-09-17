@@ -105,7 +105,7 @@ public class DemoDataGenerator {
                                 PAPER_CORP_CUSTOMER, HIGH,
                                 STONE_LIMITED_CUSTOMER, LOW,
                                 WOOD_EXPRESS_CUSTOMER, MEDIUM)),
-                new Employee("3", "Chad", List.of(STRATEGIC_PLANNING_SKILL, PROBLEM_SOLVING_SKILL),
+                new Employee("3", "Carl", List.of(STRATEGIC_PLANNING_SKILL, PROBLEM_SOLVING_SKILL),
                         Map.of(STEEL_INC_CUSTOMER, MEDIUM,
                                 PAPER_CORP_CUSTOMER, HIGH,
                                 STONE_LIMITED_CUSTOMER, MEDIUM,

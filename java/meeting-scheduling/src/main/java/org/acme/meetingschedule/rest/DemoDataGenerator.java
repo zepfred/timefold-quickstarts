@@ -26,7 +26,7 @@ import org.acme.meetingschedule.domain.TimeGrain;
 @ApplicationScoped
 public class DemoDataGenerator {
 
-    private static final String[] FIRST_NAMES = { "Amy", "Beth", "Chad", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay",
+    private static final String[] FIRST_NAMES = { "Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay",
             "Jeri", "Hope", "Avis", "Lino", "Lyle", "Nick", "Dino", "Otha", "Gwen", "Jose", "Dena", "Jana", "Dave",
             "Russ", "Josh", "Dana", "Katy" };
     private static final String[] LAST_NAMES =

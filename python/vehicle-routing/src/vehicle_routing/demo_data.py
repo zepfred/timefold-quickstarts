@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from .domain import *
 
 
-FIRST_NAMES = ("Amy", "Beth", "Chad", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay")
+FIRST_NAMES = ("Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay")
 LAST_NAMES = ("Cole", "Fox", "Green", "Jones", "King", "Li", "Poe", "Rye", "Smith", "Watt")
 SERVICE_DURATION_MINUTES = (10, 20, 30, 40)
 MORNING_WINDOW_START = time(8, 0)
