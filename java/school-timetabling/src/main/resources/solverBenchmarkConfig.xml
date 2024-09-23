@@ -1,0 +1,60 @@
+<plannerBenchmark xmlns="https://timefold.ai/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://timefold.ai/xsd/benchmark https://timefold.ai/xsd/benchmark/benchmark.xsd">
+    <inheritedSolverBenchmark>
+        <solver>
+            <termination>
+                <secondsSpentLimit>30</secondsSpentLimit>
+            </termination>
+        </solver>
+        <problemBenchmarks>
+            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
+            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>
+            <problemStatisticType>MOVE_COUNT_PER_TYPE</problemStatisticType>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+
+<!--    <solverBenchmark>-->
+<!--        <name>Exhaustive</name>-->
+<!--        <solver>-->
+<!--            <exhaustiveSearch/>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+    <solverBenchmark>
+        <name>Partitioned Solver</name>
+        <solver>
+            <constructionHeuristic/>
+            <partitionedSearch>
+                <solutionPartitionerClass>org.acme.schooltimetabling.solver.SolverSolutionPartitioner
+                </solutionPartitionerClass>
+            </partitionedSearch>
+        </solver>
+    </solverBenchmark>
+<!--    <solverBenchmark>-->
+<!--        <name>Late Acceptance</name>-->
+<!--        <solver>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch>-->
+<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
+<!--            </localSearch>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+<!--    <solverBenchmark>-->
+<!--        <name>Late Acceptance - Multithread</name>-->
+<!--        <solver>-->
+<!--            <moveThreadCount>4</moveThreadCount>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch>-->
+<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
+<!--            </localSearch>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+<!--    <solverBenchmark>-->
+<!--        <name>Tabu Search</name>-->
+<!--        <solver>-->
+<!--            <constructionHeuristic/>-->
+<!--            <localSearch>-->
+<!--                <localSearchType>TABU_SEARCH</localSearchType>-->
+<!--            </localSearch>-->
+<!--        </solver>-->
+<!--    </solverBenchmark>-->
+</plannerBenchmark>

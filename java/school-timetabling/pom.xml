@@ -35,8 +35,23 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>ai.timefold.solver.enterprise</groupId>
+        <artifactId>timefold-solver-enterprise-bom</artifactId>
+        <version>${version.ai.timefold.solver}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <id>timefold-solver-enterprise</id>
+      <name>Timefold Solver Enterprise Edition</name>
+      <url>https://timefold.jfrog.io/artifactory/releases/</url>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -58,6 +73,14 @@
     <dependency>
       <groupId>ai.timefold.solver</groupId>
       <artifactId>timefold-solver-quarkus-jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ai.timefold.solver</groupId>
+      <artifactId>timefold-solver-quarkus-benchmark</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ai.timefold.solver.enterprise</groupId>
+      <artifactId>timefold-solver-enterprise-quarkus</artifactId>
     </dependency>
 
     <!-- Testing -->

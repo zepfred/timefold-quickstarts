@@ -3,13 +3,13 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>30</secondsSpentLimit>
+                <secondsSpentLimit>10</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
             <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
-            <problemStatisticType>MOVE_COUNT_PER_STEP</problemStatisticType>
-<!--            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>-->
+            <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>
+            <problemStatisticType>MOVE_COUNT_PER_TYPE</problemStatisticType>
         </problemBenchmarks>
     </inheritedSolverBenchmark>
 
@@ -22,7 +22,7 @@
                 <unionMoveSelector>
                     <listChangeMoveSelector/>
                     <listSwapMoveSelector/>
-                    <listRuinRecreateMoveSelector/>
+                    <!--                    <listRuinRecreateMoveSelector/>-->
                 </unionMoveSelector>
             </localSearch>
         </solver>
@@ -36,38 +36,38 @@
                 <unionMoveSelector>
                     <listChangeMoveSelector/>
                     <listSwapMoveSelector/>
-                    <listRuinRecreateMoveSelector/>
+                    <!--                    <listRuinRecreateMoveSelector/>-->
                 </unionMoveSelector>
             </localSearch>
         </solver>
     </solverBenchmark>
-<!--    <solverBenchmark>-->
-<!--        <name>Late Acceptance</name>-->
-<!--        <solver>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
-<!--    <solverBenchmark>-->
-<!--        <name>Tabu Search Nearby</name>-->
-<!--        <solver>-->
-<!--            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>TABU_SEARCH</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
-<!--    <solverBenchmark>-->
-<!--        <name>Late Acceptance Nearby</name>-->
-<!--        <solver>-->
-<!--            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
+    <!--    <solverBenchmark>-->
+    <!--        <name>Late Acceptance</name>-->
+    <!--        <solver>-->
+    <!--            <constructionHeuristic/>-->
+    <!--            <localSearch>-->
+    <!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
+    <!--            </localSearch>-->
+    <!--        </solver>-->
+    <!--    </solverBenchmark>-->
+    <!--    <solverBenchmark>-->
+    <!--        <name>Tabu Search Nearby</name>-->
+    <!--        <solver>-->
+    <!--            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>-->
+    <!--            <constructionHeuristic/>-->
+    <!--            <localSearch>-->
+    <!--                <localSearchType>TABU_SEARCH</localSearchType>-->
+    <!--            </localSearch>-->
+    <!--        </solver>-->
+    <!--    </solverBenchmark>-->
+    <!--    <solverBenchmark>-->
+    <!--        <name>Late Acceptance Nearby</name>-->
+    <!--        <solver>-->
+    <!--            <nearbyDistanceMeterClass>org.acme.vehiclerouting.domain.LocationDistanceMeter</nearbyDistanceMeterClass>-->
+    <!--            <constructionHeuristic/>-->
+    <!--            <localSearch>-->
+    <!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
+    <!--            </localSearch>-->
+    <!--        </solver>-->
+    <!--    </solverBenchmark>-->
 </plannerBenchmark>

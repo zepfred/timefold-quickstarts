@@ -8,7 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
+import java.util.List;
 
+import jakarta.inject.Inject;
+
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.solver.SolverStatus;
 
 import org.acme.schooltimetabling.domain.Timetable;
@@ -19,6 +23,9 @@ import io.restassured.http.ContentType;
 
 @QuarkusTest
 class TimetableResourceTest {
+
+    @Inject
+    PlannerBenchmarkFactory benchmarkFactory;
 
     @Test
     void solveDemoDataUntilFeasible() {
@@ -95,6 +102,18 @@ class TimetableResourceTest {
                 .extract()
                 .asString();
         assertNotNull(analysis2); // Too long to validate in its entirety.
+    }
+
+    @Test
+    void benchmark() {
+        Timetable problem = given()
+                .when().get("/demo-data/SMALL")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(Timetable.class);
+
+        benchmarkFactory.buildPlannerBenchmark(List.of(problem)).benchmark();
     }
 
 }
