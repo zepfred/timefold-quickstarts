@@ -13,12 +13,12 @@
         </problemBenchmarks>
     </inheritedSolverBenchmark>
 
-<!--    <solverBenchmark>-->
-<!--        <name>Exhaustive</name>-->
-<!--        <solver>-->
-<!--            <exhaustiveSearch/>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
+    <solverBenchmark>
+        <name>Exhaustive</name>
+        <solver>
+            <exhaustiveSearch/>
+        </solver>
+    </solverBenchmark>
     <solverBenchmark>
         <name>Partitioned Solver</name>
         <solver>
@@ -29,32 +29,32 @@
             </partitionedSearch>
         </solver>
     </solverBenchmark>
-<!--    <solverBenchmark>-->
-<!--        <name>Late Acceptance</name>-->
-<!--        <solver>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
-<!--    <solverBenchmark>-->
-<!--        <name>Late Acceptance - Multithread</name>-->
-<!--        <solver>-->
-<!--            <moveThreadCount>4</moveThreadCount>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>LATE_ACCEPTANCE</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
-<!--    <solverBenchmark>-->
-<!--        <name>Tabu Search</name>-->
-<!--        <solver>-->
-<!--            <constructionHeuristic/>-->
-<!--            <localSearch>-->
-<!--                <localSearchType>TABU_SEARCH</localSearchType>-->
-<!--            </localSearch>-->
-<!--        </solver>-->
-<!--    </solverBenchmark>-->
+    <solverBenchmark>
+        <name>Late Acceptance</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Late Acceptance - Multithread</name>
+        <solver>
+            <moveThreadCount>4</moveThreadCount>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Tabu Search</name>
+        <solver>
+            <constructionHeuristic/>
+            <localSearch>
+                <localSearchType>TABU_SEARCH</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
 </plannerBenchmark>
