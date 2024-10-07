@@ -27,6 +27,7 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          repository: TimefoldAI/timefold-quickstarts
           path: ./timefold-quickstarts
           ref: ${{ github.event.inputs.developmentBranch }}
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
