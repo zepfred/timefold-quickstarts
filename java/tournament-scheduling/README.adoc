@@ -5,6 +5,7 @@ Tournament Scheduling service assigning teams to tournament matches.
 image::./tournament-scheduling-screenshot.png[]
 
 * <<run,Run the application>>
+* <<enterprise,Run the application with Timefold Solver Enterprise Edition>>
 * <<package,Run the packaged application>>
 * <<container,Run the application in a container>>
 * <<native,Run it native>>

@@ -27,6 +27,7 @@ jobs:
       - name: Checkout timefold-quickstarts
         uses: actions/checkout@v4
         with:
+          repository: TimefoldAI/timefold-quickstarts
           path: ./timefold-quickstarts
           ref: ${{ github.event.inputs.developmentBranch }}
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
@@ -109,3 +110,14 @@ jobs:
           git push origin $RELEASE_BRANCH_NAME-bump
           git branch -D $RELEASE_BRANCH_NAME
           gh pr create --reviewer triceo --base ${{ github.event.inputs.stableBranch }} --head $RELEASE_BRANCH_NAME-bump --title "build: release version ${{ github.event.inputs.javaVersion }}" --body-file .github/workflows/release-pr-body.md
+
+      - name: Put back the 999-SNAPSHOT version on the release branch
+        run: |
+          git checkout $RELEASE_BRANCH_NAME
+          export OLD_JAVA_VERSION="$(find . -name pom.xml -exec grep '<version.ai.timefold.solver>' {} \;|tail -n 1|cut -d\> -f1 --complement|cut -d\< -f1)"
+          export NEW_JAVA_VERSION="999-SNAPSHOT"
+          export OLD_PYTHON_VERSION="$(find . -name pyproject.toml -exec grep 'timefold ==' {} \;|tail -n 1|cut -d\' -f1 --complement|cut -d\= -f3|cut -d\' -f1|xargs)"
+          export NEW_PYTHON_VERSION="999-dev0"
+          .github/scripts/change_versions.sh
+          git commit -am "build: move back to version $NEW_VERSION"
+          git push origin $RELEASE_BRANCH_NAME

@@ -5,6 +5,7 @@ Assign employees to tasks to produce a better plan for task assignments.
 image::./task-assigning-screenshot.png[]
 
 * <<run,Run the application>>
+* <<enterprise,Run the application with Timefold Solver Enterprise Edition>>
 * <<package,Run the packaged application>>
 * <<container,Run the application in a container>>
 * <<native,Run it native>>
