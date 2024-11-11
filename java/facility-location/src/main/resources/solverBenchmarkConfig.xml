@@ -4,24 +4,24 @@
     <inheritedSolverBenchmark>
         <solver>
             <termination>
-                <secondsSpentLimit>180</secondsSpentLimit>
+                <secondsSpentLimit>60</secondsSpentLimit>
             </termination>
         </solver>
         <problemBenchmarks>
             <problemStatisticType>BEST_SCORE</problemStatisticType>
-            <!--            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>-->
+            <problemStatisticType>SCORE_CALCULATION_SPEED</problemStatisticType>
             <problemStatisticType>MOVE_EVALUATION_SPEED</problemStatisticType>
         </problemBenchmarks>
     </inheritedSolverBenchmark>
     <solverBenchmark>
-        <name>Default Termination</name>
+        <name>Facility Location - Default Termination</name>
         <solver>
             <constructionHeuristic/>
             <localSearch/>
         </solver>
     </solverBenchmark>
     <solverBenchmark>
-        <name>New Termination</name>
+        <name>Facility Location - New Termination</name>
         <solver>
             <constructionHeuristic/>
             <localSearch>

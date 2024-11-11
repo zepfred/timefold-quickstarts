@@ -2,10 +2,12 @@ package org.acme.facilitylocation.solver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import jakarta.inject.Inject;
 
+import ai.timefold.solver.benchmark.api.PlannerBenchmarkFactory;
 import ai.timefold.solver.core.api.solver.SolverManager;
 
 import org.acme.facilitylocation.bootstrap.DemoDataBuilder;
@@ -20,6 +22,9 @@ class SolverManagerTest {
 
     @Inject
     SolverManager<FacilityLocationProblem, Long> solverManager;
+
+    @Inject
+    PlannerBenchmarkFactory benchmarkFactory;
 
     @Test
     void solve() throws ExecutionException, InterruptedException {
@@ -47,5 +52,20 @@ class SolverManagerTest {
                 facility.getSetupCost(),
                 facility.getUsedCapacity(),
                 facility.getCapacity()));
+    }
+
+    @Test
+    void benchmark() {
+        FacilityLocationProblem problem = DemoDataBuilder.builder()
+                .setCapacity(1200)
+                .setDemand(900)
+                .setAverageSetupCost(1000).setSetupCostStandardDeviation(200)
+                .setFacilityCount(10)
+                .setConsumerCount(150)
+                .setSouthWestCorner(new Location(-10, -10))
+                .setNorthEastCorner(new Location(10, 10))
+                .build();
+
+        benchmarkFactory.buildPlannerBenchmark(List.of(problem)).benchmark();
     }
 }
