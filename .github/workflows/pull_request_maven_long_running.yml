@@ -179,6 +179,7 @@ jobs:
           export NEW_VERSION="${echo '${{ github.event.pull_request.title }}' | rev | cut -d' ' -f1 | rev}"
           export NEW_VERSION_PYTHON="${NEW_VERSION}'b0
           echo $NEW_VERSION
+          echo $NEW_VERSION
           echo $NEW_VERSION_PYTHON
 #          .github/scripts/change_versions.sh
 
