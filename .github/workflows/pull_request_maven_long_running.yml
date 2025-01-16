@@ -172,6 +172,16 @@ jobs:
           path: ./timefold-solver-enterprise
           fetch-depth: 0 # Otherwise merge will fail on account of not having history.
 
+      - name: Update timefold-solver-enterprise version (Release PR only)
+        if: startsWith(github.event.pull_request.title, 'build: release version')
+        working-directory: ./timefold-solver-enterprise
+        run: |
+          export NEW_VERSION="${echo '${{ github.event.pull_request.title }}' | rev | cut -d' ' -f1 | rev}"
+          export NEW_VERSION_PYTHON="${NEW_VERSION}'b0
+          echo $NEW_VERSION
+          echo $NEW_VERSION_PYTHON
+#          .github/scripts/change_versions.sh
+
       # Build and test
       - name: "Setup GraalVM native image"
         uses: graalvm/setup-graalvm@v1
