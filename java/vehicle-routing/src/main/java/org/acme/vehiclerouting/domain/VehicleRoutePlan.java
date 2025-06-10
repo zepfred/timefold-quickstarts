@@ -8,6 +8,7 @@ import ai.timefold.solver.core.api.domain.solution.PlanningEntityCollectionPrope
 import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.solution.ProblemFactCollectionProperty;
+import ai.timefold.solver.core.api.domain.solution.ProblemFactProperty;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import ai.timefold.solver.core.api.solver.SolverStatus;
@@ -49,6 +50,10 @@ public class VehicleRoutePlan {
 
     @PlanningEntityCollectionProperty
     @ValueRangeProvider
+    private List<Driver> drivers;
+
+    @PlanningEntityCollectionProperty
+    @ValueRangeProvider
     private List<Visit> visits;
 
     @PlanningScore
@@ -75,6 +80,7 @@ public class VehicleRoutePlan {
             @JsonProperty("startDateTime") LocalDateTime startDateTime,
             @JsonProperty("endDateTime") LocalDateTime endDateTime,
             @JsonProperty("vehicles") List<Vehicle> vehicles,
+            @JsonProperty("drivers") List<Driver> drivers,
             @JsonProperty("visits") List<Visit> visits) {
         this.name = name;
         this.southWestCorner = southWestCorner;
@@ -82,6 +88,7 @@ public class VehicleRoutePlan {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.vehicles = vehicles;
+        this.drivers = drivers;
         this.visits = visits;
         List<Location> locations = Stream.concat(
                 vehicles.stream().map(Vehicle::getHomeLocation),
@@ -113,6 +120,10 @@ public class VehicleRoutePlan {
 
     public List<Vehicle> getVehicles() {
         return vehicles;
+    }
+
+    public List<Driver> getDrivers() {
+        return drivers;
     }
 
     public List<Visit> getVisits() {

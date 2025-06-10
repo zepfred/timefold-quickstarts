@@ -145,7 +145,11 @@ function renderRoutes(solution) {
     vehiclesTable.children().remove();
     solution.vehicles.forEach(function (vehicle) {
         getHomeLocationMarker(vehicle).setPopupContent(homeLocationPopupContent(vehicle));
-        const {id, capacity, totalDemand, totalDrivingTimeSeconds} = vehicle;
+        const {id, capacity, driver, totalDemand, totalDrivingTimeSeconds} = vehicle;
+        let driverDesc = "none";
+        if (!!driver) {
+            driverDesc = "driver-" + driver
+        }
         const percentage = totalDemand / capacity * 100;
         const color = colorByVehicle(vehicle);
         vehiclesTable.append(`
@@ -155,7 +159,7 @@ function renderRoutes(solution) {
             style="background-color: ${color}; display: inline-block; width: 1rem; height: 1rem; text-align: center">
           </i>
         </td>
-        <td>Vehicle ${id}</td>
+        <td>Vehicle ${id} (${driverDesc})</td>
         <td>
           <div class="progress" data-bs-toggle="tooltip-load" data-bs-placement="left" data-html="true"
             title="Cargo: ${totalDemand} / Capacity: ${capacity}">

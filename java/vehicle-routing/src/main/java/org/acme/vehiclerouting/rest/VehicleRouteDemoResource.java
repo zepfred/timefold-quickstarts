@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
@@ -18,6 +19,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.MediaType;
 
+import org.acme.vehiclerouting.domain.Driver;
 import org.acme.vehiclerouting.domain.Location;
 import org.acme.vehiclerouting.domain.Vehicle;
 import org.acme.vehiclerouting.domain.VehicleRoutePlan;
@@ -35,9 +37,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("demo-data")
 public class VehicleRouteDemoResource {
 
-    private static final String[] FIRST_NAMES = { "Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay" };
-    private static final String[] LAST_NAMES = { "Cole", "Fox", "Green", "Jones", "King", "Li", "Poe", "Rye", "Smith", "Watt" };
-    private static final int[] SERVICE_DURATION_MINUTES = { 10, 20, 30, 40 };
+    private static final String[] FIRST_NAMES = {"Amy", "Beth", "Carl", "Dan", "Elsa", "Flo", "Gus", "Hugo", "Ivy", "Jay"};
+    private static final String[] LAST_NAMES = {"Cole", "Fox", "Green", "Jones", "King", "Li", "Poe", "Rye", "Smith", "Watt"};
+    private static final String[] LICENSE_TYPE = {"A", "B"};
+    private static final int[] SERVICE_DURATION_MINUTES = {10, 20, 30, 40};
     private static final LocalTime MORNING_WINDOW_START = LocalTime.of(8, 0);
     private static final LocalTime MORNING_WINDOW_END = LocalTime.of(12, 0);
     private static final LocalTime AFTERNOON_WINDOW_START = LocalTime.of(13, 0);
@@ -127,7 +130,7 @@ public class VehicleRouteDemoResource {
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "List of demo data represented as IDs.",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(implementation = DemoData.class, type = SchemaType.ARRAY))) })
+                            schema = @Schema(implementation = DemoData.class, type = SchemaType.ARRAY)))})
     @Operation(summary = "List demo data.")
     @GET
     public DemoData[] list() {
@@ -137,7 +140,7 @@ public class VehicleRouteDemoResource {
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "Unsolved demo route plan.",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(implementation = VehicleRoutePlan.class))) })
+                            schema = @Schema(implementation = VehicleRoutePlan.class)))})
     @Operation(summary = "Find an unsolved demo route plan by ID.")
     @GET
     @Path("/{demoDataId}")
@@ -159,17 +162,22 @@ public class VehicleRouteDemoResource {
                 .iterator();
         PrimitiveIterator.OfInt vehicleCapacity = random.ints(demoData.minVehicleCapacity, demoData.maxVehicleCapacity + 1)
                 .iterator();
+        PrimitiveIterator.OfInt vehicleLicenseType = random.ints(0, LICENSE_TYPE.length)
+                .iterator();
 
         AtomicLong vehicleSequence = new AtomicLong();
         Supplier<Vehicle> vehicleSupplier = () -> new Vehicle(
                 String.valueOf(vehicleSequence.incrementAndGet()),
                 vehicleCapacity.nextInt(),
+                LICENSE_TYPE[vehicleLicenseType.nextInt()],
                 new Location(latitudes.nextDouble(), longitudes.nextDouble()),
                 tomorrowAt(demoData.vehicleStartTime));
 
         List<Vehicle> vehicles = Stream.generate(vehicleSupplier)
                 .limit(demoData.vehicleCount)
-                .collect(Collectors.toList());
+                .toList();
+
+        List<Driver> drivers = vehicles.stream().map(v -> new Driver(v.getId(), v.getRequiredLicenseTye())).toList();
 
         Supplier<String> nameSupplier = () -> {
             Function<String[], String> randomStringSelector = strings -> strings[random.nextInt(strings.length)];
@@ -198,11 +206,11 @@ public class VehicleRouteDemoResource {
 
         List<Visit> visits = Stream.generate(visitSupplier)
                 .limit(demoData.visitCount)
-                .collect(Collectors.toList());
+                .toList();
 
         return new VehicleRoutePlan(name, demoData.southWestCorner, demoData.northEastCorner,
                 tomorrowAt(demoData.vehicleStartTime), tomorrowAt(LocalTime.MIDNIGHT).plusDays(1L),
-                vehicles, visits);
+                vehicles, drivers, visits);
     }
 
     private static LocalDateTime tomorrowAt(LocalTime time) {
