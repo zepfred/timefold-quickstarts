@@ -2,8 +2,11 @@ package org.acme.schooltimetabling.domain;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.common.PlanningId;
+import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
+import java.util.List;
 
 @PlanningEntity
 public class Lesson {
@@ -16,11 +19,11 @@ public class Lesson {
     private String studentGroup;
 
     @JsonIdentityReference
-    @PlanningVariable
+    @PlanningVariable(valueRangeProviderRefs = "timeslots")
     private Timeslot timeslot;
 
     @JsonIdentityReference
-    @PlanningVariable
+    @PlanningVariable(valueRangeProviderRefs = "rooms")
     private Room room;
 
     public Lesson() {
@@ -78,5 +81,15 @@ public class Lesson {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    @ValueRangeProvider(id = "timeslots")
+    public List<Timeslot> getTimeslots(Timetable timetable) {
+        return timetable.getTimeslots();
+    }
+
+    @ValueRangeProvider(id = "rooms")
+    public List<Room> getRooms(Timetable timetable) {
+        return timetable.getRooms();
     }
 }
